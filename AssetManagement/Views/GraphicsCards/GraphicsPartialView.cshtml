@@ -1,0 +1,102 @@
+﻿@model IEnumerable<AssetManagement.Models.GraphicsCard>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+<style>
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<input type="text" class="search" id="filterInput" placeholder="Search...">
+<div class="table-container">
+    <table class="table custom-fontsize p-4">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GraphicsDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GraphicsStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GraphicsCreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GraphicsCreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GraphicsUpdatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GraphicsUpdatedDate)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.GraphicsID" data-ddd="@item.GraphicsDescription" style="cursor:pointer;">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraphicsDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraphicsStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraphicsCreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraphicsCreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraphicsUpdatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraphicsUpdatedDate)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+            var ddd = $(this).data('ddd');
+
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#graphicsid').val(id);
+            $('#graphicsdes').val(ddd);
+
+
+        });
+
+    });
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

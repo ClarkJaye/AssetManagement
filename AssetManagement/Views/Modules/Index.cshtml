@@ -1,0 +1,162 @@
+﻿@model IEnumerable<AssetManagement.Models.Module>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18"></script>
+<h4>Module</h4>
+<p>
+    <a id="createbtn" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Create">Create New</a>
+    <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Inactive">Show Deleted</a>
+</p>
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+
+<form method="post" action="@Url.Action("DeleteAsEdit", "Modules")">
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the selected item(s)?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="text" id="filterInput" placeholder="Search...">
+    <div class="table-container">
+        <table class="table custom-fontsize p-4">
+            <thead >
+        <tr>
+            <th>
+                <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <span id="boot-icon" class="bi bi-trash-fill"></span>
+                </button>
+                
+            </th>
+            <th>
+                        <input type="checkbox" id="select-all-checkbox" class="green-checkbox" />
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModuleTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModuleDtCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModuleDtUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ModuleId"><span class="bi bi-pen"></span></a>
+            </td>
+            <td>
+                 <input type="checkbox" name="selectedIds" id="select-all-checkbox" class="green-checkbox" value="@item.ModuleId" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModuleTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.category_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModuleDtCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModuleDtUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.status_name)             
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy.UserADLogin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedBy.UserADLogin)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</form>
+</div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        alert('@TempData["ErrorMessage"]');
+    </script>
+}
+<script>
+    const selectAllCheckbox = document.getElementById("select-all-checkbox");
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedIds"]');
+
+    selectAllCheckbox.addEventListener("change", function () {
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = selectAllCheckbox.checked;
+        }
+    });
+
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+</script>

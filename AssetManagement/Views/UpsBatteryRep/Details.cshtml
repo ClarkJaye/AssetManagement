@@ -1,0 +1,54 @@
+﻿@model AssetManagement.Models.UpsBatteryRep
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>UpsBatteryRep</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UpsStore)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UpsStore.ups_store)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UpsCode)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UpsCode.ups_store)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BatteryRepDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BatteryRepDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BatteryRepRemarks)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BatteryRepRemarks)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BatteryRepCreatedAt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BatteryRepCreatedAt)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.UserCode)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.BatteryRepNo">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

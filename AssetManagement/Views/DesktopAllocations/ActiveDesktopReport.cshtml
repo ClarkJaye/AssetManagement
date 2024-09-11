@@ -1,0 +1,241 @@
+﻿@model IEnumerable<AssetManagement.Models.DesktopAllocation>
+
+@{
+    ViewData["Title"] = "Report";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18"></script>
+
+
+
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+
+    .report-view {
+        text-align: right;
+        margin-top: 20px;
+    }
+
+    .report-item {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .report-label {
+        font-weight: bold;
+        margin-right: 10px;
+        color: #333;
+    }
+
+    .report-value {
+        font-size: 18px;
+        font-weight: bold;
+        background-color: #f2f2f2;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: green;
+    }
+
+    td {
+        cursor: pointer;
+    }
+
+    .red-text {
+        color: red;
+    }
+
+    .yellow-text {
+        color: yellow;
+    }
+
+    .orangered-text {
+        color: orangered;
+    }
+
+</style>
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+
+<h4>Active First Owner Desktop</h4>
+<div class="report-view">
+    <div class="report-item">
+        <span class="report-label">Total Active Desktops:</span>
+        <span class="report-value">@ViewBag.TotalActiveDesktop</span>
+    </div>
+</div>
+
+<div style="margin-top: -40px;">
+    <input type="text" id="filterInput" placeholder="Search...">
+</div>
+    <div class="table-container">
+        <table class="table custom-fontsize  ">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DesktopInventory)
+                    </th>
+                    <th>PO</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DesktopInventoryDetail)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FixedassetTag)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ComputerName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateDeployed)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateCreated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateUpdated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Createdby)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Updatedby)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AllocId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DesktopInventory.desktopInvCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.PO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.unitTag)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FixedassetTag)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ComputerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateDeployed)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateUpdated)
+                        </td>
+                        @{
+
+
+
+                            if (item.DesktopInventoryDetail.PurchaseDate <= DateTime.Now.AddMonths(-72))
+                            {
+                                <td style="color:red; font-weight:bold; font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.Status.status_name)
+                                </td>
+                            }
+                            else if (item.DesktopInventoryDetail.PurchaseDate <= DateTime.Now.AddMonths(-24))
+                            {
+                                <td style="color:darkgreen; font-weight:bold; font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.Status.status_name)
+                                </td>
+                            }
+                            else if (item.DesktopInventoryDetail.PurchaseDate <= DateTime.Now.AddMonths(-48))
+                            {
+                                <td style="color:orange; font-weight:bold; font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.Status.status_name)
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status.status_name)
+                                </td>
+                            }
+                        }
+
+
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                        </td>
+                    </tr>
+
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+<script>
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
+
+</script>

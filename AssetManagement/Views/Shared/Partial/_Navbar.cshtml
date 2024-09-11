@@ -1,0 +1,381 @@
+﻿<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow p-0 mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/img/prg_newlogo.png" width="50" class="mx-2">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria- controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between position-relative">
+                <ul class="navbar-nav flex-grow-1 px-2 gap-4 h-nav">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link d-flex align-items-center gap-1 dropbtn" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home"></i>
+                            <p class="m-0">Dashboard</p>
+                        </a>
+                    </li>
+
+                    @{
+                        var userProfile = ViewBag.UserProfile as int?;
+                        var openAccessModules = ViewData["OpenAccessModules"] as SelectList;
+                        var OpenAccessModulesC2 = ViewData["OpenAccessModulesC2"] as SelectList;
+                        var OpenAccessModulesC3 = ViewData["OpenAccessModulesC3"] as SelectList;
+                        var OpenAccessModulesC4 = ViewData["OpenAccessModulesC4"] as SelectList;
+                        var OpenAccessModulesC5 = ViewData["OpenAccessModulesC5"] as SelectList;
+                        var OpenAccessModulesC6 = ViewData["OpenAccessModulesC6"] as SelectList;
+                        var OpenAccessModulesC7 = ViewData["OpenAccessModulesC7"] as SelectList;
+                        var OpenAccessModulesC8 = ViewData["OpenAccessModulesC8"] as SelectList;
+                        var myDept = ViewData["myDept"] as SelectList;
+                        var myStore = ViewData["myStore"] as SelectList;
+                    }
+                    @if (openAccessModules != null && openAccessModules.Any() || OpenAccessModulesC4 != null && OpenAccessModulesC4.Any())
+                    {
+                        <li class="nav-item dropdown">
+                            <a id="maintenance" class="nav-link d-flex align-items-center gap-2 dropbtn dropdown-toggle" data-toggle="dropdown">
+                                <i class="fas fa-cogs"></i>
+                                <p class="m-0">Maintenance</p>
+                            </a>
+                            <ul class="dropdown-menu" style="width: 150px; max-height:300px; overflow-x: hidden;">
+                                <li>
+                                    @if (openAccessModules != null && openAccessModules.Any())
+                                    {
+                                        @foreach (var item in openAccessModules)
+                                        {
+                                            if (item.Text != "Modules")
+                                            {
+                                                <a asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                            }
+                                        }
+                                    }
+                                </li>
+                                @if (OpenAccessModulesC4 != null && OpenAccessModulesC4.Any())
+                                {
+                                    <li>
+                                        <a href="" id="deviceModalBtn" data-toggle="modal" data-target="#deviceModal" style="cursor: pointer;">
+                                            Device
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if (OpenAccessModulesC3 != null && OpenAccessModulesC3.Any())
+                    {
+                        <li class="nav-item dropdown">
+                            <a id="transactions" class="nav-link d-flex align-items-center gap-2 dropbtn dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-cog" aria-hidden="true"></i>
+                                <p class="m-0">Settings</p>
+                            </a>
+                            <ul class="dropdown-menu" style="width: 150px; max-height:300px; overflow-x: hidden;">
+                                <li>
+                                    @foreach (var item in OpenAccessModulesC3)
+                                    {
+                                        <a asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                    }
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (OpenAccessModulesC5 != null && OpenAccessModulesC5.Any() || OpenAccessModulesC6 != null && OpenAccessModulesC6.Any() || OpenAccessModulesC7 != null && OpenAccessModulesC7.Any() || OpenAccessModulesC8 != null && OpenAccessModulesC8.Any())
+                    {
+                        <li class="nav-item dropdown">
+                            <a id="transactions" class="nav-link d-flex align-items-center gap-2 dropbtn dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                <p class="m-0">Transactions</p>
+                            </a>
+                            <ul class="dropdown-menu" style="width: 150px;">
+                                @if (OpenAccessModulesC5 != null && OpenAccessModulesC5.Any())
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a style=" cursor:pointer;" class="test" tabindex="-1">
+                                            <i class="fas fa-laptop"></i>
+                                            Laptop
+                                            <span class="caret"></span>
+                                        </a>
+
+                                        <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                            <li>
+                                                @foreach (var item in OpenAccessModulesC5)
+                                                {
+                                                    <a tabindex="-1" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                                }
+                                            </li>
+
+                                        </ul>
+
+                                    </li>
+                                }
+                                @if (OpenAccessModulesC6 != null && OpenAccessModulesC6.Any())
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a style=" cursor:pointer;" class="test" tabindex="-1">
+                                            <i class="fas fa-plug"></i> 
+                                            Peripheral
+                                            <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                            <li>
+                                                @foreach (var item in OpenAccessModulesC6)
+                                                {
+
+                                                    <a tabindex="-1" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                                }
+                                            </li>
+
+                                        </ul>
+
+                                    </li>
+                                }
+                                @if (OpenAccessModulesC7 != null && OpenAccessModulesC7.Any())
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a style=" cursor:pointer;" class="test" tabindex="-1">
+                                            <i class="fas fa-desktop"></i> 
+                                            Desktop
+                                            <span class="caret"></span>
+                                        </a>
+
+                                        <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                            <li>
+                                                @foreach (var item in OpenAccessModulesC7)
+                                                {
+
+                                                    <a tabindex="-1" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                                }
+                                            </li>
+
+                                        </ul>
+
+                                    </li>
+                                }
+                                @if (OpenAccessModulesC8 != null && OpenAccessModulesC8.Any())
+                                {
+                                    <li class="dropdown-submenu">
+                                        <a style=" cursor:pointer;" class="test dropdown-toggle" tabindex="-1"> 
+                                            <i class="fas fa-desktop"></i>
+                                            Monitor 
+                                            <span class="caret"></span>
+                                        </a>
+
+                                        <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                            <li>
+                                                @foreach (var item in OpenAccessModulesC8)
+                                                {
+
+                                                    <a tabindex="-1" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                                }
+                                            </li>
+
+                                        </ul>
+
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link d-flex align-items-center gap-2 dropbtn dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-eye"></i>
+                            <p class="m-0">Views</p>
+                        </a>
+                        <ul class="dropdown-menu" style="width: 150px;">
+                            <li class="dropdown-submenu">
+                                <a class="test dropbtn dropdown-toggle" data-toggle="dropdown" tabindex="-1" style=" cursor:pointer;">
+                                    <i class="fas fa-cogs"></i>
+                                    Maintenance
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                    <li><a tabindex="-1" href="/Profiles/ProfileViews"> Profile List </a></li>
+                                    <li><a tabindex="-1" href="/ProfileAccesses/Accesslist">Access List </a></li>
+                                    <li><a tabindex="-1" href="/Users/UserViews"> User Views List </a></li>
+                                    <li><a tabindex="-1" href="/UserStores/UserStoreViews"> User Store List </a></li>
+                                    <li><a tabindex="-1" href="/UserDepartments/UserDepartmentsViews"> User Departments List </a></li>
+                                    <li><a tabindex="-1" href="/Owners/OwnerViews"> Owner List </a></li>
+                                    <li><a tabindex="-1" href="/Vendors/VendorsViews"> Vendors List </a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown-submenu">
+                                <a class="test dropbtn dropdown-toggle" data-toggle="dropdown" tabindex="-1" style=" cursor:pointer;">
+                                    <i class="fas fa-laptop"></i>
+                                    Laptop
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                    <li><a href="/LaptopAllocations/AllocationViews"> Laptop Allocation </a></li>
+                                    <li><a tabindex="-1" href="/SecondOwnerAllocs/SecondOwnerViews"> Second Laptop Allocation </a></li>
+                                    <li><a tabindex="-1" href="/ReturnLTAs/ReturnLTAViews">Return Laptop  </a></li>
+                                    <li><a tabindex="-1" href="/LaptopBorroweds/BorrowedViews">Borrowed Laptop  </a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="test dropbtn dropdown-toggle" data-toggle="dropdown" tabindex="-1" style=" cursor:pointer;">
+                                    <i class="fas fa-plug"></i>
+                                    Peripheral
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                    <li><a tabindex="-1" href="/LaptopPeripheralAllocations/PeripheralViews">                                                  Peripheral Allocation </a></li>
+                                    <li><a tabindex="-1" href="/SecondOwnerPeripAllocs/SecondPeripheralViews">Second Peripheral Allocation </a></li>
+                                    <li><a tabindex="-1" href="/ReturnPeripherals/ReturnPeripheralViews">Return Peripheral  </a></li>
+                                    <li><a tabindex="-1" href="/BorrowedPeripherals/BorrowedPeripheralViews">Borrowed Peripheral  </a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link d-flex align-items-center gap-2 dropbtn dropdown-toggle" data-toggle="dropdown" >
+                            <i class="fa fa-file-alt"></i>
+                            <p class="m-0">Reports</p>
+                        </a>
+                        <ul class="dropdown-menu" style="width: 150px;">
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" style=" cursor:pointer;">
+                                    <i class="fas fa-laptop"></i>
+                                    Laptop
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" style="width: 200px;">
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1">4 Years First Owner <span class="caret"></span></a>
+                                        <ul class="dropdown-menu" style="width: 240px;">
+                                            <li><a tabindex="-1" href="/LaptopAllocations/LaptopReportsDeploy">By Deployment</a></li>
+                                            <li><a tabindex="-1" href="/LaptopAllocations/LaptopReports">By Purchase</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1">4 Years Second Owner  <span class="caret"></span></a>
+                                        <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                            <li><a tabindex="-1" href="/LaptopAllocations/LaptopReportsDeploy2">By Deployment</a></li>
+                                            <li><a tabindex="-1" href="/LaptopAllocations/LaptopReports">By Purchase</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a tabindex="-1" href="/LaptopAllocations/ActiveLaptopsReport">Active Laptops</a></li>
+                                    <li><a tabindex="-1" href="/LaptopAllocations/DisposeLaptopReport">Dispose Laptops</a></li>
+                                    <li><a tabindex="-1" href="/LaptopAllocations/OwnedLaptopReport">Owned Laptops</a></li>
+                                    <li><a tabindex="-1" href="/LaptopAllocations/LaptopBorrowedReport">Borrowed Laptops</a></li>
+                                    <li><a tabindex="-1" href="/LaptopAllocations/SpareLaptopReport">Spare Laptops</a></li>
+                                    <li>
+                                        <a tabindex="-1" href="/LaptopAllocations/AvailableLaptopReport">
+                                            Available Laptops
+                                        </a>
+                                    </li>
+                                    <li><a tabindex="-1" href="/LaptopAllocations/LaptopBrandReport">Laptops Brand</a></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="test" tabindex="-1">Laptops Date Range <span class="caret"></span></a>
+                                        <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                            <li><a tabindex="-1" href="/InventoryDetails/FilterLaptopsDeploy">By Deployment</a></li>
+                                            <li><a tabindex="-1" href="/InventoryDetails/FilterLaptops">By Purchase</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" style=" cursor:pointer;">
+                                    <i class="fas fa-desktop"></i>
+                                    Desktop
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                    <li><a tabindex="-1" href="/DesktopAllocations/SixyearsDesktop">6 Years First Owner</a></li>
+                                    <li><a tabindex="-1" href="/DesktopAllocations/SixyearsDesktopSecond">6 Years Second Owner</a></li>
+                                    <li><a tabindex="-1" href="/DesktopAllocations/ActiveDesktopReport">Active Desktops First Owner</a></li>
+                                    <li><a tabindex="-1" href="/DesktopAllocations/ActiveDesktopReportSecond">Active Desktops Second Owner</a></li>
+                                    <li><a tabindex="-1" href="/DesktopAllocations/DisposeDesktop">Dispose Desktops</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" style=" cursor:pointer;">
+                                    <i class="fas fa-desktop"></i>
+                                    Monitor
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" style="width: 200px;overflow: hidden;">
+                                    <li>
+                                        <a tabindex="-1" href="/MonitorAllocations/SixyearsMonitorFirst">6 Years First Owner</a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="-1" href="/MonitorAllocations/SixyearsMonitorSecond">6 Years Second Owner</a>
+                                    </li>
+                                    <li><a tabindex="-1" href="/MonitorAllocations/ActiveMonitorReport">Active Monitor First Owner</a></li>
+                                    <li><a tabindex="-1" href="/MonitorAllocations/ActiveMonitorReportSecond">Active Monitor Second Owner</a></li>
+                                    <li><a tabindex="-1" href="/MonitorAllocations/DisposeMonitor">Dispose Monitor</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <partial name="Partial/_LoginPartial" />
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+
+
+
+
+
+
+
+<!-- Device Modal -->
+<div class="modal fade" id="deviceModal" tabindex="-1" role="dialog" aria-labelledby="deviceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deviceModalLabel">Device Options</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form elements for Level, Brand, Model, CPU, Hard Disk, Memory, OS -->
+                @if (OpenAccessModulesC4 != null && OpenAccessModulesC4.Any())
+                {
+                    <ul class="device-options">
+                        @foreach (var item in OpenAccessModulesC4)
+                        {
+                            <a style="font-size: 12px; font-weight: bold;" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <h4>YOU DON'T HAVE ACCESS TO ANY DEVICE OPTION</h4>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Logout Modal -->
+<div class="modal fade" id="deleteModal1" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Sign Out</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" asp-action="Index" asp-controller="Home" id="homeBtn">Home</a>
+                <a class="btn btn-danger" asp-action="Logout" asp-controller="Users" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@model AssetManagement.Models.LaptopPeripheral
+
+@{
+    Layout = null;
+}
+
+<script>
+    $(document).ready(function () {
+        $('#detailsModal').modal('show');
+    });
+</script>
+
+<style>
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        .modal-body p {
+            margin-bottom: 0;
+        }
+
+
+</style>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Peripheral Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>PeripheralCode:</strong> @Model.PeripheralCode</p>
+                <p><strong>Description:</strong> @Model.PeripheralDescription</p>
+                <p><strong>Brand:</strong> @Model.Brand.BrandDescription</p>
+                <p><strong>DeviceType:</strong> @Model.DeviceType.DevtypeDescription</p>
+                <p><strong>Vendor:</strong> @Model.Vendor.VendorName</p>
+                <!-- Add more properties as needed -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

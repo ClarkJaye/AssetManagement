@@ -1,0 +1,160 @@
+﻿@model IEnumerable<AssetManagement.Models.ProfileAccess>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 150px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+<h4>Profile Access</h4>
+<div class="createform"></div>
+
+
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+<h4 class="title">@ViewData["ProfileName"]</h4>
+<a class="btn btn-success btn-sm" id="profileAccess"> Modify Access </a>
+<input type="text" id="filterInput" placeholder="Search...">
+<div class="table-responsive scrollable-container table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Module)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Module.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OpenAccess)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.ModuleTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.Category.category_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OpenAccess)
+                    </td>
+                    <td>
+                        <form asp-action="Delete" method="post" class="delete-form">
+                            <input type="hidden" name="id" value="@item.ProfileId" />
+                            <input type="hidden" name="id2" value="@item.ModuleId" />
+                            <input type="checkbox" class="delete-checkbox green-checkbox" id="select-all-checkbox" name="delete" value="Y" @(item.OpenAccess == "Y" ? "checked" : "") />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="container-fluid d-flex justify-content-end">
+    <a asp-action="Index" asp-controller="ProfileAccesses" class="btn btn-secondary text-start me-2">Back</a>
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#profileAccess").click(function () {
+            $(this).hide();
+            $.ajax({
+                url: "@Url.Action("SetAccessProfile","Profiles")",
+                type: "GET",
+                success: function (res) {
+                    $(".table-responsive").html(res);
+                }
+            })
+        })
+
+
+
+        $("#createbtn").click(function () {
+            $(this).hide();
+            $('.table-responsive ,.title').hide();
+            $.ajax({
+                url: "@Url.Action("Create","ProfileAccesses")",
+                type: "GET",
+                success: function (res) {
+                    $(".createform").html(res);
+                }
+            })
+        })
+
+        $(".editbtn").click(function () {
+            $(".createbtn").hide();
+            var id = $(this).data("id");
+            var id2 = $(this).data("id2");
+            var id3 = $(this).data("id3");
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+
+            $.ajax({
+                url: "@Url.Action("Edit","ProfileAccesses")",
+                type: "GET",
+                data: { id: id, id2: id2 },
+                success: function (res) {
+                    $(".createform").html(res);
+                }
+            })
+        })
+
+        $(".delete-checkbox").change(function () {
+            // Submit the form whenever the checkbox changes
+            $(this).closest("form").submit();
+        });
+
+    })
+
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<AssetManagement.Models.DeviceType>
+
+@{
+    Layout = null;
+}
+<style>
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<input type="text" id="filterInput" placeholder="Search...">
+<div class="table-responsive scrollable-container">
+    <table class="table custom-fontsize p-4" style="cursor:pointer;">
+        <thead class="sticky-top" style="z-index:1; position:relative">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DevtypeDescription)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.DevtypeStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DevtypeCreatedby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DevtypeUpdateby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateUpdated)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.DevtypeID" data-dd="@item.DevtypeDescription">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DevtypeDescription)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.DevtypeStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DevtypeCreatedby)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DevtypeUpdateby)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+
+
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+            var dd = $(this).data('dd');
+
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#devid').val(id);
+            $('#devdes').val(dd);
+
+
+        });
+
+    });
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

@@ -1,0 +1,187 @@
+﻿@model IEnumerable<AssetManagement.Models.MainBoard>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+    .search {
+        margin-top: 10px;
+    }
+
+</style>
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+@{
+    var alertMessage = TempData["AlertMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(alertMessage))
+{
+    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
+        @alertMessage
+    </div>
+}
+
+
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+<div class="createform"></div>
+<a id="createbtn" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn">Create</a>
+<a class="btn  bg-secondary retbtn text-white h5 p-2" asp-action="Inactive">Retrieve Data</a>
+<h4 class="title ">
+    Main Board
+</h4>
+<input type="text" class="search" id="filterInput" placeholder="Search...">
+<div class="table-container">
+    <table class="table custom-fontsize p-4">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BoardDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BoardStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BoardCreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BoardCreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BoardUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BoardUpdatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardCreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardCreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardUpdatedDate)
+            </td>
+            <td>
+                <div class="d-flex flex-row gap-2 ">
+                    <a class="btn btn-sm bg-success text-white custom-fontsize editbtn" data-id="@item.BoardID">Edit</a>
+                    <form asp-action="Delete" method="post" class="delete-form">
+                        <input type="hidden" name="id" value="@item.BoardID" />
+                        <a class="btn btn-sm  bg-danger text-white custom-fontsize btn-delt">Delete</a>
+
+                    </form>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $(".btn-delt").click(function () {
+            $(this).closest("form").submit();
+        })
+
+        $("#createbtn").click(function () {
+            $(this).hide();
+            $('.table-responsive ,.title ,.btn').hide();
+
+            $.ajax({
+                url: "@Url.Action("Create","MainBoards")",
+                type: "GET",
+                success: function (res) {
+                    $(".createform").html(res);
+                }
+            })
+        })
+
+        $(".editbtn").click(function () {
+            $(".createbtn ,.retbtn").hide();
+            var id = $(this).data("id");
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+
+            $.ajax({
+                url: "@Url.Action("Edit","MainBoards")",
+                type: "GET",
+                data: { id: id },
+                success: function (res) {
+                    $(".createform").html(res);
+                }
+            })
+        })
+    })
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

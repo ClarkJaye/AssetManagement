@@ -1,0 +1,90 @@
+﻿@model AssetManagement.Models.Memory
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<hr />
+<div>
+    <div>
+        <form asp-action="Edit" class="row"id="edit-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MemoryId" />
+            <div class="form-group col-6">
+                <label asp-for="MemoryDescription" class="control-label"></label>
+                <input asp-for="MemoryDescription" class="form-control" />
+                <span asp-validation-for="MemoryDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group col-6">
+                <label asp-for="MemoryCapacity" class="control-label"></label>
+                <select asp-for="MemoryCapacity" class="form-control" asp-items="ViewBag.MemoryCapacity"></select>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="MemoryStatus" class="control-label"></label>
+                <input asp-for="MemoryStatus" class="form-control" />
+                <span asp-validation-for="MemoryStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="MemoryCreatedBy" class="control-label"></label>
+                <input asp-for="MemoryCreatedBy" class="form-control" />
+                <span asp-validation-for="MemoryCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="MemoryCreatedDate" class="control-label"></label>
+                <input asp-for="MemoryCreatedDate" class="form-control" />
+                <span asp-validation-for="MemoryCreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="MemoryUpdatedBy" class="control-label"></label>
+                <input asp-for="MemoryUpdatedBy" class="form-control" />
+                <span asp-validation-for="MemoryUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="MemoryUpdatedDate" class="control-label"></label>
+                <input asp-for="MemoryUpdatedDate" class="form-control" />
+                <span asp-validation-for="MemoryUpdatedDate" class="text-danger"></span>
+            </div>
+          <div class="form-group mt-4 mb-2 col">
+                <a asp-action="Index" class="btn btn-secondary text-start me-2">Back</a>
+                <input type="submit" value="Save" class="btn bg-success text-white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","Memories")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

@@ -1,0 +1,203 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "_AccountLayout";
+}
+
+<div class="row vh-100">
+    <div class="col-lg-12">
+        <div class="row align-items-center justify-content-center h-100 g-0 px-4 px-sm-0">
+            <div class="col col-sm-6 col-lg-6 col-xl-4">
+                <!--Logo-->
+                <a asp-controller="Users" asp-action="Index" class="d-flex justify-content-center mb-4">
+                    <img src="/img/prg_newlogo.png" alt="Logo" width="80"/>
+                </a>
+                <div class="text-center mb-5">
+                    <h3 class="fw-bold">Welcome Back!</h3>
+                    <p class="text-secondary">Please Log in to your account.</p>
+                </div>
+
+                <form id="login-form" method="post">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="bi bi-person"></i>
+                        </span>
+                        <input id="username" name="username" type="email" value="ICTDEV@PRINCERETAIL.COM" class="form-control form-control-lg fs-6" placeholder="Email" />
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">
+                            <i class="bi bi-lock"></i>
+                        </span>
+                        <input id="password" name="password" type="password" value="Prince2024@@@@" class="form-control form-control-lg fs-6" placeholder="Password" />
+                        <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                            <i class="bi bi-eye-slash" id="eyeIcon"></i>
+                        </span>
+                    </div>
+
+                    <div class="input-group mb-3 d-flex justify-content-between">
+                        <div class="form-check">
+                            <input style="cursor:pointer;box-shadow: none;" type="checkbox" class="form-check-input" id="useADAuthentication" name="useADAuthentication">
+                            <label class="form-check-label" for="useADAuthentication">Use Local Authentication</label>
+                        </div>
+                    </div>
+
+                    <button type="button" id="adButton" class="btn btn-primary btn-lg w-100">AD Login</button>
+                    <button type="button" id="localButton" class="btn btn-danger btn-lg w-100 d-none">Login</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    $(document).ready(function () {
+        $('#useADAuthentication').change(function () {
+            if (this.checked) {
+                // Switch to Local Authentication (UserCode input)
+                $('#adButton').hide();
+                $('#localButton').removeClass('d-none').show();
+                $('#username').attr('type', 'text');
+                $('#username').attr('placeholder', 'UserCode');
+            } else {
+                // Switch back to AD Authentication (Email input)
+                $('#adButton').show();
+                $('#localButton').hide();
+                $('#username').attr('type', 'email');
+                $('#username').attr('placeholder', 'Email');
+            }
+        });
+
+        // Automatically append "Princeretail.com" to the email input if AD authentication is selected
+        $('#username').on('blur', function () {
+           if (!$('#useADAuthentication').is(':checked')) {
+               let emailValue = $(this).val();
+               if (emailValue && !emailValue.includes('@@')) {
+                   $(this).val(emailValue + '@@' + 'PRINCERETAIL.COM');
+               }
+           }
+        });
+
+        // Transform username to uppercase
+        $('#username').on('input', function () {
+            const value = $(this).val();
+            $(this).val(value.toUpperCase());  
+        });
+
+        // Show/Hide Password Toggle
+        $('#togglePassword').click(function () {
+            let passwordField = $('#password');
+            let passwordFieldType = passwordField.attr('type');
+            let eyeIcon = $('#eyeIcon');
+
+            if (passwordFieldType === 'password') {
+                passwordField.attr('type', 'text');
+                eyeIcon.removeClass('bi-eye-slash').addClass('bi-eye');
+            } else {
+                passwordField.attr('type', 'password');
+                eyeIcon.removeClass('bi-eye').addClass('bi-eye-slash');
+            }
+        });
+
+        //Login Process
+        const handleLoginResponse = (response) => {
+            if (response.success) {
+                swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    html: 'Welcome <span style="color: green; font-weight: bold;"> ' + response.userName + ' </span>! ' + response.message,
+                    allowOutsideClick: false,
+                    showConfirmButton: true
+                }).then(() => window.location.href = '@Url.Action("Index", "Home")');
+            } else {
+                swal.fire({ icon: 'error', title: 'Error', text: response.message });
+            }
+        };
+
+        const handleError = () => {
+            swal.fire({ icon: 'error', title: 'An error occurred', text: 'There was a problem with the request' });
+        };
+
+        $('#adButton').click(function () {
+            $.post('Users/ADLogin', $('#login-form').serialize(), handleLoginResponse, 'json').fail(handleError);
+        });
+
+        $('#localButton').click(function () {
+            $.post('Users/Login', $('#login-form').serialize(), handleLoginResponse, 'json').fail(handleError);
+        });
+
+        // Add 'Enter' keypress event to trigger login
+        $('#login-form').keypress(function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+
+                if ($('#useADAuthentication').is(':checked')) {
+                    $('#localButton').click();
+                } else {
+                    $('#adButton').click();
+                }
+            }
+        });
+
+
+    })
+    // Alert Message
+    @if (!string.IsNullOrEmpty(TempData["AlertMessage1"] as string))
+    {
+        var alertMessage = TempData["AlertMessage1"] as string;
+
+        <text>
+            swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '@alertMessage',
+                customClass: {
+                    confirmButton: 'swal-button swal-button--confirm'
+                }
+            });
+        </text>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["AlertMessage2"] as string))
+    {
+        var alertMessage = TempData["AlertMessage2"] as string;
+        <text>
+            swal.fire({
+                icon: 'Error',
+                title: 'Error',
+                text: '@alertMessage',
+                customClass: {
+                    confirmButton: 'swal-button swal-button--confirm'
+                }
+            });
+        </text>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["AlertMessage3"] as string))
+    {
+        var alertMessage = TempData["AlertMessage2"] as string;
+
+        <text>
+            swal.fire({
+                icon: 'Logout',
+                title: 'Logout',
+                text: '',
+                customClass: {
+                    confirmButton: 'swal-button swal-button--confirm'
+                }
+            });
+        </text>
+    }
+
+</script>

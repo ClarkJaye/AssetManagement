@@ -1,0 +1,164 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\LaptopAllocations\GetSpecs.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Luxoft.Framework.Report.Excel.EPPlus" Version="17.6.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
+    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+    <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="8.0.0" />
+    <PackageReference Include="System.Web.Http.Common" Version="4.0.20126.16343" />
+    <PackageReference Include="System.Web.Mvc.Extensions" Version="1.1.1.2" />
+    <PackageReference Include="System.Web.Mvc.Extensions.Mvc.4" Version="1.0.9" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="10.1.2" />
+    <PackageReference Include="X.Web.PagedList" Version="10.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\DesktopAllocations\Create.cshtml" />
+    <None Include="Views\DesktopAllocations\Delete.cshtml" />
+    <None Include="Views\DesktopAllocations\DeskAllocPartialView.cshtml" />
+    <None Include="Views\DesktopAllocations\Details.cshtml" />
+    <None Include="Views\DesktopAllocations\Edit.cshtml" />
+    <None Include="Views\DesktopAllocations\Inactive.cshtml" />
+    <None Include="Views\DesktopAllocations\Index.cshtml" />
+    <None Include="Views\DesktopAllocations\ReturnPartialView.cshtml" />
+    <None Include="Views\DesktopBorroweds\Create.cshtml" />
+    <None Include="Views\DesktopBorroweds\Delete.cshtml" />
+    <None Include="Views\DesktopBorroweds\DeskInvPartialView.cshtml" />
+    <None Include="Views\DesktopBorroweds\Details.cshtml" />
+    <None Include="Views\DesktopBorroweds\Inactive.cshtml" />
+    <None Include="Views\DesktopBorroweds\Index.cshtml" />
+    <None Include="Views\DesktopInventories\Borrowed.cshtml" />
+    <None Include="Views\DesktopInventories\Create.cshtml" />
+    <None Include="Views\DesktopInventories\Delete.cshtml" />
+    <None Include="Views\DesktopInventories\DeletedHistory.cshtml" />
+    <None Include="Views\DesktopInventories\DeskInvPartialView.cshtml" />
+    <None Include="Views\DesktopInventories\Details.cshtml" />
+    <None Include="Views\DesktopInventories\Edit.cshtml" />
+    <None Include="Views\DesktopInventories\Inactive.cshtml" />
+    <None Include="Views\DesktopInventories\Index.cshtml" />
+    <None Include="Views\DesktopInventories\InventoryDetails.cshtml" />
+    <None Include="Views\DesktopInventories\InventorySecOwnerDetails.cshtml" />
+    <None Include="Views\DesktopInventories\ReturnDetails.cshtml" />
+    <None Include="Views\DesktopInventories\SeeAll.cshtml" />
+    <None Include="Views\DesktopInventories\SeeAllUnitTag.cshtml" />
+    <None Include="Views\DesktopInventories\seeDetails.cshtml" />
+    <None Include="Views\DesktopInventoryDetails\Create.cshtml" />
+    <None Include="Views\DesktopInventoryDetails\Delete.cshtml" />
+    <None Include="Views\DesktopInventoryDetails\Details.cshtml" />
+    <None Include="Views\DesktopInventoryDetails\Edit.cshtml" />
+    <None Include="Views\DesktopInventoryDetails\Index.cshtml" />
+    <None Include="Views\DesktopNewAllocs\Create.cshtml" />
+    <None Include="Views\DesktopNewAllocs\Delete.cshtml" />
+    <None Include="Views\DesktopNewAllocs\Details.cshtml" />
+    <None Include="Views\DesktopNewAllocs\Edit.cshtml" />
+    <None Include="Views\DesktopNewAllocs\Inactive.cshtml" />
+    <None Include="Views\DesktopNewAllocs\Index.cshtml" />
+    <None Include="Views\LaptopInventories\GetSpecs.cshtml" />
+    <None Include="Views\MonitorAllocations\Create.cshtml" />
+    <None Include="Views\MonitorAllocations\Delete.cshtml" />
+    <None Include="Views\MonitorAllocations\Details.cshtml" />
+    <None Include="Views\MonitorAllocations\Edit.cshtml" />
+    <None Include="Views\MonitorAllocations\Inactive.cshtml" />
+    <None Include="Views\MonitorAllocations\Index.cshtml" />
+    <None Include="Views\MonitorAllocations\MonitorAllocPartialView.cshtml" />
+    <None Include="Views\MonitorAllocations\ReturnPartialView.cshtml" />
+    <None Include="Views\MonitorBorroweds\Create.cshtml" />
+    <None Include="Views\MonitorBorroweds\Delete.cshtml" />
+    <None Include="Views\MonitorBorroweds\Details.cshtml" />
+    <None Include="Views\MonitorBorroweds\Edit.cshtml" />
+    <None Include="Views\MonitorBorroweds\Inactive.cshtml" />
+    <None Include="Views\MonitorBorroweds\Index.cshtml" />
+    <None Include="Views\MonitorBorroweds\MonitorInvPartialView.cshtml" />
+    <None Include="Views\MonitorDetails\Create.cshtml" />
+    <None Include="Views\MonitorDetails\Delete.cshtml" />
+    <None Include="Views\MonitorDetails\Details.cshtml" />
+    <None Include="Views\MonitorDetails\Edit.cshtml" />
+    <None Include="Views\MonitorDetails\Index.cshtml" />
+    <None Include="Views\MonitorInventories\Borrowed.cshtml" />
+    <None Include="Views\MonitorInventories\Create.cshtml" />
+    <None Include="Views\MonitorInventories\Delete.cshtml" />
+    <None Include="Views\MonitorInventories\DeletedHistory.cshtml" />
+    <None Include="Views\MonitorInventories\Details.cshtml" />
+    <None Include="Views\MonitorInventories\Edit.cshtml" />
+    <None Include="Views\MonitorInventories\Inactive.cshtml" />
+    <None Include="Views\MonitorInventories\Index.cshtml" />
+    <None Include="Views\MonitorInventories\InventoryDetails.cshtml" />
+    <None Include="Views\MonitorInventories\InventorySecOwnerDetails.cshtml" />
+    <None Include="Views\MonitorInventories\MonitorInvPartialView.cshtml" />
+    <None Include="Views\MonitorInventories\ReturnDetails.cshtml" />
+    <None Include="Views\MonitorInventories\SeeAll.cshtml" />
+    <None Include="Views\MonitorInventories\SeeAllSerial.cshtml" />
+    <None Include="Views\MonitorInventories\seeDetails.cshtml" />
+    <None Include="Views\MonitorNewAllocs\Create.cshtml" />
+    <None Include="Views\MonitorNewAllocs\Delete.cshtml" />
+    <None Include="Views\MonitorNewAllocs\Details.cshtml" />
+    <None Include="Views\MonitorNewAllocs\Edit.cshtml" />
+    <None Include="Views\MonitorNewAllocs\Inactive.cshtml" />
+    <None Include="Views\MonitorNewAllocs\Index.cshtml" />
+    <None Include="Views\ReturnDTAs\Create.cshtml" />
+    <None Include="Views\ReturnDTAs\CreateSecReturn.cshtml" />
+    <None Include="Views\ReturnDTAs\Delete.cshtml" />
+    <None Include="Views\ReturnDTAs\Details.cshtml" />
+    <None Include="Views\ReturnDTAs\Edit.cshtml" />
+    <None Include="Views\ReturnDTAs\Index.cshtml" />
+    <None Include="Views\ReturnMTAs\Create.cshtml" />
+    <None Include="Views\ReturnMTAs\CreateSecReturn.cshtml" />
+    <None Include="Views\ReturnMTAs\Delete.cshtml" />
+    <None Include="Views\ReturnMTAs\Details.cshtml" />
+    <None Include="Views\ReturnMTAs\Edit.cshtml" />
+    <None Include="Views\ReturnMTAs\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\dataTables\" />
+  </ItemGroup>
+
+</Project>
+
+
+<!--<PropertyGroup>
+  <TargetFramework>net6.0</TargetFramework>
+  <Nullable>enable</Nullable>
+  <ImplicitUsings>enable</ImplicitUsings>
+</PropertyGroup>
+
+<ItemGroup>
+  <Content Remove="Views\LaptopAllocations\GetSpecs.cshtml" />
+</ItemGroup>
+
+<ItemGroup>
+  <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  <PackageReference Include="Luxoft.Framework.Report.Excel.EPPlus" Version="17.6.1" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.23" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.23">
+    <PrivateAssets>all</PrivateAssets>
+    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+  </PackageReference>
+  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+  <PackageReference Include="PagedList.Mvc" Version="4.0.0" />
+  <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+  <PackageReference Include="System.DirectoryServices" Version="7.0.1" />
+  <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
+  <PackageReference Include="System.Web.Http.Common" Version="4.0.20126.16343" />
+  <PackageReference Include="System.Web.Mvc.Extensions" Version="1.1.1.2" />
+  <PackageReference Include="System.Web.Mvc.Extensions.Mvc.4" Version="1.0.9" />
+  <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
+</ItemGroup>-->

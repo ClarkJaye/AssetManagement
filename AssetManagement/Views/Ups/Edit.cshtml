@@ -1,0 +1,289 @@
+﻿@model AssetManagement.Models.Ups
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .custom-fontsize {
+        font-size: 11px;
+    }
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+@{
+    var alertMessage = TempData["AlertMessage"] as string;
+    if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
+            @alertMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+}
+<script>
+    $(document).ready(function () {
+        // Close the alert after 6 seconds
+        setTimeout(function () {
+            $("#alert").alert("close");
+        }, 5000);
+    });
+</script>
+
+<h4>Uninterruptible Power Supply</h4>
+<hr />
+<div>
+    <table class="table">
+        <tr>
+            <td hidden>
+                <label asp-for="ups_store" class="control-label"></label>
+                @Model.ups_store
+            </td>
+            <td hidden>
+                <label asp-for="ups_code" class="control-label"></label>
+                @Model.ups_code
+            </td>
+            <td>
+                <label asp-for="ups_warranty" class="control-label"><b>Warranty :</b></label>
+                @Model.ups_warranty
+            </td>
+            <td>
+                <label asp-for="ups_validity" class="control-label"><b>Validity :</b></label>
+                @Model.ups_validity
+            </td>
+            <td>
+                <label asp-for="ups_iovoltage" class="control-label"><b>IO Voltage :</b></label>
+                @Model.ups_iovoltage
+            </td>
+            <td>
+                <label asp-for="ups_dcvoltage" class="control-label"><b>DC Voltage :</b></label>
+                @Model.ups_dcvoltage
+            </td>
+            <td>
+                <label asp-for="ups_idealload" class="control-label"><b>Ideal Load :</b></label>
+                @Model.ups_idealload
+            </td>
+            <td>
+                <label asp-for="ups_currentload" class="control-label"><b>Current Load:</b></label>
+                @Model.ups_currentload
+            </td>
+            <td>
+                <label asp-for="ups_dtinstalled " class="control-label"><b>Date Installed :</b></label>
+                @Model.ups_dtinstalled
+            </td>
+            <td>
+                <label asp-for="ups_serviceyrs" class="control-label"><b>Service Years :</b></label>
+                @Model.ups_serviceyrs
+            </td>
+             <td>
+                <label asp-for="ups_lastpmdt" class="control-label"><b>Last PM :</b></label>
+                @Model.ups_lastpmdt
+            </td>
+             <td>
+                <label asp-for="ups_battrepcount" class="control-label"><b>Battery Count :</b></label>
+                @Model.ups_battrepcount
+            </td>
+             <td>
+                <label asp-for="ups_unitserve" class="control-label"><b>Unit Serve :</b></label>
+                @Model.ups_unitserve
+            </td>
+             <td>
+                <label asp-for="ups_remarks" class="control-label"><b>Remarks :</b></label>
+                @Model.ups_remarks
+            </td>
+             <td>
+                <label asp-for="ups_brand" class="control-label"><b>Brand :</b></label>
+                @Model.Brand.BrandDescription
+            </td>
+             <td>
+                <label asp-for="ups_model" class="control-label"><b>Model :</b></label>
+                @Model.Model.ModelDescription
+            </td>
+             <td>
+                <label asp-for="ups_type" class="control-label"><b>UPS Type :</b></label>
+                @Model.UpsType.type_description
+            </td>
+             <td>
+                <label asp-for="ups_vendor" class="control-label"><b>Vendor :</b></label>
+                @Model.Vendor.VendorName
+            </td>
+            <td>
+                <label asp-for="ups_condition" class="control-label"><b>UPS Condition :</b></label>
+                @Model.UpsCondition.condition_description
+            </td>
+            <td>
+                <label asp-for="ups_battstatus" class="control-label"><b>Battery Status :</b></label>
+                @Model.UpsBattStatus.status_description
+            </td>
+
+        </tr>
+    </table>
+</div>
+<hr />
+    <div>
+        <form asp-action="Edit">
+        <div class="row form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ups_store" />
+            <div class="form-group col-2">
+                <label asp-for="ups_store" class="control-label"></label>
+                <input readonly style="background-color: white;" asp-for="ups_store" class="form-control" />
+                <span asp-validation-for="ups_store" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_code" class="control-label"></label>
+                <input readonly style="background-color: white;" asp-for="ups_code" class="form-control" />
+                <span asp-validation-for="ups_code" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_brand" class="control-label"></label>
+                    <select asp-for="ups_brand" class="form-control" asp-items="ViewBag.ups_brand"></select>
+                <span asp-validation-for="ups_brand" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_model" class="control-label"></label>
+                <select asp-for="ups_model" class="form-control" asp-items="ViewBag.ups_model"></select>
+                <span asp-validation-for="ups_model" class="text-danger"></span>
+            </div>
+        <div class="form-group col-2">
+                <label asp-for="ups_type" class="control-label"></label>
+                <select asp-for="ups_type" class="form-control" asp-items="ViewBag.ups_type"></select>
+                <span asp-validation-for="ups_type" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_serial" class="control-label"></label>
+                    <input asp-for="ups_serial" class="form-control" />
+                <span asp-validation-for="ups_serial" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_warranty" class="control-label"></label>
+                <input asp-for="ups_warranty" class="form-control" />
+                <span asp-validation-for="ups_warranty" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_validity" class="control-label"></label>
+                <input asp-for="ups_validity" class="form-control" />
+                <span asp-validation-for="ups_validity" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_iovoltage" class="control-label"></label>
+                <input asp-for="ups_iovoltage" class="form-control" />
+                <span asp-validation-for="ups_iovoltage" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_dcvoltage" class="control-label"></label>
+                <input asp-for="ups_dcvoltage" class="form-control" />
+                <span asp-validation-for="ups_dcvoltage" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_idealload" class="control-label"></label>
+                <input asp-for="ups_idealload" class="form-control" />
+                <span asp-validation-for="ups_idealload" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_currentload" class="control-label"></label>
+                <input asp-for="ups_currentload" class="form-control" />
+                <span asp-validation-for="ups_currentload" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_vendor" class="control-label"></label>
+                <select asp-for="ups_vendor" class="form-control" asp-items="ViewBag.ups_vendor"></select>
+                <span asp-validation-for="ups_vendor" class="text-danger"></span>
+            </div>
+         <div class="form-group col-2" hidden>
+                <label asp-for="ups_dtinstalled" class="control-label"></label>
+                <input asp-for="ups_dtinstalled" class="form-control" />
+                <span asp-validation-for="ups_dtinstalled" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_condition" class="control-label"></label>
+                <select asp-for="ups_condition" class="form-control" asp-items="ViewBag.ups_condition"></select>
+                <span asp-validation-for="ups_condition" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_serviceyrs" class="control-label"></label>
+                <input asp-for="ups_serviceyrs" class="form-control" />
+                <span asp-validation-for="ups_serviceyrs" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_lastpmdt" class="control-label"></label>
+                <input asp-for="ups_lastpmdt" class="form-control" />
+                <span asp-validation-for="ups_lastpmdt" class="text-danger"></span>
+            </div>
+           <div class="form-group col-2">
+                <label asp-for="ups_battstatus" class="control-label"></label>
+                <select asp-for="ups_battstatus" class="form-control" asp-items="ViewBag.ups_battstatus"></select>
+                <span asp-validation-for="ups_battstatus" class="text-danger"></span>
+            </div>
+          <div class="form-group col-2">
+                <label asp-for="ups_battrepcount" class="control-label"></label>
+                <input asp-for="ups_battrepcount" class="form-control" />
+                <span asp-validation-for="ups_battrepcount" class="text-danger"></span>
+            </div>
+          <div class="form-group col-2">
+                <label asp-for="ups_unitserve" class="control-label"></label>
+                <input asp-for="ups_unitserve" class="form-control" />
+                <span asp-validation-for="ups_unitserve" class="text-danger"></span>
+            </div>
+         <div class="form-group col-2" hidden>
+                <label asp-for="ups_status" class="control-label"></label>
+                <select asp-for="ups_status" class="form-control" asp-items="ViewBag.ups_status"></select>
+                <span asp-validation-for="ups_status" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_remarks" class="control-label"></label>
+                <input asp-for="ups_remarks" class="form-control" />
+                <span asp-validation-for="ups_remarks" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_createdby" class="control-label"></label>
+                <select asp-for="ups_createdby" class="form-control" asp-items="ViewBag.ups_createdby"></select>
+                <span asp-validation-for="ups_createdby" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_createddt" class="control-label"></label>
+                <input asp-for="ups_createddt" class="form-control" />
+                <span asp-validation-for="ups_createddt" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_updatedby" class="control-label"></label>
+                <select asp-for="ups_updatedby" class="form-control" asp-items="ViewBag.ups_updatedby"></select>
+                <span asp-validation-for="ups_updatedby" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden> 
+                <label asp-for="ups_updateddt" class="control-label"></label>
+                <input asp-for="ups_updateddt" class="form-control" />
+                <span asp-validation-for="ups_updateddt" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2 mt-4">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
+            </div>
+</div>
+        </form>
+    </div>
+
+ 
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

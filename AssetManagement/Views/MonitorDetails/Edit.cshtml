@@ -1,0 +1,84 @@
+﻿@model AssetManagement.Models.MonitorDetail
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>MonitorDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="monitorCode" class="control-label"></label>
+                <select asp-for="monitorCode" class="form-control" asp-items="ViewBag.monitorCode"></select>
+                <span asp-validation-for="monitorCode" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="SerialNumber" />
+            <div class="form-group">
+                <label asp-for="PO" class="control-label"></label>
+                <input asp-for="PO" class="form-control" />
+                <span asp-validation-for="PO" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonitorVendor" class="control-label"></label>
+                <select asp-for="MonitorVendor" class="form-control" asp-items="ViewBag.MonitorVendor"></select>
+                <span asp-validation-for="MonitorVendor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseDate" class="control-label"></label>
+                <input asp-for="PurchaseDate" class="form-control" />
+                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeployedDate" class="control-label"></label>
+                <input asp-for="DeployedDate" class="form-control" />
+                <span asp-validation-for="DeployedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonitorStatus" class="control-label"></label>
+                <select asp-for="MonitorStatus" class="form-control" asp-items="ViewBag.MonitorStatus"></select>
+                <span asp-validation-for="MonitorStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DetailCreated" class="control-label"></label>
+                <select asp-for="DetailCreated" class="form-control" asp-items="ViewBag.DetailCreated"></select>
+                <span asp-validation-for="DetailCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DetailUpdated" class="control-label"></label>
+                <select asp-for="DetailUpdated" class="form-control" asp-items="ViewBag.DetailUpdated"></select>
+                <span asp-validation-for="DetailUpdated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateUpdated" class="control-label"></label>
+                <input asp-for="DateUpdated" class="form-control" />
+                <span asp-validation-for="DateUpdated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

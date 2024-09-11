@@ -1,0 +1,108 @@
+﻿@model IEnumerable<AssetManagement.Models.User>
+
+@{
+    ViewData["Title"] = "Users Inactive";
+}
+
+<!-- Begin Card Structure -->
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title m-2">User Inactive</h4>
+    </div>
+    <div class="card-body">
+        <div class="mb-2 mx-2">
+            <a class="btn btn-sm btn-secondary text-white" asp-controller="Users" asp-action="Index">Back to Lists</a>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table id="usersInactiveTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.UserCode)</th>
+                        <th>@Html.DisplayNameFor(model => model.UserADLogin)</th>
+                        <th>@Html.DisplayNameFor(model => model.UserFullName)</th>
+                        <th>@Html.DisplayNameFor(model => model.UserCreated)</th>
+                        <th>@Html.DisplayNameFor(model => model.UserDateCreated)</th>
+                        <th>@Html.DisplayNameFor(model => model.UserUpdated)</th>
+                        <th>@Html.DisplayNameFor(model => model.UserDateUpdated)</th>
+                        <th>@Html.DisplayNameFor(model => model.Status)</th>
+                        <th>@Html.DisplayNameFor(model => model.Profile)</th>
+                        <th class="text-center">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.UserCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserADLogin)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserFullName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserCreated)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserDateCreated)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserUpdated)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserDateUpdated)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Status.status_name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Profile.ProfileName)</td>
+
+                            <td class="text-center">
+                                <form asp-controller="Users" asp-action="Retrieve">
+                                    <input type="hidden" name="userCode" value="@item.UserCode" />
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <span class="fas fa-undo"></span> Active
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize DataTables
+        $('#usersInactiveTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+        });
+    });
+
+    // const selectAllCheckbox = document.getElementById("select-all-checkbox");
+    // const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedIds"]');
+
+    // selectAllCheckbox.addEventListener("change", function () {
+    //     for (let i = 0; i < checkboxes.length; i++) {
+    //         checkboxes[i].checked = selectAllCheckbox.checked;
+    //     }
+    // });
+</script>

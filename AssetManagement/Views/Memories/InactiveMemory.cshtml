@@ -1,0 +1,108 @@
+﻿@model IEnumerable<AssetManagement.Models.Memory>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+<div class="createform"></div>
+<a class="btn btn-sm bg-secondary text-white custom-fontsize" asp-action="Index">Back To List</a>
+<h4 class="title ">
+    Inactive Memory
+</h4>
+<div class="table-responsive scrollable-container">
+    <table class="table custom-fontsize p-4">
+        <thead class="sticky-top" style="z-index:1; position:relative">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemoryDescription)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.MemoryStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemoryCreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemoryCreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemoryUpdatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemoryUpdatedDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemoryDescription)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.MemoryStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemoryCreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemoryCreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemoryUpdatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemoryUpdatedDate)
+                    </td>
+                    <td class="d-flex flex-row gap-2">
+                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.MemoryId" data-id="@item.MemoryId">Activate</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.btn-activate').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '@Url.Action("Activate")',
+                type: 'POST',
+                data: { id: id },
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Error occurred while activating the module.');
+                }
+            });
+        });
+    });
+</script>
+

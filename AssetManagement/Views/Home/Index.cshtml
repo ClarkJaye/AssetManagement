@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<style>
+	body{
+		overflow: hidden;
+	}
+
+    .sweetalert-custom-class {
+        font-family: 'Chivo', sans-serif;
+        border-radius: 10px;
+        background-color: #ffffff;
+        border: 2px solid #4CAF50;
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+    }
+
+    .sweetalert-title-class {
+        font-family: 'Chivo', sans-serif;
+        color: #4CAF50;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .sweetalert-content-class {
+        font-family: 'Chivo', sans-serif;
+        color: #555555;
+        font-size: 18px;
+    }
+</style>
+
+<div class="container text-center justify-content-center align-items-center">
+    <img src="~/img/home-logo.png" width="350px" class="mx-auto d-block mt-4" alt="Logo">
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+    {
+        var userName = @TempData["UserName"] as string;
+        <text>
+            Swal.fire({
+                icon: 'success',
+                title: 'Successful',
+                html: 'Welcome <span style="color: green; font-weight: bold; font-family: Chivo, sans-serif;">' + userName + '</span>! Login successfully!',
+                showConfirmButton: false,
+                timer: 3000,
+                iconColor: '#4CAF50', // Set the icon color to green
+                customClass: {
+                    popup: 'sweetalert-custom-class',
+                    title: 'sweetalert-title-class',
+                    content: 'sweetalert-content-class'
+                }
+            });
+        </text>
+    }
+
+
+</script>
+
+

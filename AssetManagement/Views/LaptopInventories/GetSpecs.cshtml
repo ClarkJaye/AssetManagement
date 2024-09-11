@@ -1,0 +1,130 @@
+﻿@model IEnumerable<AssetManagement.Models.LaptopInventory>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+
+
+@if (ViewBag.Category == "OS")
+{
+    <div class="form-group">
+        <label for="os">Select OS:</label>
+        <select class="form-control" name="id3" id="osDropdown">
+            <option value="">-- SELECT OS --</option>
+            @foreach (var item in Model.Select(m => m.OS.OSDescription).Distinct())
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+}
+@if (ViewBag.Category == "CPU")
+{
+    <div class="form-group">
+        <label for="cpu">Select CPU:</label>
+        <select class="form-control" name="id3" id="cpuDropdown">
+            <option value="">-- SELECT CPU --</option>
+            @foreach (var item in Model.Select(m => m.CPU.CPUDescription).Distinct())
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+}
+@if (ViewBag.Category == "MODEL")
+{
+    <div class="form-group">
+        <label for="model">Select MODEL:</label>
+        <select class="form-control" name="id3" id="modelDropdown">
+            <option value="">-- SELECT MODEL --</option>
+            @foreach (var item in Model.Select(m => m.Model.ModelDescription).Distinct())
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+}
+
+@if (ViewBag.Category == "LEVEL")
+{
+    <div class="form-group">
+        <label for="level">Select LEVEL:</label>
+        <select class="form-control" name="id3" id="levelDropdown">
+            <option value="">-- SELECT LEVEL --</option>
+            @foreach (var item in Model.Select(m => m.Level.LevelDescription).Distinct())
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+}
+
+@if (ViewBag.Category == "MEMORY")
+{
+    <div class="form-group">
+        <label for="memory">Select MEMORY:</label>
+        <select class="form-control" name="id3" id="memoryDropdown">
+            <option value="">-- SELECT MEMORY --</option>
+            @foreach (var item in Model.Select(m => m.Memory.Capacity.CapacityDescription).Distinct())
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+}
+@if (ViewBag.Category == "HARDDISK")
+{
+    <div class="form-group">
+        <label for="hardDisk">Select HARDDISK:</label>
+        <select class="form-control" name="id3" id="hardDiskDropdown">
+            <option value="">-- SELECT HARDDISK --</option>
+            @foreach (var item in Model.Select(m => m.HardDisk.Capacity.CapacityDescription).Distinct())
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+    </div>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

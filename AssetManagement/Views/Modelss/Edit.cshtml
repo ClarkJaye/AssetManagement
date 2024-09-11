@@ -1,0 +1,86 @@
+﻿@model AssetManagement.Models.Model
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<hr />
+<div>
+    <div>
+        <form asp-action="Edit" class="row" id="edit-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ModelId" />
+            <div class="form-group col-6">
+                <label asp-for="ModelDescription" class="control-label"></label>
+                <input asp-for="ModelDescription" class="form-control" />
+                <span asp-validation-for="ModelDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModelStatus" class="control-label"></label>
+                <input asp-for="ModelStatus" class="form-control" />
+                <span asp-validation-for="ModelStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModelCreatedBy" class="control-label"></label>
+                <input asp-for="ModelCreatedBy" class="form-control" />
+                <span asp-validation-for="ModelCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModelCreatedDate" class="control-label"></label>
+                <input asp-for="ModelCreatedDate" class="form-control" />
+                <span asp-validation-for="ModelCreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModelUpdatedBy" class="control-label"></label>
+                <input asp-for="ModelUpdatedBy" class="form-control" />
+                <span asp-validation-for="ModelUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModelUpdatedDate" class="control-label"></label>
+                <input asp-for="ModelUpdatedDate" class="form-control" />
+                <span asp-validation-for="ModelUpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-2 col">
+                <a asp-action="Index" class="btn btn-secondary text-start me-2">Back</a>
+                <input type="submit" value="Save" class="btn btn-success text-white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","Modelss")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

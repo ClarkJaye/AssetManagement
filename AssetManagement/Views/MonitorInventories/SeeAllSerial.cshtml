@@ -1,0 +1,140 @@
+﻿@model IEnumerable<AssetManagement.Models.MonitorDetail>
+
+@{
+    Layout = null;
+}
+<style>
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    tr {
+        cursor: pointer;
+    }
+</style>
+<input type="text" id="filterInput" placeholder="Search...">
+<div>
+    <table class="table custom-fontsize  ">
+        <thead>
+            <tr>
+                <th>
+                    Code
+                </th>
+                <th>
+                    PO
+                </th>
+                <th>
+                    SERIAL
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PurchaseDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DeployedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Createdby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updatedby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateUpdated)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.SerialNumber">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PurchaseDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeployedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#seid').val(id);
+
+        });
+
+    });
+
+
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

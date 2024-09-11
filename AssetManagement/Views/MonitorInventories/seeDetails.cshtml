@@ -1,0 +1,43 @@
+﻿@model AssetManagement.Models.MonitorInventory
+
+@{
+    Layout = null;
+}
+
+<script>
+    $(document).ready(function () {
+        $('#detailsModal').modal('show');
+    });
+</script>
+
+<style>
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        .modal-body p {
+            margin-bottom: 0;
+        }
+</style>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Laptop Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Laptop Code:</strong> @Model.monitorCode</p>
+                <p><strong>Description:</strong> @Model.Description</p>
+                <p><strong>Model:</strong> @Model.Model.ModelDescription</p>
+                <!-- Add more properties as needed -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<AssetManagement.Models.Vendor>
+
+@{
+    ViewData["Title"] = "Inactive";
+}
+<style>
+
+    .title {
+        margin-top: 25px;
+    }
+</style>
+<div class="createform"></div>
+<a class="btn btn-sm bg-secondary text-white custom-fontsize" asp-action="Index">Back</a>
+<h4 class="title">Inactive Vendor</h4>
+<div class="table-responsive scrollable-container">
+    <table class="table custom-fontsize p-4">
+        <thead class="sticky-top" style="z-index:1; position:relative">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.VendorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VendorAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VCreatedby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VUpdateby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateUpdated)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VendorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VendorAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VCreatedby)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VUpdateby)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                    </td>
+                    <td class="d-flex flex-row gap-2">
+                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.VendorID" data-id="@item.VendorID">Activate</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.btn-activate').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '@Url.Action("Activate")',
+                type: 'POST',
+                data: { id: id },
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Error occurred while activating the module.');
+                }
+            });
+        });
+    });
+</script>

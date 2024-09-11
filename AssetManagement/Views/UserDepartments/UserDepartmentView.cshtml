@@ -1,0 +1,40 @@
+﻿@model IEnumerable<AssetManagement.Models.UserDepartment>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+
+
+<h4>USER DEPARTMENTS TAKEN</h4>
+<div class="table-responsive table-container">
+    <table class="table" style="text-align: center;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Department)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.UserADLogin)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { userCode = item.UserCode, departmentCode = item.DeptCode }, new { onclick = "return confirm('Are you sure you want to delete this item?');",  style="color: #BF1E25; text-decoration: none;"})
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

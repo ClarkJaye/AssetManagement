@@ -1,0 +1,66 @@
+﻿@model AssetManagement.Models.Vendor
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<hr />
+<div>
+        <form asp-action="Edit">
+        <div class="row form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="VendorID" />
+            <div class="form-group col-4">
+                <label asp-for="VendorName" class="control-label"></label>
+                <input asp-for="VendorName" class="form-control" />
+                <span asp-validation-for="VendorName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-4">
+                <label asp-for="VendorAddress" class="control-label"></label>
+                <input asp-for="VendorAddress" class="form-control" />
+                <span asp-validation-for="VendorAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="VendorStatus" class="control-label"></label>
+                <input asp-for="VendorStatus" />
+                <span asp-validation-for="VendorStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="VCreatedby" class="control-label"></label>
+                <input asp-for="VCreatedby" />
+                <span asp-validation-for="VCreatedby" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group col-4 mt-4">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn bg-secondary text-white " asp-action="Index" >Back</a>
+            </div> 
+        </div>
+        </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","Vendors")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

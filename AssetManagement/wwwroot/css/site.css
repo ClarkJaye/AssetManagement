@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+    --roboto: 'Roboto', sans-serif;
+    --lato: 'Lato', sans-serif;
+    --light: #F9F9F9;
+    --grey: #eee;
+    --dark: #342E37;
+    --dark-grey: #AAAAAA;
+    --red: #E57373;
+    --green: #4CAF50;
+    --btn: #d24f4f;
+}
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+a{
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/*.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--red); 
+}
+*/
+
+body {
+    background: var(--grey); 
+    font-family: var(--roboto);
+    color: var(--dark);
+}
+
+/* Button styling */
+.btn-red {
+    background-color: var(--btn);
+    color: var(--light);
+}
+    .btn-red:hover {
+        background-color: var(--red);
+        color: var(--light);
+    }
+
+/*.btn-secondary {
+    background-color: #6c757d;
+    color: var(--light);
+}
+
+    .btn-secondary:hover {
+        background-color: #6c757dc9;
+        color: var(--light);
+        border-color: #6c757dc9;
+    }
+*/
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--roboto);
+    color: var(--dark);
+}
+
+
+/* Custom Checkbox Style */
+.custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--dark-grey);
+    border-radius: 3px;
+    outline: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+    .custom-checkbox:checked {
+        background-color: var(--red); 
+        border-color: var(--red); 
+    }
+
+        .custom-checkbox:checked::before {
+            font-family: "Font Awesome 5 Free";
+            content: "\f00c";
+            font-weight: 900;
+            color: white;
+            position: absolute;
+            top: -2px;
+            font-size: 12px;
+        }
+
+
+
+/*
+.toast-notification {
+    position: absolute;
+    bottom: 20px;
+    float: right;
+    right: 20px;
+    padding: 10px;
+    background-color: #106F04;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+}
+
+    .toast-notification::before {
+        content: "\f0a6";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+.animated-toast {
+    animation: toastFade 3s ease-in-out forwards;
+}
+
+#filterInput {
+    padding: 10px;
+    border: 2px solid #ccc;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 200px;
+    box-sizing: border-box;
+}
+
+    #filterInput::placeholder {
+        color: #999;
+    }
+
+    #filterInput:focus {
+        border-color: #106F04;
+        box-shadow: 0 0 8px #106F04;
+    }
+*/
+
+
+
+/*Custom Datatable*/
+input#dt-search-0 {
+    width: 400px;
+}
+.row.mt-2.justify-content-between {
+    margin-bottom: 1rem !important;
+}
+
+/*Table*/
+.table{
+    font-size: 12px;
+}
+    .table thead {
+        background-color: var(--bs-gray-600);
+        color: #fff;
+    }
+
+    .table tbody tr {
+        vertical-align: middle!important;
+    }
+
+
+
+
+
+
+
+/*
+.table-container {
+    height: 500px;
+    overflow: auto;
+}
+
+    .table-container thead {
+        position: sticky;
+        top: 0;
+        background-color: #f9f9f9;
+    }*/
+/*.table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 0;
+    border: 2px solid #000;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+    .table th, .table td {
+        border: 2px solid #000;
+        padding: 8px;
+    }*/
+/*    .table thead {
+        background-color: #343a40;
+        color: #fff;
+    }*/
+/*
+    .table th {
+        font-weight: bold;
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .table tbody tr:hover {
+        background-color: #ddd;
+    }
+*/
+/*input {
+    text-transform: uppercase;
+}
+
+tr:hover {
+    background-color: lightgreen;
+    color: #000;
+    border: 2px solid #000;
+}
+
+.form-control:focus {
+    border-width: 2px;
+    border-color: grey;
+    box-shadow: none;
+    border-radius: 13px;
+}*/

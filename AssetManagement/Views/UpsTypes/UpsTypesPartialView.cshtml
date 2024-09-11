@@ -1,0 +1,115 @@
+﻿@model IEnumerable<AssetManagement.Models.UpsType>
+
+@{
+    Layout = null;
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18"></script>
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+</style>
+<div class="filterInput">
+    <input type="text" id="filterInput" placeholder="Search...">
+</div>
+<div class="table-container">
+    <table class="table custom-fontsize p-4">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.type_description)
+            </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.type_status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.type_createdby)
+            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.type_createddt)
+                </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.type_updatedby)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr data-id="@item.type_id" data-dd="@item.type_description">
+                <td>
+                    @Html.DisplayFor(modelItem => item.type_description)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.type_status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type_createdby)
+                </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.type_createddt)
+                    </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.type_updatedby)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+<script>
+
+    $(document).ready(function () {
+
+
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+            var dd = $(this).data('dd');
+
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#typeid').val(id);
+            $('#typedes').val(dd);
+
+
+        });
+
+    });
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+</script>

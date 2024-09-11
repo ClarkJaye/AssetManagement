@@ -1,0 +1,160 @@
+﻿@using AssetManagement.Models.View_Model;
+@model UserStoreViewModel
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+    .form-group {
+        margin-top: 10px;
+    }
+    .filterInputs {
+        margin-top: 10px;
+    }
+</style>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+@if (TempData["ErrorMessage1"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage1"]</div>
+}
+<div>
+    
+        <form asp-action="Create">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-3" id="leveltable">
+ @*               <label asp-for="UserStore.UserCode" class="control-label"></label>*@
+                <select hidden  asp-for="UserStore.UserCode" class="form-control" asp-items="ViewBag.UserCode"></select>
+                <label class="control-label">USER FULL NAME</label>
+                <select id="userCode"  name="userCODE" class="form-control" asp-items="ViewBag.UserCode"></select>
+            </div>
+            <div class="form-group col-3" id="partialstoretable">
+                <label hidden asp-for="UserStore.StoreCode" class="control-label"></label>
+                <input hidden asp-for="UserStore.StoreCode" class="form-control" />
+                <label class="control-label"> STORE NAME</label>
+                <input id="StoreName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="background-color: #106F04;" />
+                <a asp-action="Index" asp-controller="UserStores"  class="btn btn-primary" style="background-color: #BF1E25;" >CANCEL</a>
+            </div>
+        </div>
+    </form>
+                
+</div>
+
+<div class="displaytable" style="float:right; width:40vw;"></div>
+<div class="filterInputs">
+    <input type="text" id="filterInput" placeholder="Search...">
+</div>
+
+<div class="table-responsive scrollable-container table-container">
+
+<table class="table custom-fontsize p-4">
+    <thead >
+        <tr>
+            <th >
+                @Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().Store_code)
+            </th>
+            <th >
+                @Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().StoreName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().Status)
+            </th>
+    </thead>
+    <tbody style="cursor:pointer;">
+        @foreach (var item in Model.StoreList)
+        {
+                <tr onclick="fillFormFields('@item.Store_code', '@item.StoreName') ">
+                <td >
+                    @Html.DisplayFor(modelItem => item.Store_code)
+                </td>
+                <td >
+                    @Html.DisplayFor(modelItem => item.StoreName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status.status_name)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 
+</div>
+
+<script>
+    function fillFormFields(Store_code, StoreName) {
+        document.getElementById("UserStore_StoreCode").value = Store_code;
+        document.getElementById("StoreName").value = StoreName;
+    }
+
+    // FILTERING
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                var storeName = $(this).find('td:nth-child(2)').text().toLowerCase();
+                $(this).toggle(storeName.indexOf(value) > -1);
+            });
+        });
+    });
+
+    // 2 SELECT FUNCTIONALITY
+    $(document).ready(function () {
+        // Get the initial selected value
+        var initialSelectedValue = $("#userCode").val();
+
+        // Set the initial selected value of the hidden select
+        $("select[name='UserStore.UserCode']").val(initialSelectedValue);
+
+        $("#userCode").change(function () {
+            var selectedValue = $(this).val();
+
+            // Set the selected value of the hidden select
+            $("select[name='UserStore.UserCode']").val(selectedValue);
+        });
+    });
+
+
+
+    //AJAX
+    $(document).ready(function () {
+
+        $("#userCode").change(function () {
+            var userCode = $(this).val();
+
+            $.ajax({
+                url: "@Url.Action("UserStoreView","UserStores")",
+                type: "GET",
+                data: { userCODE: userCode },
+                traditional: true,
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            });
+        });
+    });
+</script>
+  
+

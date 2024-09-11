@@ -1,0 +1,57 @@
+﻿@model AssetManagement.Models.UpsBattStatus
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>UpsBattStatus</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status_description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status_description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status_status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status_status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status_createdby)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status_createdby)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status_createddt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status_createddt)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status_updatedby)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status_updatedby)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status_updateddt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status_updateddt)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="status_id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

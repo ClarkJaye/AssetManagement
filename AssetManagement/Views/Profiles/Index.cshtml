@@ -1,0 +1,247 @@
+﻿@using AssetManagement.Models.View_Model;
+@model ProfileViewModel
+@{
+
+    ViewData["Title"] = "Profiles";
+}
+
+
+<h4>Profile</h4>
+
+<a class="btn btn-sm btn-secondary p-2" asp-controller="Profiles" asp-action="Inactive">Show Deleted</a>
+
+<hr />
+
+<form asp-action="CreateUpdate">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Profile.ProfileId" />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Profile.ProfileName" class="control-label"></label>
+                <input asp-for="Profile.ProfileName" class="form-control" />
+                <span asp-validation-for="Profile.ProfileName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label  asp-for="Profile.ProfileStatus" class="control-label"></label>
+                <select asp-for="Profile.ProfileStatus" class="form-control" asp-items="ViewBag.ProfileStatus"></select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Profile.ProfileDescription" class="control-label"></label>
+                <input asp-for="Profile.ProfileDescription" class="form-control" />
+                <span asp-validation-for="Profile.ProfileDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="Profile.ProfileCreated" class="control-label"></label>
+                <select asp-for="Profile.ProfileCreated" class="form-control" asp-items="ViewBag.ProfileCreated"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-sm btn-red" />
+                <a class="btn btn-sm btn-secondary" asp-action="Cancel">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+<form method="post" action="@Url.Action("DeleteAsEdit", "Profiles")">
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the selected item(s)?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive scrollable-container table-container">
+        <table class="table custom-fontsize">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select-all-checkbox" class="green-checkbox" />
+                    </th>
+                    <th>
+                        <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <span id="boot-icon" class="bi bi-trash-fill"></span>
+                        </button>
+                    </th>
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.Profile.ProfileId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Profile.ProfileName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Profile.ProfileDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Profile.ProfileDtCreated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Profile.ProfileDtUpdated)
+                    </th>
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.Profile.Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Profile.CreatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Profile.UpdatedBy)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.ProfileList)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="select-all-checkbox" class="green-checkbox" name="selectedIds" value="@item.ProfileId" />
+                        </td>
+                        <td>
+                            <a asp-action="Index" asp-route-id="@item.ProfileId"><span class="bi bi-pen"></span></a>
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.ProfileId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileDtCreated)    
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileDtUpdated)
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy.UserADLogin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedBy.UserADLogin)
+                        </td>
+                        <td>
+                            <a data-id="@item.ProfileId" class="btn btn-sm bg-secondary text-white custom-fontsize acc">access</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>
+
+
+
+
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["ErrorMessage1"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage1"]</div>
+}
+
+
+
+
+<script>
+    const selectAllCheckbox = document.getElementById("select-all-checkbox");
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedIds"]');
+    selectAllCheckbox.addEventListener("change", function () {
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = selectAllCheckbox.checked;
+        }
+    });
+
+    $(document).ready(function () {
+        $(".acc").click(function () {
+            $(".createbtn").hide();
+            var id = $(this).data("id");
+            // Get the ProfileName of the selected row
+            var profileName = $(this).closest("tr").find("td:nth-child(4)").text();
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+
+            $.ajax({
+                url: "@Url.Action("Index","ProfileAccesses")",
+                type: "GET",
+                data: { id: id },
+                success: function (res) {
+                    // Set the ProfileName value in session
+                    $.ajax({
+                        url: "@Url.Action("SetProfileNameSession","ProfileAccesses")",
+                        type: "POST",
+                        data: { profileName: profileName },
+                        success: function (res) {
+                            // Redirect to the index of ProfileAccesses
+                            window.location.href = '@Url.Action("Index", "ProfileAccesses")?id=' + id;
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+</script>
+
+
+

@@ -1,0 +1,85 @@
+﻿@model AssetManagement.Models.CPU
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<hr />
+<div>
+    <div>
+        <form asp-action="Edit" class="row" id="edit-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CPUId" />
+            <div class="form-group col-6">
+                <label asp-for="CPUDescription" class="control-label"></label>
+                <input asp-for="CPUDescription" class="form-control" />
+                <span asp-validation-for="CPUDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="CPUStatus" class="control-label"></label>
+                <input asp-for="CPUStatus" class="form-control" />
+                <span asp-validation-for="CPUStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="CPUCreatedBy" class="control-label"></label>
+                <input asp-for="CPUCreatedBy" class="form-control" />
+                <span asp-validation-for="CPUCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="CPUCreatedDate" class="control-label"></label>
+                <input asp-for="CPUCreatedDate" class="form-control" />
+                <span asp-validation-for="CPUCreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="CPUUpdatedBy" class="control-label"></label>
+                <input asp-for="CPUUpdatedBy" class="form-control" />
+                <span asp-validation-for="CPUUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="CPUUpdatedDate" class="control-label"></label>
+                <input asp-for="CPUUpdatedDate" class="form-control" />
+                <span asp-validation-for="CPUUpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-2 col">
+                <a asp-action="Index" class="btn btn-secondary text-start me-2">Back</a>
+                <input type="submit" value="Save" class="btn bg-success text-white" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","CPUs")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

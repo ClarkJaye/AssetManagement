@@ -1,0 +1,101 @@
+﻿@model IEnumerable<AssetManagement.Models.InventoryDetails>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LaptopInventory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeployedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Createdby)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Updatedby)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vendor.VendorID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeployedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.status_code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SerialCode">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SerialCode">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SerialCode">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

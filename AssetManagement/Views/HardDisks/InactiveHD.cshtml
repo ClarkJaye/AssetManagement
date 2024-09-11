@@ -1,0 +1,119 @@
+﻿@model IEnumerable<AssetManagement.Models.HardDisk>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+<div class="createform"></div>
+<a class="btn btn-sm bg-secondary text-white custom-fontsize" asp-action="Index">Back To List</a>
+<h4 class="title ">
+    Hard Disk
+</h4>
+<div class="table-responsive scrollable-container">
+    <table class="table custom-fontsize p-4">
+        <thead class="sticky-top" style="z-index:1; position:relative">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.HDDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HDCapacity)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.HDStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HDCreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HDCreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HDUpdatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HDUpdatedDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HDDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HDCapacity)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.HDStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HDCreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HDCreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HDUpdatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HDUpdatedDate)
+                    </td>
+                    <td class="d-flex flex-row gap-2">
+                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.HDId" data-id="@item.HDId">Activate</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.btn-activate').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '@Url.Action("Activate")',
+                type: 'POST',
+                data: { id: id },
+                success: function () {
+                    Swal.fire({
+                        title: 'Success',
+                        text: '@TempData["SuccessNotification"]',
+                        icon: 'success',
+                        timer: 3000, // Automatically close the notification after 3 seconds
+                        showConfirmButton: false
+                    });
+                },
+                error: function () {
+                    console.log('Error occurred while activating the module.');
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,54 @@
+﻿@model AssetManagement.Models.UpsCondition
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>UpsCondition</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.condition_description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.condition_description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.condition_status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.condition_status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.condition_createdby)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.condition_createdby)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.condition_createddt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.condition_createddt)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.condition_updatedby)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.condition_updatedby)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.condition_updateddt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.condition_updateddt)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.condition_id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

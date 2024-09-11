@@ -1,0 +1,69 @@
+﻿@model AssetManagement.Models.SecondOwnerPeripAlloc
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>SecondOwnerPeripAlloc</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SecAllocId" />
+            <div class="form-group">
+                <label asp-for="AllocId" class="control-label"></label>
+                <select asp-for="AllocId" class="form-control" asp-items="ViewBag.AllocId"></select>
+                <span asp-validation-for="AllocId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecPeripheralCode" class="control-label"></label>
+                <select asp-for="SecPeripheralCode" class="form-control" asp-items="ViewBag.SecPeripheralCode"></select>
+                <span asp-validation-for="SecPeripheralCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecOwnerCode" class="control-label"></label>
+                <select asp-for="SecOwnerCode" class="form-control" asp-items="ViewBag.SecOwnerCode"></select>
+                <span asp-validation-for="SecOwnerCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DatePurchased" class="control-label"></label>
+                <input asp-for="DatePurchased" class="form-control" />
+                <span asp-validation-for="DatePurchased" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AgeYears" class="control-label"></label>
+                <input asp-for="AgeYears" class="form-control" />
+                <span asp-validation-for="AgeYears" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="SecAllocationStatus" class="control-label"></label>
+                <select asp-for="SecAllocationStatus" class="form-control" asp-items="ViewBag.SecAllocationStatus"></select>
+                <span asp-validation-for="SecAllocationStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="AllocCreated" class="control-label"></label>
+                <select asp-for="AllocCreated" class="form-control" asp-items="ViewBag.AllocCreated"></select>
+                <span asp-validation-for="AllocCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

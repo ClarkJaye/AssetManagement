@@ -1,0 +1,91 @@
+﻿ @model IEnumerable<AssetManagement.Models.ProfileAccess>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        overflow:hidden;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+<h4>Access List</h4>
+<input type="text" id="filterInput" placeholder="Search...">
+<div class="table-container">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Profile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Module.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Module)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OpenAccess)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Profile.ProfileName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.Category.category_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Module.ModuleTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OpenAccess)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

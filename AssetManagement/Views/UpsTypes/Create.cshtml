@@ -1,0 +1,58 @@
+﻿@model AssetManagement.Models.UpsType
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>UpsType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="type_description" class="control-label"></label>
+                <input asp-for="type_description" class="form-control" />
+                <span asp-validation-for="type_description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type_status" class="control-label"></label>
+                <input asp-for="type_status" class="form-control" />
+                <span asp-validation-for="type_status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type_createdby" class="control-label"></label>
+                <input asp-for="type_createdby" class="form-control" />
+                <span asp-validation-for="type_createdby" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type_createddt" class="control-label"></label>
+                <input asp-for="type_createddt" class="form-control" />
+                <span asp-validation-for="type_createddt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type_updatedby" class="control-label"></label>
+                <input asp-for="type_updatedby" class="form-control" />
+                <span asp-validation-for="type_updatedby" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type_updateddt" class="control-label"></label>
+                <input asp-for="type_updateddt" class="form-control" />
+                <span asp-validation-for="type_updateddt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

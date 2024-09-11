@@ -1,0 +1,122 @@
+﻿@model IEnumerable<AssetManagement.Models.User>
+
+@{
+    ViewData["Title"] = "User Views";
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<style>
+    .custom-fontsize {
+        font-size: 12px;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+</style>
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+
+<h4> Inactive User </h4>
+<input type="text" id="filterInput" placeholder="Search...">
+    <div class="table-responsive scrollable-container table-container">
+        <table class="table custom-fontsize ">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserADLogin)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserFullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserCreated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserDateCreated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserUpdated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserDateUpdated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Profile)
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserADLogin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserFullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserDateCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserUpdated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserDateUpdated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Profile.ProfileName)
+                        </td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+</div>
+
+<script>
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

@@ -1,0 +1,88 @@
+﻿@model AssetManagement.Models.OS
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+</hr>
+<div>
+    <div>
+        <form asp-action="Edit" class="row" id="edit-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="OSId" />
+            <div class="form-group col-6">
+                <label asp-for="OSDescription" class="control-label"></label>
+                <input asp-for="OSDescription" class="form-control" />
+                <span asp-validation-for="OSDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="OSStatus" class="control-label"></label>
+                <input asp-for="OSStatus" class="form-control" />
+                <span asp-validation-for="OSStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="OSCreatedBy" class="control-label"></label>
+                <input asp-for="OSCreatedBy" class="form-control" />
+                <span asp-validation-for="OSCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="OSCreatedDate" class="control-label"></label>
+                <input asp-for="OSCreatedDate" class="form-control" />
+                <span asp-validation-for="OSCreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="OSUpdatedBy" class="control-label"></label>
+                <input asp-for="OSUpdatedBy" class="form-control" />
+                <span asp-validation-for="OSUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="OSUpdatedDate" class="control-label"></label>
+                <input asp-for="OSUpdatedDate" class="form-control" />
+                <span asp-validation-for="OSUpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-2 col">
+                <a asp-action="Index" class="btn btn-secondary text-start me-2">Back</a>
+                <input type="submit" value="Save" class="btn bg-success text-white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","OS")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

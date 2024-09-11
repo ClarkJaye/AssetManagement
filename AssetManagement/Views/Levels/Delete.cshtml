@@ -1,0 +1,57 @@
+﻿@model AssetManagement.Models.Level
+
+@{
+    ViewData["Title"] = "Delete";
+}
+<br />
+<br />
+<h5>Are you sure you want to delete this?</h5>
+<div>
+    <h4>Level</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LevelDescription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LevelDescription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LevelStatus)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LevelStatus)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LevelCreatedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LevelCreatedBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LevelCreatedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LevelCreatedDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LevelUpdatedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LevelUpdatedBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LevelUpdatedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LevelUpdatedDate)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="LevelId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input asp-route-id="@Model.LevelId" type="submit" value="Delete" class="btn btn-danger" /> |
+        <a class="btn btn-sm bg-success text-white custom-fontsize" asp-action="Index">Back To List</a>
+    </form>
+</div>

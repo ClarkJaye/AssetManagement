@@ -1,0 +1,59 @@
+﻿@model AssetManagement.Models.Memory
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+    .form-group {
+        margin-top: 10px;
+    }
+
+</style>
+
+<h4>Memory</h4>
+<hr />
+<div>
+        <form asp-action="Create">
+        <div class="row form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-3">
+                <label asp-for="MemoryDescription" class="control-label"></label>
+                <input asp-for="MemoryDescription" class="form-control" required />
+                <span asp-validation-for="MemoryDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="MemoryCapacity" class="control-label"></label>
+                <select asp-for="MemoryCapacity" class="form-control" asp-items="ViewBag.MemoryCapacity"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn bg-success text-white" />
+                <a class="btn bg-secondary text-white " asp-action="Index">Back</a>
+            </div>
+        </div>
+        </form>
+    </div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

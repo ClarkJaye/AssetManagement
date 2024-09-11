@@ -1,0 +1,106 @@
+﻿@model IEnumerable<AssetManagement.Models.Brand>
+
+@{
+    ViewData["Title"] = "Inactive";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+<div class="createform"></div>
+<a class="btn bg-secondary text-white " asp-action="Index">Back</a>
+<h4 class="title">Inactive Brands</h4>
+<div class="table-responsive scrollable-container">
+    <table class="table custom-fontsize p-4">
+        <thead class="sticky-top" style="z-index:1; position:relative">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandCreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandCreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandUpdatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandUpdatedDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandCreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandCreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandUpdatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandUpdatedDate)
+                    </td>
+                    <td class="d-flex flex-row gap-2">
+                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.BrandId" data-id="@item.BrandId">Activate</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.btn-activate').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '@Url.Action("Activate")',
+                type: 'POST',
+                data: { id: id},
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Error occurred while activating the module.');
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,43 @@
+﻿@{
+    var userProfile = ViewBag.UserProfile as int?;
+}
+<ul class="navbar-nav px-3">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle item-name" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user"></i>
+            @ViewBag.showprofile
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDrop" style="left: -5rem;width: 200px;overflow: hidden;">
+            <li>
+                <a class="dropdown-item">
+                    <i class="fas fa-user"></i>
+                    @ViewBag.showprofilename
+                </a>
+            </li>
+            <li>
+                @if (userProfile.HasValue && userProfile.Value == 1)
+                {
+                    <a class="dropdown-item" asp-action="ChangePassword" asp-controller="Users" id="logoutBtn">
+                        <i class="fas fa-key"></i>
+                        Change Password
+                    </a>
+                }
+                else
+                {
+                    <a class="dropdown-item" asp-action="UserChangePassword" asp-controller="Users" id="logoutBtn">
+                        <i class="fas fa-key"></i> 
+                        Change Password
+                    </a>
+                }
+            </li>
+            <li>
+                <a id="logoutBtn" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteModal1" style="cursor: pointer;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+
+    </li>
+
+</ul>

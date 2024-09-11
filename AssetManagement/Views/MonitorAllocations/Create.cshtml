@@ -1,0 +1,143 @@
+﻿@model AssetManagement.Models.MonitorAllocation
+
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .custom-fontsize {
+        font-size: 11px;
+    }
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+</style>
+@{
+    var alertMessage = TempData["AlertMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(alertMessage))
+{
+    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
+        @alertMessage
+    </div>
+}
+<h4>Monitor Allocation</h4>
+<hr />
+<div>
+    <form asp-action="Create">
+        <div class="row form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="AllocId" class="control-label"></label>
+                <input asp-for="AllocId" class="form-control" />
+                <span asp-validation-for="AllocId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" id="laptable">
+                <label asp-for="monitorCode" class="control-label"></label>
+                <input asp-for="monitorCode" class="form-control" id="lapid" hidden />
+                <input class="form-control" id="lapdes" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="setable">
+                <label asp-for="SerialNumber" class="control-label"></label>
+                <input asp-for="SerialNumber" readonly class="form-control" id="seid" required style="background-color: white;" />
+                <span asp-validation-for="SerialNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" id="ownertable">
+                <label asp-for="OwnerCode" class="control-label"></label>
+                <input asp-for="OwnerCode" class="form-control" id="oid" hidden />
+                <input class="form-control" id="odes" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="FixedassetTag" class="control-label"></label>
+                <input asp-for="FixedassetTag" class="form-control" required />
+                <span asp-validation-for="FixedassetTag" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="AllocationStatus" class="control-label"></label>
+                <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
+                <span asp-validation-for="AllocationStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" style="margin-top:23px;">
+                <input type="submit" value="Create" class="btn bg-success text-white" />
+                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="displaytable"></div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#laptable").click(function () {
+
+            $('#lapid').val(null);
+
+            $('#lapdes').val(null);
+            $.ajax({
+                url: "@Url.Action("MonitorInvPartialView","MonitorInventories")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        $("#setable").click(function () {
+            $('#seid').val(null);
+
+            var laptopCode = $('#lapid').val();
+
+            $.ajax({
+                url: "@Url.Action("SeeAllSerial", "MonitorInventories")",
+                type: "GET",
+                data: { id: laptopCode },
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+
+        //OWNER
+
+        $("#ownertable").click(function () {
+
+            $('#oid').val(null);
+
+            $('#odes').val(null);
+            $.ajax({
+                url: "@Url.Action("MonitorOwnerPartialView","Owners")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+
+
+    })
+</script>

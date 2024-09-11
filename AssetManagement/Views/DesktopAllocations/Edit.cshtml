@@ -1,0 +1,84 @@
+﻿@model AssetManagement.Models.DesktopAllocation
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>DesktopAllocation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AllocId" />
+            <div class="form-group">
+                <label asp-for="DesktopCode" class="control-label"></label>
+                <select asp-for="DesktopCode" class="form-control" asp-items="ViewBag.DesktopCode"></select>
+                <span asp-validation-for="DesktopCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerCode" class="control-label"></label>
+                <select asp-for="OwnerCode" class="form-control" asp-items="ViewBag.OwnerCode"></select>
+                <span asp-validation-for="OwnerCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnitTag" class="control-label"></label>
+                <select asp-for="UnitTag" class="form-control" asp-items="ViewBag.UnitTag"></select>
+                <span asp-validation-for="UnitTag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FixedassetTag" class="control-label"></label>
+                <input asp-for="FixedassetTag" class="form-control" />
+                <span asp-validation-for="FixedassetTag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ComputerName" class="control-label"></label>
+                <input asp-for="ComputerName" class="form-control" />
+                <span asp-validation-for="ComputerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateDeployed" class="control-label"></label>
+                <input asp-for="DateDeployed" class="form-control" />
+                <span asp-validation-for="DateDeployed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AllocationStatus" class="control-label"></label>
+                <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
+                <span asp-validation-for="AllocationStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AllocCreated" class="control-label"></label>
+                <select asp-for="AllocCreated" class="form-control" asp-items="ViewBag.AllocCreated"></select>
+                <span asp-validation-for="AllocCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AllocUpdated" class="control-label"></label>
+                <select asp-for="AllocUpdated" class="form-control" asp-items="ViewBag.AllocUpdated"></select>
+                <span asp-validation-for="AllocUpdated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateUpdated" class="control-label"></label>
+                <input asp-for="DateUpdated" class="form-control" />
+                <span asp-validation-for="DateUpdated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,59 @@
+﻿@model AssetManagement.Models.UpsBatteryRep
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>UpsBatteryRep</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UpsBattStore" class="control-label"></label>
+                <select asp-for="UpsBattStore" class="form-control" asp-items="ViewBag.UpsBattStore"></select>
+                <span asp-validation-for="UpsBattStore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpsBattCode" class="control-label"></label>
+                <select asp-for="UpsBattCode" class="form-control" asp-items="ViewBag.UpsBattCode"></select>
+                <span asp-validation-for="UpsBattCode" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="BatteryRepNo" />
+            <div class="form-group">
+                <label asp-for="BatteryRepDate" class="control-label"></label>
+                <input asp-for="BatteryRepDate" class="form-control" />
+                <span asp-validation-for="BatteryRepDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BatteryRepRemarks" class="control-label"></label>
+                <input asp-for="BatteryRepRemarks" class="form-control" />
+                <span asp-validation-for="BatteryRepRemarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BatteryRepCreatedBy" class="control-label"></label>
+                <select asp-for="BatteryRepCreatedBy" class="form-control" asp-items="ViewBag.BatteryRepCreatedBy"></select>
+                <span asp-validation-for="BatteryRepCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BatteryRepCreatedAt" class="control-label"></label>
+                <input asp-for="BatteryRepCreatedAt" class="form-control" />
+                <span asp-validation-for="BatteryRepCreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

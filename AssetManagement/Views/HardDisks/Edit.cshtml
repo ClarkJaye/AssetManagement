@@ -1,0 +1,99 @@
+﻿@model AssetManagement.Models.HardDisk
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        border-width: 2px;
+        border-color: #BF1E25;
+        box-shadow: none;
+        border-radius: 13px;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<hr />
+<div>
+    <div>
+        <form asp-action="Edit" class="row" id="edit-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="HDId" />
+            <div class="form-group col-6">
+                <label asp-for="HDDescription" class="control-label"></label>
+                <input asp-for="HDDescription" class="form-control" />
+                <span asp-validation-for="HDDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group col-6">
+                <label asp-for="HDCapacity" class="control-label"></label>
+                <select asp-for="HDCapacity" class="form-control" asp-items="ViewBag.HDCapacity"></select>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="HDStatus" class="control-label"></label>
+                <input asp-for="HDStatus" class="form-control" />
+                <span asp-validation-for="HDStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="HDCreatedBy" class="control-label"></label>
+                <input asp-for="HDCreatedBy" class="form-control" />
+                <span asp-validation-for="HDCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="HDCreatedDate" class="control-label"></label>
+                <input asp-for="HDCreatedDate" class="form-control" />
+                <span asp-validation-for="HDCreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="HDUpdatedBy" class="control-label"></label>
+                <input asp-for="HDUpdatedBy" class="form-control" />
+                <span asp-validation-for="HDUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="HDUpdatedDate" class="control-label"></label>
+                <input asp-for="HDUpdatedDate" class="form-control" />
+                <span asp-validation-for="HDUpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-2 col">
+                <a asp-action="Index" class="btn btn-secondary text-start me-2">Back</a>
+                <input type="submit" value="Save" class="btn bg-success text-white" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","HardDisks")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>
+

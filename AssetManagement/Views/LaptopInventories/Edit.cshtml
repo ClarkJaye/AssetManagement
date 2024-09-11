@@ -1,0 +1,311 @@
+﻿@model AssetManagement.Models.LaptopInventory
+
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .custom-fontsize {
+
+        font-size: 11px;
+    }
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+@{
+    var alertMessage = TempData["AlertMessage"] as string;
+    if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
+            @alertMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+}
+
+<script>
+    $(document).ready(function () {
+        // Close the alert after 6 seconds
+        setTimeout(function () {
+            $("#alert").alert("close");
+        }, 5000);
+    });
+</script>
+
+<h4>Laptop Inventory</h4>
+<hr />
+<div>
+    <table class="table">
+        <tr>
+            <td hidden>
+                <label asp-for="laptoptinvCode" class="control-label"></label>
+                @Model.laptoptinvCode
+            </td>
+            <td>
+                <label asp-for="Description" class="control-label"><b>Description :</b></label>
+                @Model.Description
+            </td>
+            <td>
+                <label asp-for="LTLevel" class="control-label"><b>LTLevel :</b></label>
+                @Model.Level.LevelDescription
+            </td>
+            <td>
+                <label asp-for="LTBrand" class="control-label"><b>LTBrand :</b></label>
+                @Model.Brand.BrandDescription
+            </td>
+            <td>
+                <label asp-for="LTModel" class="control-label"><b>LTModel :</b></label>
+                @Model.Model.ModelDescription
+            </td>
+            <td>
+                <label asp-for="LTcpu" class="control-label"><b>LTcpu :</b></label>
+                @Model.CPU.CPUDescription
+            </td>
+            <td>
+                <label asp-for="LTHardisk" class="control-label"><b>LTHardisk :</b></label>
+                @Model.HardDisk.HDDescription
+            </td>
+            <td>
+                <label asp-for="LTMemory" class="control-label"><b>LTMemory :</b></label>
+                @Model.Memory.MemoryDescription
+            </td>
+            <td>
+                <label asp-for="LTOS" class="control-label"><b>LTOS :</b></label>
+                @Model.OS.OSDescription
+            </td>
+
+        </tr>
+    </table>
+</div>
+<hr />
+<div>
+    <form asp-action="Edit">
+        <div class="row form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-2" >
+                <label asp-for="laptoptinvCode" class="control-label"></label>
+                <input readonly style="background-color: white;" asp-for="laptoptinvCode" class="form-control" />
+                <span asp-validation-for="laptoptinvCode" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" >
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" id="leveltable">
+                <label asp-for="LTLevel" class="control-label"></label>
+                <input asp-for="LTLevel" asp-items="ViewBag.LTLevel" hidden class="form-control" id="levelid"  />
+                <input class="form-control" id="leveldes" disabled style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="brandtable" >
+                <label asp-for="LTBrand" class="control-label"></label>
+                <input asp-for="LTBrand" class="form-control" id="brandid" hidden />
+                <input class="form-control" id="branddes" disabled style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="modeltable" >
+                <label asp-for="LTModel" class="control-label"></label>
+                <input asp-for="LTModel" class="form-control" id="modelid" hidden />
+                <input class="form-control" id="modeldes" disabled style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="cputable" >
+                <label asp-for="LTcpu" class="control-label"></label>
+                <input asp-for="LTcpu" class="form-control" id="cpuid" hidden />
+                <input class="form-control" id="cpudes" disabled style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="harddisktable" >
+                <label asp-for="LTHardisk" class="control-label"></label>
+                <input asp-for="LTHardisk" class="form-control" id="hdid" hidden />
+                <input class="form-control" id="hddes" disabled style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="memorytable" >
+                <label asp-for="LTMemory" class="control-label"></label>
+                <input asp-for="LTMemory" class="form-control" id="mid" hidden />
+                <input class="form-control" id="mdes" disabled style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="ostable" >
+                <label asp-for="LTOS" class="control-label"></label>
+                <input asp-for="LTOS" class="form-control" id="osid" hidden />
+                <input class="form-control" id="osdes" disabled style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="AllocatedNo" class="control-label"></label>
+                <input asp-for="AllocatedNo" class="form-control" />
+                <span asp-validation-for="AllocatedNo" class="text-danger"></span>
+            </div>
+            <div hidden class="form-group col-2">
+                <label asp-for="LTStatus" class="control-label"></label>
+                <select asp-for="LTStatus" class="form-control" asp-items="ViewBag.LTStatus"></select>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="LTCreated" class="control-label"></label>
+                <input asp-for="LTCreated" class="form-control" />
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+            </div>
+            <div class="form-group col-2 mt-4">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn bg-secondary text-white " asp-action="Index">Back</a>
+            </div>
+                
+        </div>
+    </form>
+</div>
+<div class="displaytable">
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#leveltable").click(function () {
+
+            $('#levelid').val(null);
+
+            $('#leveldes').val(null);
+            $.ajax({
+                url: "@Url.Action("LevelPartialView","Levels")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        //BRAND
+        $("#brandtable").click(function () {
+
+            $('#brandid').val(null);
+
+            $('#branddes').val(null);
+            $.ajax({
+                url: "@Url.Action("BrandPartialView","Brands")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        //Model
+        $("#modeltable").click(function () {
+
+            $('#modelid').val(null);
+
+            $('#modeldes').val(null);
+            $.ajax({
+                url: "@Url.Action("ModelPartialView","Modelss")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        //CPU
+        $("#cputable").click(function () {
+
+            $('#cpuid').val(null);
+
+            $('#cpudes').val(null);
+            $.ajax({
+                url: "@Url.Action("CPUPartialView","CPUs")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        //Hardisk
+        $("#harddisktable").click(function () {
+
+            $('#hdid').val(null);
+
+            $('#hddes').val(null);
+            $.ajax({
+                url: "@Url.Action("HardDiskPartialView","HardDisks")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        //Memory
+        $("#memorytable").click(function () {
+
+            $('#mid').val(null);
+
+            $('#mdes').val(null);
+            $.ajax({
+                url: "@Url.Action("MemoryPartialView","Memories")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        //OS
+        $("#ostable").click(function () {
+
+            $('#osid').val(null);
+
+            $('#osdes').val(null);
+            $.ajax({
+                url: "@Url.Action("OSPartialView","OS")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        //VENDOR
+        $("#vendortable").click(function () {
+
+            $('#vid').val(null);
+
+            $('#vname').val(null);
+            $.ajax({
+                url: "@Url.Action("VendorsPartialView","Vendors")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+
+    })
+
+</script>

@@ -1,0 +1,297 @@
+﻿@model IEnumerable<AssetManagement.Models.InventoryDetails>
+
+
+@{
+    ViewData["Title"] = "Reports";
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+
+    td {
+        cursor: pointer;
+    }
+
+    .allocation-details {
+        margin-bottom: 20px;
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .allocation-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Style for the form */
+    form.form-inline {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Style for the label */
+    label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    /* Style for the select element */
+    select {
+        width: 200px;
+        padding: 5px;
+    }
+
+    /* Style for the submit button */
+    .btn-success {
+        color: #fff;
+        padding: 5px 15px;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+</style>
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+
+
+<div class="container">
+    <h2>Laptop Brand Category</h2>
+    <form asp-action="LaptopBrandReport" method="get" class="form-inline">
+        <div class="form-group">
+            <label for="SelectedBrandId">Select Brand:</label>
+            <select id="SelectedBrandId" name="id" class="form-control">
+                <option value="">All Brand</option>
+                @foreach (var item in (SelectList)ViewData["Brand"])
+                {
+                    <option id="selectedBrand" value="@item.Text">@item.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="SelectedBrandId">Select Specs:</label>
+            <select id="setable" name="id2" class="form-control">
+                <option value="">-- Select Specs --</option>
+                <option value="OS">OS</option>
+                <option value="CPU">CPU</option>
+                <option value="MODEL">MODEL</option>
+                <option value="LEVEL">LEVEL</option>
+                <option value="MEMORY">MEMORY</option>
+                <option value="HARDDISK">HARD DISK</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <div class="displaySelected"></div>
+        </div>
+        <div class="form-group">
+            <label for="os">Select Status:</label>
+            <select class="form-control" name="id4" id="osDropdown">
+                <option value="">-- Select Status --</option>
+                <option value="AVAILABLE">AVAILABLE</option>
+                <option value="COMPLETED">COMPLETED</option>
+
+
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Filter</button>
+        </div>
+    </form>
+
+
+    @if (ViewBag.TotalAvailableLaptop != null)
+    {
+        <p style="color: green; font-weight: bold;">Total number of @ViewBag.Id is: @ViewBag.TotalAvailableLaptop</p>
+        <p style="color: red; font-weight: bold; margin-top: -15px;">COMPLETED: @ViewBag.TotalCompletedLaptop</p>
+        <p style="color: green; font-weight: bold;margin-top: -15px;">AVAILABLE: @ViewBag.TotalAvailableLaptop3</p>
+    }
+</div>
+
+
+<div style="margin-top: -30px;">
+    <input type="text" id="filterInput" placeholder="Search...">
+    <table class="table custom-fontsize  ">
+    <thead>
+        <tr>
+            <th>
+                CODE
+            </th>
+            <th>
+                LAPTOP DESCRIPTION
+            </th>
+            <th>
+                BRAND
+            </th>
+            <th>
+                LEVEL
+            </th>
+            <th>
+                OS
+            </th>
+            <th>
+                MEMORY
+            </th>
+            <th>
+                HARDDISK
+            </th>
+            <th>
+                MODEL
+            </th>
+            <th>
+                CPU
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PO)
+            </th>
+            <th>
+                SERIAL
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendor)
+            </th>
+            <th>
+                PURCHASE DATE
+            </th>
+            <th>
+                DEPLOYED DATE
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.Brand.BrandDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.Level.LevelDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.OS.OSDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.Memory.Capacity.CapacityDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.HardDisk.Capacity.CapacityDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LaptopInventory.Model.ModelDescription)
+                </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventory.CPU.CPUDescription)
+                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PO)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PurchaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeployedDate)
+                </td>
+                @if (item.LTStatus == "CO")
+                {
+                    <td style="color: red;">
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                }
+                   
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#setable").change(function () {
+            var laptopCode = $('#SelectedBrandId').val();
+            var laptopSpec = $(this).val();
+            $.ajax({
+                url: "@Url.Action("GetSpecs", "LaptopInventories")",
+                type: "GET",
+                data: { id: laptopCode, id2: laptopSpec },
+                success: function (res) {
+                    $(".displaySelected").html(res);
+                },
+                error: function () {
+                    alert("An error occurred.");
+                }
+            });
+        });
+    });
+
+
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

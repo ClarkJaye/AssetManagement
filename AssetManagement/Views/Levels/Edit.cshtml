@@ -1,0 +1,86 @@
+﻿@model AssetManagement.Models.Level
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<hr />
+<div>
+    <div>
+        <form asp-action="Edit" class="row" id="edit-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="LevelId" />
+            <div class="form-group col-6">
+                <label asp-for="LevelDescription" class="control-label"></label>
+                <input asp-for="LevelDescription" class="form-control" />
+                <span asp-validation-for="LevelDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="LevelStatus" class="control-label"></label>
+                <input asp-for="LevelStatus" class="form-control" />
+                <span asp-validation-for="LevelStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="LevelCreatedBy" class="control-label"></label>
+                <input asp-for="LevelCreatedBy" class="form-control" />
+                <span asp-validation-for="LevelCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="LevelCreatedDate" class="control-label"></label>
+                <input asp-for="LevelCreatedDate" class="form-control" />
+                <span asp-validation-for="LevelCreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="LevelUpdatedBy" class="control-label"></label>
+                <input asp-for="LevelUpdatedBy" class="form-control" />
+                <span asp-validation-for="LevelUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="LevelUpdatedDate" class="control-label"></label>
+                <input asp-for="LevelUpdatedDate" class="form-control" />
+                <span asp-validation-for="LevelUpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-2 col">
+                <a asp-action="Index" class="btn btn-secondary text-start me-2">Back</a>
+                <input type="submit" value="Save" class="btn bg-success text-white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","Levels")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

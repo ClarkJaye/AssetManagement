@@ -1,0 +1,103 @@
+﻿@model IEnumerable<AssetManagement.Models.MainBoard>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+<style>
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<input type="text" class="search" id="filterInput" placeholder="Search...">
+<div class="table-container">
+    <table class="table custom-fontsize p-4">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BoardDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BoardStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BoardCreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BoardCreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BoardUpdatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BoardUpdatedDate)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.BoardID" data-bdes="@item.BoardDescription" style="cursor:pointer;">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BoardDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BoardStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BoardCreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BoardCreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BoardUpdatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BoardUpdatedDate)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+            var bdes = $(this).data('bdes');
+
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#boardid').val(id);
+            $('#boardes').val(bdes);
+
+
+        });
+
+    });
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

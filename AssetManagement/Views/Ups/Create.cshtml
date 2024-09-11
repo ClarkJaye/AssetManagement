@@ -1,0 +1,247 @@
+﻿@model AssetManagement.Models.Ups
+
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .custom-fontsize {
+        font-size: 11px;
+    }
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+</style>
+@{
+    var alertMessage = TempData["AlertMessage"] as string;
+}
+@if (!string.IsNullOrEmpty(alertMessage))
+{
+    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
+        @alertMessage
+    </div>
+}
+<h4>Uninterruptible Power Supply</h4>
+<hr />
+<div>
+        <form asp-action="Create">
+        <div class="row form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-2">
+                <label asp-for="ups_store" class="control-label"></label>
+                <select asp-for="ups_store" class="form-control" asp-items="ViewBag.ups_store"></select>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_code" class="control-label"></label>
+                <input asp-for="ups_code" class="form-control" />
+                <span asp-validation-for="ups_code" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" id="brandtable">
+                <label asp-for="ups_brand" class="control-label"></label>
+                <input asp-for="ups_brand" value="0" class="form-control" id="brandid" hidden />
+                <input class="form-control" id="branddes" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="modeltable">
+                <label asp-for="ups_model" class="control-label"></label>
+                <input asp-for="ups_model" value="0" class="form-control" id="modelid" hidden />
+                <input class="form-control" id="modeldes" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2" id="typetable">
+                <label asp-for="ups_type" class="control-label"></label>
+                <input asp-for="ups_type" value="0" class="form-control" id="typeid" hidden />
+                <input class="form-control" id="typedes" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_serial" class="control-label"></label>
+                <input asp-for="ups_serial" class="form-control" />
+                <span asp-validation-for="ups_serial" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_warranty" class="control-label"></label>
+                <input asp-for="ups_warranty" class="form-control" />
+                <span asp-validation-for="ups_warranty" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_validity" class="control-label"></label>
+                <input asp-for="ups_validity" class="form-control" />
+                <span asp-validation-for="ups_validity" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_iovoltage" class="control-label"></label>
+                <input asp-for="ups_iovoltage" class="form-control" />
+                <span asp-validation-for="ups_iovoltage" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_dcvoltage" class="control-label"></label>
+                <input asp-for="ups_dcvoltage" class="form-control" />
+                <span asp-validation-for="ups_dcvoltage" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_idealload" class="control-label"></label>
+                <input asp-for="ups_idealload" class="form-control" />
+                <span asp-validation-for="ups_idealload" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_currentload" class="control-label"></label>
+                <input asp-for="ups_currentload" class="form-control" />
+                <span asp-validation-for="ups_currentload" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" id="vendortable">
+                <label asp-for="ups_vendor" class="control-label"></label>
+                <input asp-for="ups_vendor" value="0" class="form-control" id="vid" hidden />
+                <input class="form-control" id="vname" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_dtinstalled" class="control-label"></label>
+                <input asp-for="ups_dtinstalled" class="form-control" />
+                <span asp-validation-for="ups_dtinstalled" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" id="conditiontable">
+                <label asp-for="ups_condition" class="control-label"></label>
+                <input asp-for="ups_condition" value="0" class="form-control" id="cid" hidden />
+                <input class="form-control" id="cname" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_serviceyrs" class="control-label"></label>
+                <input asp-for="ups_serviceyrs" class="form-control" />
+                <span asp-validation-for="ups_serviceyrs" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_lastpmdt" class="control-label"></label>
+                <input asp-for="ups_lastpmdt" class="form-control" />
+                <span asp-validation-for="ups_lastpmdt" class="text-danger"></span>
+            </div>
+           <div class="form-group col-2" id="batttable">
+                <label asp-for="ups_battstatus" class="control-label"></label>
+                <input asp-for="ups_battstatus" value="0" class="form-control" id="battid" hidden />
+                <input class="form-control" id="battdes" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_battrepcount" class="control-label"></label>
+                <input asp-for="ups_battrepcount" class="form-control" />
+                <span asp-validation-for="ups_battrepcount" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_unitserve" class="control-label"></label>
+                <input asp-for="ups_unitserve" class="form-control" />
+                <span asp-validation-for="ups_unitserve" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="ups_status" class="control-label"></label>
+                <select asp-for="ups_status" class ="form-control" asp-items="ViewBag.ups_status"></select>
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="ups_remarks" class="control-label"></label>
+                <input asp-for="ups_remarks" class="form-control" />
+                <span asp-validation-for="ups_remarks" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" style="margin-top:23px;">
+                <input type="submit" value="Create" class="btn bg-success text-white" />
+                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="displaytable"></div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+
+        $("#brandtable").click(function () {
+
+            $('#brandid').val(null);
+
+            $('#branddes').val(null);
+            $.ajax({
+                url: "@Url.Action("BrandPartialView","Brands")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+        $("#modeltable").click(function () {
+
+            $('#modelid').val(null);
+
+            $('#modeldes').val(null);
+            $.ajax({
+                url: "@Url.Action("ModelPartialView","Modelss")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+        $("#vendortable").click(function () {
+
+            $('#vid').val(null);
+
+            $('#vname').val(null);
+            $.ajax({
+                url: "@Url.Action("VendorsPartialView","Vendors")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+        $("#typetable").click(function () {
+
+            $('#typeid').val(null);
+
+            $('#typedes').val(null);
+            $.ajax({
+                url: "@Url.Action("UpsTypesPartialView","UpsTypes")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+        $("#conditiontable").click(function () {
+
+            $('#cid').val(null);
+
+            $('#cname').val(null);
+            $.ajax({
+                url: "@Url.Action("UpsConditionsPartialView","UpsConditions")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+        $("#batttable").click(function () {
+
+            $('#battid').val(null);
+
+            $('#battdes').val(null);
+            $.ajax({
+                url: "@Url.Action("UpsBattStatusPartialView","UpsBattStatus")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res); 
+                }
+            })
+        })
+    })
+
+</script>

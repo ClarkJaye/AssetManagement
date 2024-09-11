@@ -1,0 +1,73 @@
+﻿@model AssetManagement.Models.Module
+
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+/*    .form-group{
+        margin-top: 10px;
+    }*/
+
+</style>    
+
+<h4>Module</h4>
+<hr />
+<div>
+        <form asp-action="Create">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-3">
+                <label asp-for="ModuleTitle" class="control-label"></label>
+                <input asp-for="ModuleTitle" class="form-control" />
+                <span asp-validation-for="ModuleTitle" class="text-danger"></span>
+            </div>
+         @*   <div class="form-group">
+                <label hidden asp-for="ModuleDtCreated" class="control-label"></label>
+                <input type="hidden" asp-for="ModuleDtCreated" class="form-control"/>
+                <span asp-validation-for="ModuleDtCreated" class="text-danger"></span>
+            </div>*@
+            <div class="form-group col-3">
+                <label asp-for="ModuleCategory" class="control-label"></label>
+                <select asp-for="ModuleCategory" class="form-control" asp-items="ViewBag.ModuleCategory"></select>
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="ModuleStatus" class="control-label"></label>
+                <select asp-for="ModuleStatus" class ="form-control" asp-items="ViewBag.ModuleStatus"></select>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModuleCreated" class="control-label"></label>
+                <select asp-for="ModuleCreated" class ="form-control" asp-items="ViewBag.ModuleCreated"></select>
+            </div>
+            <div class="form-group col-3" style="margin-top: 23px;">
+                <input type="submit" value="Create" class="btn bg-success text-white" />
+                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
+            </div>
+        </div>
+        </form>
+    
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,89 @@
+﻿@model AssetManagement.Models.GraphicsCard
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+</style>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="GraphicsID" />
+            <div class="form-group">
+                <label asp-for="GraphicsDescription" class="control-label"></label>
+                <input asp-for="GraphicsDescription" class="form-control" />
+                <span asp-validation-for="GraphicsDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="GraphicsStatus" class="control-label"></label>
+                <input asp-for="GraphicsStatus" class="form-control" />
+                <span asp-validation-for="GraphicsStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="GraphicsCreatedBy" class="control-label"></label>
+                <input asp-for="GraphicsCreatedBy" class="form-control" />
+                <span asp-validation-for="GraphicsCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="GraphicsCreatedDate" class="control-label"></label>
+                <input asp-for="GraphicsCreatedDate" class="form-control" />
+                <span asp-validation-for="GraphicsCreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="GraphicsUpdatedBy" class="control-label"></label>
+                <input asp-for="GraphicsUpdatedBy" class="form-control" />
+                <span asp-validation-for="GraphicsUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="GraphicsUpdatedDate" class="control-label"></label>
+                <input asp-for="GraphicsUpdatedDate" class="form-control" />
+                <span asp-validation-for="GraphicsUpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4 mb-2 col
+">
+                <a asp-action="Index" class="btn btn-secondary text-start me-2">Back</a>
+                <input type="submit" value="Save" class="btn bg-success text-white" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-save").click(function () {
+
+            var formData = $("#edit-form").serialize();
+            $.ajax({
+                url: "@Url.Action("Edit","Brands")",
+                type: "POST",
+                data: { formData: formData },
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        })
+    })
+</script>

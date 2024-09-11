@@ -1,0 +1,113 @@
+﻿@model AssetManagement.Models.DesktopBorrowed
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@{
+    var alertMessage = TempData["AlertMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(alertMessage))
+{
+    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
+        @alertMessage
+    </div>
+}
+<div style="margin-top: 15vh;">
+    <h4>Desktop Borrowed</h4>
+<hr />
+<form asp-action="Create">
+<div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-2" hidden>
+                <label asp-for="BorrowedID" class="control-label"></label>
+                <input asp-for="BorrowedID" class="form-control" />
+                <span asp-validation-for="BorrowedID" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" id="laptable">
+                <label asp-for="UnitID" class="control-label"></label>
+                <input asp-for="UnitID" class="form-control" id="lapid" hidden />
+                <input class="form-control" id="lapdes" readonly style="background-color: white;" />
+            </div>
+
+            <div class="form-group col-2" id="setable">
+                <label asp-for="UnitTag" class="control-label"></label>
+                <input asp-for="UnitTag" readonly class="form-control" id="seid" required style="background-color: white;" />
+                <span asp-validation-for="UnitTag" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-2" id="ownertable">
+                <label asp-for="OwnerID" class="control-label"></label>
+                <input asp-for="OwnerID" class="form-control" id="oid" hidden />
+                <input class="form-control" id="odes" readonly style="background-color: white;" />
+            </div>
+            <div class="form-group col-2">
+                <label asp-for="Remark" class="control-label"></label>
+                <input asp-for="Remark" class="form-control" />
+                <span asp-validation-for="Remark" class="text-danger"></span>
+            </div>
+            <div class="form-group col-2" style="margin-top:23px;">
+                <input type="submit" value="Create" class="btn bg-success text-white" />
+                <a class="btn bg-secondary text-white " asp-action="DeskInvPartialView">BACK</a>
+            </div>
+        </form>
+    </div>
+<div class="displaytable"></div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    $(document).ready(function () {
+
+        $("#laptable").click(function () {
+
+            $('#lapid').val(null);
+
+            $('#lapdes').val(null);
+            $.ajax({
+                url: "@Url.Action("DeskInvPartialView","DesktopInventories")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+        $("#setable").click(function () {
+            $('#seid').val(null);
+
+            var laptopCode = $('#lapid').val();
+
+            $.ajax({
+                url: "@Url.Action("SeeAllUnitTag", "DesktopInventories")",
+                type: "GET",
+                data: { id: laptopCode },
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+
+        //OWNER
+
+        $("#ownertable").click(function () {
+
+            $('#oid').val(null);
+
+            $('#odes').val(null);
+            $.ajax({
+                url: "@Url.Action("OwnerPartialView","Owners")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
+
+
+    })
+</script>

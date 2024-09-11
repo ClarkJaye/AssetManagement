@@ -1,0 +1,105 @@
+﻿@model AssetManagement.Models.UserDepartment
+
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+    .form-group {
+        margin-top: 10px;
+    }
+
+</style>
+<h4>User Department</h4>
+<hr />
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+<div>
+    
+        <form asp-action="Create">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-6">
+                <label asp-for="UserCode" class="control-label">USER FULL NAME</label>
+                <select  asp-for="UserCode" class="form-control" asp-items="ViewBag.UserCode"></select>
+            </div>
+            <div class="form-group col-6">
+                <label asp-for="DeptCode" class="control-label">DEPARTMENT NAME</label>
+                <select asp-for="DeptCode" class="form-control" asp-items="ViewBag.DeptCode"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn bg-success text-white" />
+                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
+            </div>
+        </div>
+        </form>
+   
+</div>
+
+<div class="displaytable"></div>
+
+<script>
+
+
+    // 2 SELECT FUNCTIONALITY
+    $(document).ready(function () {
+        // Get the initial selected value
+        var initialSelectedValue = $("#userCode").val();
+
+        // Set the initial selected value of the hidden select
+        $("select[name='UserStore.UserCode']").val(initialSelectedValue);
+
+        $("#userCode").change(function () {
+            var selectedValue = $(this).val();
+
+            // Set the selected value of the hidden select
+            $("select[name='UserStore.UserCode']").val(selectedValue);
+        });
+    });
+
+
+
+    //AJAX
+    $(document).ready(function () {
+
+        $("#userCode").change(function () {
+            var userCode = $(this).val();
+
+            $.ajax({
+                url: "@Url.Action("UserDepartmentView","UserDepartments")",
+                type: "GET",
+                data: { userCODE: userCode },
+                traditional: true,
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            });
+        });
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,105 @@
+﻿@model IEnumerable<AssetManagement.Models.OS>
+
+@{
+    ViewData["Title"] = "Inactive";
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+</style>
+<div class="createform"></div>
+<a class="btn btn-sm bg-secondary text-white custom-fontsize" asp-action="Index">Back To List</a>
+<h4 class="title">Inactive OS</h4>
+<div class="table-responsive scrollable-container">
+    <table class="table custom-fontsize p-4">
+        <thead class="sticky-top" style="z-index:1; position:relative">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OSDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OSStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OSCreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OSCreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OSUpdatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OSUpdatedDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OSDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OSStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OSCreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OSCreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OSUpdatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OSUpdatedDate)
+                    </td>
+                    <td class="d-flex flex-row gap-2">
+                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.OSId" data-id="@item.OSId">Activate</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.btn-activate').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '@Url.Action("Activate")',
+                type: 'POST',
+                data: { id: id },
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    console.log('Error occurred while activating the module.');
+                }
+            });
+        });
+    });
+</script>

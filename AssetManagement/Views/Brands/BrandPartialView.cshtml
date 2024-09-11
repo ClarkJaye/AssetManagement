@@ -1,0 +1,101 @@
+﻿@model IEnumerable<AssetManagement.Models.Brand>
+                 
+@{
+    Layout = null;
+}
+<style>
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+    }
+</style>
+<input  type="text" id="filterInput" placeholder="Search...">
+<div class="table-responsive scrollable-container">
+    
+    <table class="table custom-fontsize p-4" style="cursor:pointer;">
+        <thead class="sticky-top" style="z-index:1; position:relative">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandDescription)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.BrandStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandCreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandCreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandUpdatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandUpdatedDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.BrandId" data-dd="@item.BrandDescription">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandDescription)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.BrandStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandCreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandCreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandUpdatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandUpdatedDate)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+
+
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+            var dd = $(this).data('dd');
+
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#brandid').val(id);
+            $('#branddes').val(dd);
+
+
+        });
+
+    });
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

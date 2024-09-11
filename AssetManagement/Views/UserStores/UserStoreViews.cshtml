@@ -1,0 +1,141 @@
+﻿@model PagedList.IPagedList<AssetManagement.Models.UserStore>
+
+@addTagHelper * , PagedList.Core.Mvc
+
+@{
+    ViewData["Title"] = "User Store Views";
+}
+@using PagedList;
+@using PagedList.Mvc;
+@using System.Web.Mvc;
+
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/PagedList.js"></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18"></script>
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+</style>
+
+<h4>User Store List</h4>
+
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+<form method="get" action="@Url.Action("UserStoreViews", "UserStores")">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="searchString"
+               placeholder="Search by user or store" style="width: 50px;">
+        <div class="input-group-append"  >
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+<div class="table-responsive table-container">
+    <table class="table" style="text-align: center;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().User)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Store)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="text-align: center;">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.UserADLogin)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store.StoreName)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="Paging" style="text-align:center">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", "UserStores", new { page = 1 })">&laquo;</a>
+            </li>
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "UserStores", new { page = i })">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.PageNumber == Model.PageCount ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", "UserStores", new { page = Model.PageCount })">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#partialstoretable").click(function () {
+            $(this).hide();
+            $.ajax({
+                url: '@Url.Action("PartialStoreView","UserStoresController")',
+                type: 'GET',
+                success: function (response) {
+                    $(".table-responsive").html(response);
+                }
+            })
+        })
+    })
+
+</script>
+

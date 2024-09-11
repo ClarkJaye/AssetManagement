@@ -1,0 +1,187 @@
+﻿@model IEnumerable<AssetManagement.Models.Vendor>
+
+
+@{
+    ViewData["Title"] = "Index";
+
+}
+<style>
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Chivo', sans-serif;
+        margin: 0;
+        padding: 10px;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Add this CSS to adjust the top margin of the layout container */
+    .container {
+        margin-top: 70px; /* Adjust this value according to your navbar height */
+    }
+
+    .search {
+        margin-top: 10px;
+    }
+    .title {
+        margin-top: 10px;
+    }
+
+</style>
+@{
+    var alertMessage = TempData["AlertMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(alertMessage))
+{
+    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
+        @alertMessage
+    </div>
+}
+
+
+@if (TempData["Welcome"] != null)
+{
+    <div class="toast-notification animated-toast">
+        <p>@TempData["Welcome"]</p>
+    </div>
+}
+<div class="createform"></div>
+<a id="createbtn" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn">Create</a>
+<a class="btn  bg-secondary retbtn text-white h5 p-2" asp-action="InactiveVendor">Retrieve Data</a>
+<h4 class="title ">
+    Vendor
+</h4>
+<input type="text" class="search" id="filterInput" placeholder="Search...">
+<div class="table-container">
+    <table class="table custom-fontsize p-4">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Createdby)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Updatedby)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.VendorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VendorAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateUpdated)
+            </td>
+            <td >
+                @Html.DisplayFor(modelItem => item.Status.status_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+            </td>
+            <td>
+            <div class="d-flex flex-row gap-2 ">
+            <a class="btn btn-sm bg-success text-white custom-fontsize editbtn" data-id="@item.VendorID" 
+                             >Edit</a>
+                <form asp-action="Delete" method="post" class="delete-form">
+                                <input type="hidden" name="id" value="@item.VendorID" />
+            <a class="btn btn-sm  bg-danger text-white custom-fontsize btn-delt" >Delete</a>
+
+                </form>
+            </div>
+        </td>
+    </tr>
+}
+</tbody>
+</table>
+</div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        alert('@TempData["ErrorMessage"]');
+        </script>
+}
+<script>
+    $(document).ready(function () {
+        $(".btn-delt").click(function () {
+            $(this).closest("form").submit();
+        })
+
+        $("#createbtn").click(function () {
+            $(this).hide();
+            $('.table-responsive ,.title ,.btn').hide();
+
+            $.ajax({
+                url: "@Url.Action("Create","Vendors")",
+                type: "GET",
+                success: function (res) {
+                    $(".createform").html(res);
+                }
+            })
+        })
+
+        $(".editbtn").click(function () {
+            $(".createbtn ,.retbtn").hide();
+            var id = $(this).data("id");
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+
+            $.ajax({
+                url: "@Url.Action("Edit","Vendors")",
+                type: "GET",
+                data: { id: id },
+                success: function (res) {
+                    $(".createform").html(res);
+                }
+            })
+        })
+    })
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
