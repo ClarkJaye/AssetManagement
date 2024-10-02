@@ -4,9 +4,8 @@
     ViewData["Title"] = "Edit";
     Layout = null;
 }
-<hr />
 <div>
-        <form asp-action="Edit">
+    <form asp-action="Edit">
         <div class="row form-group">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="VendorID" />
@@ -37,10 +36,10 @@
             </div>
             <div class="form-group col-4 mt-4">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a class="btn bg-secondary text-white " asp-action="Index" >Back</a>
-            </div> 
+                <a class="btn btn-secondary text-white " asp-action="Index">Back</a>
+            </div>
         </div>
-        </form>
+    </form>
 </div>
 
 @section Scripts {

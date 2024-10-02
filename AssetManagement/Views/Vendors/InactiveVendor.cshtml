@@ -3,18 +3,17 @@
 @{
     ViewData["Title"] = "Inactive";
 }
-<style>
 
-    .title {
-        margin-top: 25px;
-    }
-</style>
-<div class="createform"></div>
-<a class="btn btn-sm bg-secondary text-white custom-fontsize" asp-action="Index">Back</a>
-<h4 class="title">Inactive Vendor</h4>
-<div class="table-responsive scrollable-container">
-    <table class="table custom-fontsize p-4">
-        <thead class="sticky-top" style="z-index:1; position:relative">
+
+<div class="mx-4">
+    <div class="mb-4">
+        <a class="btn btn-sm btn-secondary" asp-controller="Vendors" asp-action="Index">Back to List</a>
+    </div>
+
+    <h4>Inactive Vendor</h4>
+    <div class="mt-4">
+    <table id="inactiveVendorTable" class="table">
+            <thead>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.VendorName)
@@ -60,29 +59,36 @@
                         @Html.DisplayFor(modelItem => item.DateUpdated)
                     </td>
                     <td class="d-flex flex-row gap-2">
-                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.VendorID" data-id="@item.VendorID">Activate</a>
+                        <a class="btn btn-sm btn-success btn-activate" asp-controller="Vendors" asp-action="Activate" asp-route-id="@item.VendorID" data-id="@item.VendorID">
+                            <span class="fas fa-undo"></span> Retrieve
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('.btn-activate').click(function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            $.ajax({
-                url: '@Url.Action("Activate")',
-                type: 'POST',
-                data: { id: id },
-                success: function () {
-                    location.reload();
-                },
-                error: function () {
-                    console.log('Error occurred while activating the module.');
+        // Initialize DataTables
+        $('#inactiveVendorTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
                 }
-            });
+            }
         });
     });
 </script>

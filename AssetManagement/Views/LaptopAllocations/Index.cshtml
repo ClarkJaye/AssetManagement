@@ -3,34 +3,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-
-
 
 <style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-
     .report-view {
         text-align: right;
     }
@@ -48,275 +22,173 @@
     .report-value {
         font-size: 18px;
         font-weight: bold;
-        background-color: #f2f2f2;
+        background-color: #fff;
         padding: 5px 10px;
         border-radius: 5px;
         color: green;
     }
-
-    .filter {
-        margin-top: 20px;
-    }
 </style>
-@if (TempData["Welcome"] != null)
-{
-    <div class="toast-notification animated-toast">
-        <p>@TempData["Welcome"]</p>
-    </div>
-}
 
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-    if (!string.IsNullOrEmpty(alertMessage))
+
+<div class="m-4 px-1">
+    <h4>Laptop Allocation</h4>
+    @if (TempData["Welcome"] != null)
     {
-        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
-            @alertMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+        <p>@TempData["Welcome"]</p>
     }
+</div>
+
+@if (@TempData["AlertMessage"] != null)
+{
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
-<script>
-    $(document).ready(function () {
-        // Close the alert after 6 seconds
-        setTimeout(function () {
-            $("#alert").alert("close");
-        }, 5000);
-    });
-</script>
-<h2>Laptop Allocation</h2>
+<div class="d-flex align-items-center justify-content-between">
 
-<div class="report-view">
-    <div class="report-item">
-        <span class="report-label">Total Active Laptops:</span>
-        <span class="report-value">@ViewBag.TotalActiveLaptops</span>
+    <!-- Action Buttons -->
+    <div class="d-flex align-items-center gap-2 mb-2 mx-2 p-4">
+        <div class="d-flex align-items-center gap-2">
+            <a class="btn btn-outline-red" asp-controller="LaptopAllocations" asp-action="Create">
+                <i class="fas fa-pencil-alt"></i>
+                <span>Create New</span>
+            </a>
+            <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Inactive">
+                <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+            </a>
+        </div>
     </div>
-    <div class="report-item">
-        <span class="report-label">Total Inactive Laptops:</span>
-        <span class="report-value">@ViewBag.TotalInactiveLaptops</span>
+
+
+    <div class="report-view d-flex flex-column justify-content-end">
+        <div class="report-item">
+            <span class="report-label">Total <span class="text-success">Active</span> Laptops:</span>
+            <span class="report-value">@ViewBag.TotalActiveLaptops</span>
+        </div>
+        <div class="report-item">
+            <span class="report-label">Total <span class="text-danger   ">Inactive</span> Laptops:</span>
+            <span class="report-value">@ViewBag.TotalInactiveLaptops</span>
+        </div>
     </div>
+
 </div>
 
-<p style="margin-top:-36px;">
-    <a id="createbtn" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Create">Create New</a>
-    <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Inactive">Show Deleted</a>
-    @*<a href="@Url.Action("ExportToExcel", "LaptopAllocations")" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn"><i class="bi bi-file-excel"></i> Export to Excel</a>*@
-</p>
 
-<div class="filter">
-<input type="text" id="filterInput" placeholder="Search...">
-</div>
+<hr />
 
+<div class=" m-4">
+    <div class="mb-3">
+        <button type="button" class="multi-delete-button btn btn-sm btn-danger disabled" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <span class="fas fa-ban"></span> Temporary Delete
+        </button>
+    </div>
 
-<form method="post" action="@Url.Action("DeleteAsEdit", "LaptopAllocations")">
-    <!-- Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete the selected item(s)?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+    <form method="post" action="@Url.Action("DeleteAsEdit", "LaptopAllocations")">
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete the selected item(s)?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-<div class="table-container">
-        <table class="table custom-fontsize p-4 ">
-    <thead>
-        <tr>
-            <th >
-                @Html.DisplayNameFor(model => model.AllocId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ComputerName)
-            </th>
-            <th>
-                DESCRIPTION
-            </th>
-            <th>
-                CODE
-            </th>
-            <th>
-                PO
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SerialNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FixedassetTag)
-            </th>
-            <th>
-                        @Html.DisplayNameFor(model => model.DateDeployed)
-            </th>
-            <th >
-                @Html.DisplayNameFor(model => model.AllocationStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Createdby)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Updatedby)
-            </th>
 
-            <th>
-                <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                    <span id="boot-icon" class="bi bi-trash-fill"></span>
-                </button>
+        <!-- Table with Data -->
+        <div class="table-container table-responsive">
+            <table id="laptopAllocTable" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="d-flex flex-column gap-1">
+                                <label for="select-all-checkbox" style="cursor:pointer;">ALL</label>
+                                <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
+                            </div>
+                        </th>
+                        <th>@Html.DisplayNameFor(model => model.AllocId)</th>
+                        <th>@Html.DisplayNameFor(model => model.Owner)</th>
+                        <th>@Html.DisplayNameFor(model => model.ComputerName)</th>
+                        <th>DESCRIPTION</th>
+                        <th>CODE</th>
+                        <th>PO</th>
+                        <th>@Html.DisplayNameFor(model => model.SerialNumber)</th>
+                        <th>@Html.DisplayNameFor(model => model.FixedassetTag)</th>
+                        <th>@Html.DisplayNameFor(model => model.DateDeployed)</th>
+                        <th>@Html.DisplayNameFor(model => model.AllocationStatus)</th>
+                        <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
+                        <th>@Html.DisplayNameFor(model => model.DateUpdated)</th>
+                        <th>@Html.DisplayNameFor(model => model.Createdby)</th>
+                        <th>@Html.DisplayNameFor(model => model.Updatedby)</th>
+                        <th></th>
 
-            </th>
-            <th>
-                        <input type="checkbox" id="select-all-checkbox" class="green-checkbox" />
-            </th>
-
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-                    if(item.AllocationStatus == "CO")
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
                     {
-                        <tr style="color: red;">
+                        <tr class="@((item.AllocationStatus == "CO") ? "text-danger" : "")">
+                            <td class="text-center">
+                                <input type="checkbox" name="selectedIds" value="@item.AllocId" class="item-checkbox custom-checkbox" />
+                            </td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.AllocId)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Owner.OwnerCode)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.ComputerName)</td>
+                            <td class="editbtn"  id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopInventory.Description)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopCode)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.InventoryDetails.PO)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.SerialNumber)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.FixedassetTag)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateDeployed)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Status.status_name)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateCreated)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateUpdated)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Createdby.UserFullName)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Updatedby.UserFullName)</td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.AllocId)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.ComputerName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopCode)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.SerialNumber)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.FixedassetTag)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateDeployed)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                            </td>
-                            
-                            <td>
-                                <input type="checkbox" name="selectedIds" id="select-all-checkbox" class="green-checkbox" value="@item.AllocId" />
-                            </td>
-                            <td>
-                                <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnLTAs" asp-route-id="@item.AllocId">Return </a>
-                                
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary" asp-action="Create" asp-controller="ReturnLTAs" asp-route-id="@item.AllocId">
+                                        <i class="fas fa-undo"></i>
+                                        <span>Return</span>
+                                    </a>
+                                    @if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddYears(-4))
+                                    {
+                                        <a class="btn btn-sm btn-outline-warning" asp-action="ChangeStatus" asp-controller="LaptopAllocations" asp-route-id="@item.AllocId">
+                                            <i class="fas fa-check"></i>
+                                            <span>Yes</span>
+                                        </a>
+                                    }
+                                </div>
                             </td>
                         </tr>
                     }
-                    else
-                    {
-                        <tr >
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AllocId)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.ComputerName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopCode)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.SerialNumber)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.FixedassetTag)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateDeployed)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                            </td>
-                            
-                            <td>
-                                <input type="checkbox" name="selectedIds" id="select-all-checkbox" class="green-checkbox" value="@item.AllocId" />
-                            </td>
-                            <td>
-                                <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnLTAs" asp-route-id="@item.AllocId">Return </a>
-                                @if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddYears(-4))
-                                {
-                                    <a class="btn btn-sm bg-warning  text-white custom-fontsize" asp-action="ChangeStatus" asp-controller="LaptopAllocations" asp-route-id="@item.AllocId">YES </a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-                    
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </form>
 
-    </div>
 
-</form>
+    <div class="displaytable"> </div>
+</div>
+
+
+<!-- Notification Handling -->
 @if (TempData["ErrorMessage"] != null)
 {
     <script>
         alert('@TempData["ErrorMessage"]');
     </script>
 }
-
-<div class="displaytable"> </div>
 
 @if (TempData["SuccessNotification"] != null)
 {
@@ -326,49 +198,54 @@
                 title: 'Success',
                 text: '@TempData["SuccessNotification"]',
                 icon: 'success',
-                timer: 3000, // Automatically close the notification after 3 seconds
+                timer: 3000,
                 showConfirmButton: false
             });
         });
     </script>
 }
 
-
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    const selectAllCheckbox = document.getElementById("select-all-checkbox");
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllCheckbox = document.getElementById("select-all-checkbox");
+        const checkboxes = document.querySelectorAll('input[name="selectedIds"]');
+        const deleteButtonContainer = document.querySelector('.multi-delete-button');
 
-    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedIds"]');
-
-
-
-    selectAllCheckbox.addEventListener("change", function () {
-
-        for (let i = 0; i < checkboxes.length; i++) {
-
-            checkboxes[i].checked = selectAllCheckbox.checked;
-
-        }
-    });
-    //FILTERING
-
-    $(document).ready(function () {
-        $('#filterInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            $('tbody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+        selectAllCheckbox.addEventListener("change", function () {
+            checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+            toggleDeleteButton();
         });
-    });
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", toggleDeleteButton);
+        });
+
+        function toggleDeleteButton() {
+            const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            deleteButtonContainer.classList.toggle('disabled', !isAnyChecked);
+        }
+
+        // Initialize DataTables
+        $('#laptopAllocTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
+        });
 
 
-
-
-
-
-    //MODAL
-
-    $(document).ready(function () {
+        //MODAL
         $(document).on("click", ".editbtn", function () {
             var userCode = $(this).attr("id");
 

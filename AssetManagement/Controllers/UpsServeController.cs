@@ -85,6 +85,7 @@ namespace AssetManagement.Controllers
         // GET: UpsServes/Create
         public IActionResult Create()
         {
+            ViewData["UpsServeStore"] = new SelectList(_context.tbl_ictams_ups, "ups_store", "ups_store");
             ViewData["UpsServeCode"] = new SelectList(_context.tbl_ictams_ups, "ups_code", "ups_code");
             ViewData["UnitCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
             return View();
@@ -123,7 +124,7 @@ namespace AssetManagement.Controllers
             _context.Add(upsServe);
             await _context.SaveChangesAsync();
             // ...
-            TempData["SuccessNotification"] = "Successfully added a new Uninterruptible Power Supply Serve!";
+            TempData["SuccessNotification"] = "Successfully added!";
             // ...
             return RedirectToAction(nameof(Index));
         }
@@ -141,8 +142,8 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["UpsServeCode"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsServe.UpsServeCode);
             ViewData["UpsServeStore"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsServe.UpsServeStore);
+            ViewData["UpsServeCode"] = new SelectList(_context.Ups, "ups_code", "ups_code", upsServe.UpsServeCode);
             ViewData["UnitCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", upsServe.UnitCreatedBy);
             return View(upsServe);
         }
@@ -179,8 +180,8 @@ namespace AssetManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UpsServeCode"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsServe.UpsServeCode);
             ViewData["UpsServeStore"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsServe.UpsServeStore);
+            ViewData["UpsServeCode"] = new SelectList(_context.Ups, "ups_code", "ups_code", upsServe.UpsServeCode);
             ViewData["UnitCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", upsServe.UnitCreatedBy);
             return View(upsServe);
         }
@@ -195,12 +196,23 @@ namespace AssetManagement.Controllers
                     _context.Remove(upsserve);
                     await _context.SaveChangesAsync();
                     // ...
-                    TempData["SuccessNotification"] = "Successfully delete a  Uninterruptible Power Supply Serve!";
+                    TempData["SuccessNotification"] = "Successfully deleted!";
                     // ...
                 }
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: UpsBatteryReps/GetUpsCodesByStore
+        public async Task<JsonResult> GetUpsCodesByStore(string upsStore)
+        {
+            var upsCodes = await _context.tbl_ictams_ups
+                .Where(u => u.ups_store == upsStore)
+                .Select(u => new { u.ups_code })
+                .ToListAsync();
+
+            return Json(upsCodes);
         }
 
         private bool UpsServeExists(int id)

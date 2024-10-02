@@ -66,6 +66,7 @@ namespace AssetManagement.Controllers
             return View();
         }
 
+
         // POST: Ups/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -79,7 +80,7 @@ namespace AssetManagement.Controllers
                 TempData["ErrorMessage"] = "This serial number already exists!";
                 return RedirectToAction(nameof(Index));
             }
-            if (ups.ups_store.Equals(0))
+            if (ups.ups_store == null)
             {
                 TempData["AlertMessage"] = "Please select a store!";
                 return RedirectToAction("Create");
@@ -174,7 +175,7 @@ namespace AssetManagement.Controllers
                 TempData["AlertMessage"] = "Please input a unit serve!";
                 return RedirectToAction("Create");
             }
-            if (ups.ups_remarks.Equals(0))
+            if (ups.ups_remarks == null)
             {
                 TempData["AlertMessage"] = "Please input a remarks!";
                 return RedirectToAction("Create");
@@ -288,7 +289,6 @@ namespace AssetManagement.Controllers
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
         }
     
 

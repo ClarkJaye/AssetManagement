@@ -4,56 +4,86 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<div class="m-4 px-1">
+    <h4>Edit UPS Battery Replacement </h4>
+    <hr />
 
-<h4>UpsBatteryRep</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div>
+        <form class="row" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UpsBattStore" class="control-label"></label>
-                <select asp-for="UpsBattStore" class="form-control" asp-items="ViewBag.UpsBattStore"></select>
-                <span asp-validation-for="UpsBattStore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpsBattCode" class="control-label"></label>
-                <select asp-for="UpsBattCode" class="form-control" asp-items="ViewBag.UpsBattCode"></select>
-                <span asp-validation-for="UpsBattCode" class="text-danger"></span>
-            </div>
+
             <input type="hidden" asp-for="BatteryRepNo" />
-            <div class="form-group">
+
+            <div class="form-group col-md-4">
+                <label asp-for="UpsBattStore" class="control-label"></label>
+                <select asp-for="UpsBattStore" class="form-control" asp-items="ViewBag.UpsBattStore" id="UpsStore">
+                    <option value="">Select UPS Store</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label asp-for="UpsBattCode" class="control-label"></label>
+                <select asp-for="UpsBattCode" class="form-control" asp-items="ViewBag.UpsBattCode" id="UpsCode">
+                    <option value="">Select UPS Code</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-4">
                 <label asp-for="BatteryRepDate" class="control-label"></label>
                 <input asp-for="BatteryRepDate" class="form-control" />
                 <span asp-validation-for="BatteryRepDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group col-md-4">
                 <label asp-for="BatteryRepRemarks" class="control-label"></label>
                 <input asp-for="BatteryRepRemarks" class="form-control" />
                 <span asp-validation-for="BatteryRepRemarks" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group col-md-4">
                 <label asp-for="BatteryRepCreatedBy" class="control-label"></label>
-                <select asp-for="BatteryRepCreatedBy" class="form-control" asp-items="ViewBag.BatteryRepCreatedBy"></select>
+                <select asp-for="BatteryRepCreatedBy" class="form-select" asp-items="ViewBag.BatteryRepCreatedBy"></select>
                 <span asp-validation-for="BatteryRepCreatedBy" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group col-md-4">
                 <label asp-for="BatteryRepCreatedAt" class="control-label"></label>
                 <input asp-for="BatteryRepCreatedAt" class="form-control" />
                 <span asp-validation-for="BatteryRepCreatedAt" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-group mt-4 mb-2 col">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#UpsStore').change(function () {
+            var selectedStore = $(this).val();
+            if (selectedStore) {
+                $.getJSON('@Url.Action("GetUpsCodesByStore")', { upsStore: selectedStore }, function (data) {
+                    var upsCodeDropdown = $('#UpsCode');
+                    upsCodeDropdown.empty(); // Clear previous options
+                    upsCodeDropdown.append('<option value="">Select UPS Code</option>');
+                    $.each(data, function (index, item) {
+                        upsCodeDropdown.append('<option value="' + item.ups_code + '">' + item.ups_code + '</option>');
+                    });
+                });
+            } else {
+                $('#UpsPMCode').empty();
+                $('#UpsPMCode').append('<option value="">Select UPS Code</option>');
+            }
+        });
+    });
+</script>

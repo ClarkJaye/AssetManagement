@@ -62,6 +62,93 @@ namespace AssetManagement.Controllers
 
         }
 
+        // GET: UpsBatteryReps/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.tbl_ictams_upspm == null)
+            {
+                return NotFound();
+            }
+
+            var upsPm = await _context.tbl_ictams_upspm.FindAsync(id);
+            if (upsPm == null)
+            {
+                return NotFound();
+            }
+            ViewData["UpsPMStore"] = new SelectList(_context.tbl_ictams_ups.Select(u => u.ups_store).Distinct(), upsPm.UpsPMStore);
+            ViewData["UpsPMCode"] = new SelectList(_context.tbl_ictams_ups.Where(u => u.ups_store == upsPm.UpsPMStore), "ups_code", "ups_code", upsPm.UpsPMCode);
+            ViewData["PMCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", upsPm.PMCreatedBy);
+            return View(upsPm);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UpsPM upsPm)
+        {
+            if (upsPm.PMNO == 0)
+            {
+                return NotFound();
+            }
+
+            // Check if the UpsPMStore and UpsPMCode exist in the related table
+            var validStore = await _context.tbl_ictams_ups.AnyAsync(u => u.ups_store == upsPm.UpsPMStore);
+            var validCode = await _context.tbl_ictams_ups.AnyAsync(u => u.ups_code == upsPm.UpsPMCode && u.ups_store == upsPm.UpsPMStore);
+
+            if (!validStore)
+            {
+                ModelState.AddModelError("UpsPMStore", "Selected UPS Store does not exist.");
+            }
+
+            if (!validCode)
+            {
+                ModelState.AddModelError("UpsPMCode", "Selected UPS Code does not exist or is not related to the selected store.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                // Re-populate the select lists and return the view with errors
+                ViewData["UpsPMStore"] = new SelectList(_context.tbl_ictams_ups.Select(u => u.ups_store).Distinct(), upsPm.UpsPMStore);
+                ViewData["UpsPMCode"] = new SelectList(_context.tbl_ictams_ups.Where(u => u.ups_store == upsPm.UpsPMStore), "ups_code", "ups_code", upsPm.UpsPMCode);
+                ViewData["PMCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", upsPm.PMCreatedBy);
+                return View(upsPm);
+            }
+
+            try
+            {
+                _context.Update(upsPm);
+                TempData["SuccessNotification"] = "Successfully updated!";
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UpsPMExists(upsPm.PMNO))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        // GET: UpsBatteryReps/GetUpsCodesByStore
+        public async Task<JsonResult> GetUpsCodesByStore(string upsStore)
+        {
+            var upsCodes = await _context.tbl_ictams_ups
+                .Where(u => u.ups_store == upsStore)
+                .Select(u => new { u.ups_code })
+                .ToListAsync();
+
+            return Json(upsCodes);
+        }
+
+
         // GET: UpsPMs/Details/5
         public async Task<IActionResult> Details(int? id)
         {

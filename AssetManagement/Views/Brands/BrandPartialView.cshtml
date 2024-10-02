@@ -3,17 +3,28 @@
 @{
     Layout = null;
 }
+
+
 <style>
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
+    .table tbody tr {
+        cursor: pointer;
+    }
+
+        .table tbody tr:hover {
+            background: var(--bs-gray-400);
+        }
+
+    .highlighted-row {
+        background: var(--bs-gray-400);
     }
 </style>
-<input  type="text" id="filterInput" placeholder="Search...">
-<div class="table-responsive scrollable-container">
-    
-    <table class="table custom-fontsize p-4" style="cursor:pointer;">
+
+<div style="width: 300px;">
+    <input class="form-control" type="text" id="filterInput" placeholder="Search...">
+</div>
+
+<div class="table-responsive scrollable-container table-container mt-2">
+    <table class="table table-responsive">
         <thead class="sticky-top" style="z-index:1; position:relative">
             <tr>
                 <th>
@@ -66,8 +77,6 @@
 </div>
 <script>
     $(document).ready(function () {
-
-
         // Add click event listener to each row in the table
         $('table tbody tr').click(function () {
             // Get the id from the clicked row's data-id attribute

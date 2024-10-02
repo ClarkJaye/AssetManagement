@@ -15,53 +15,61 @@
     }
 }
 
-<h4>User Creation</h4>
-<hr />
-<div>
-    <form  asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2">
-                <label asp-for="UserCode" class="control-label"></label>
-                <input asp-for="UserCode" class="form-control" placeholder="Enter usercode"/>
-                <span asp-validation-for="UserCode" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="UserPassword" class="control-label"></label>
-                <input asp-for="UserPassword" value="1234" class="form-control" />
-                <span asp-validation-for="UserPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="UserADLogin" class="control-label"></label>
-                <input asp-for="UserADLogin" class="form-control" placeholder="Enter AD account" />
-                <span asp-validation-for="UserADLogin" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="UserFullName" class="control-label"></label>
-                <input asp-for="UserFullName" class="form-control" placeholder="Enter Fullname" />
-                <span asp-validation-for="UserFullName" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="laptable">
-                <label asp-for="UserProfile" class="control-label"></label>
-                <input asp-for="UserProfile" class="form-control" id="lapid" hidden />
-                <input class="form-select bg-white" id="lapdes" readonly placeholder="select profile below"/>
-                <span asp-validation-for="UserProfile" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="UserStatus" class="control-label"></label>
-                <select asp-for="UserStatus" class="form-control" asp-items="ViewBag.UserStatus"></select>
-                <span asp-validation-for="UserStatus" class="text-danger"></span>
 
-            </div>
+<div class="m-4">
 
-            <div class="form-group col-2" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white" asp-action="Index">BACK</a>
+
+    <h4>User Creation</h4>
+    <hr />
+    <div>
+        <form asp-action="Create">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-2">
+                    <label asp-for="UserCode" class="control-label"></label>
+                    <input asp-for="UserCode" class="form-control" placeholder="Enter usercode" />
+                    <span asp-validation-for="UserCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-2" hidden>
+                    <label asp-for="UserPassword" class="control-label"></label>
+                    <input asp-for="UserPassword" value="1234" class="form-control" />
+                    <span asp-validation-for="UserPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group col-2">
+                    <label asp-for="UserADLogin" class="control-label"></label>
+                    <input asp-for="UserADLogin" class="form-control" placeholder="Enter AD account" />
+                    <span asp-validation-for="UserADLogin" class="text-danger"></span>
+                </div>
+                <div class="form-group col-2">
+                    <label asp-for="UserFullName" class="control-label"></label>
+                    <input asp-for="UserFullName" class="form-control" placeholder="Enter Fullname" />
+                    <span asp-validation-for="UserFullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-2" id="laptable">
+                    <label asp-for="UserProfile" class="control-label"></label>
+                    <input asp-for="UserProfile" class="form-control d-none" id="pId" />
+                    <input class="form-select bg-white" id="pDes" readonly placeholder="Select profile below" />
+                    <span class="text-danger d-none" id="pDesValidation">The PROFILE field is required.</span>
+                </div>
+
+
+                <div class="form-group col-2" hidden>
+                    <label asp-for="UserStatus" class="control-label"></label>
+                    <select asp-for="UserStatus" class="form-control" asp-items="ViewBag.UserStatus"></select>
+                    <span asp-validation-for="UserStatus" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4 mb-2 col d-flex align-items-center gap-2">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn btn-outline-secondary " asp-action="Index">Back to List</a>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+    <div class="displaytable"></div>
+
 </div>
-<div class="displaytable"></div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 @section Scripts {
@@ -72,10 +80,10 @@
 
 <script>
     $(document).ready(function () {
-        // Show the display table when the UserProfile input or lapdes is focused
-        $("#lapdes").focus(function () {
-            $('#lapid').val(null);
-            $('#lapdes').val(null);
+        // Show the display table when the UserProfile input is focused
+        $("#pDes").focus(function () {
+            $('#pId').val(null);
+            $('#pDes').val(null);
 
             // Fetch and display the partial view (display table)
             $.ajax({
@@ -87,138 +95,66 @@
             });
         });
 
+        // Handle form submission
+        $("form").on("submit", function (e) {
+            var userProfileValue = $("#pId").val();
+            var userProfileValidation = $("#pDesValidation");
+
+            if (!userProfileValue) {
+                userProfileValidation.removeClass("d-none");
+                e.preventDefault();
+            } else {
+                userProfileValidation.addClass("d-none");
+            }
+        });
+
+        // Table row click handler to set the profile value and remove validation error if valid
+        $('table tbody tr').click(function () {
+            var profileId = $(this).data('pi');
+            var profileName = $(this).data('pn');
+
+            // Set profile ID and name
+            $('#pId').val(profileId);
+            $('#pDes').val(profileName);
+
+            // Remove validation message when a profile is selected
+            if (profileId) {
+                $("#pDesValidation").addClass("d-none");
+            }
+        });
+
+        // Real-time validation: Check the profile value when focusing on any other field
+        $("input, select").focus(function () {
+            if (!$(this).is("#pId, #pDes")) {
+                var userProfileValue = $("#pId").val();
+                var userProfileValidation = $("#pDesValidation");
+
+                if (userProfileValue) {
+                    userProfileValidation.addClass("d-none");
+                }
+            }
+        });
+
+
+        // Real-time validation: Remove validation error when leaving the profile input (or any other field)
+        $("#pDes").blur(function () {
+            var userProfileValue = $("#pId").val();
+            var userProfileValidation = $("#pDesValidation");
+
+            if (userProfileValue) {
+                userProfileValidation.addClass("d-none");
+            }
+        });
+
+
         // Hide the display table when clicking outside the laptable
         $(document).click(function (e) {
             if (!$(e.target).closest('#laptable').length && !$(e.target).closest('.displaytable').length) {
                 $(".displaytable").hide();
             }
         });
-
-        // Hide the display table when the input loses focus (if needed)
-        $("input").focus(function () {
-            if (!$(this).is("#lapid, #lapdes")) {
-                $(".displaytable").hide();
-            }
-        });
-
-        // Close the alert after 6 seconds
-        setTimeout(function () {
-            $("#alert").alert("close");
-        }, 5000);
-    });
-
-</script>
-
-
-
-
-
-
-
-
-
-@* 
-            @model AssetManagement.Models.User
-
-@{
-    ViewData["Title"] = "Create";
-}
-
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-    if (!string.IsNullOrEmpty(alertMessage))
-    {
-        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
-            @alertMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-}
-
-
-<div class="d-flex justify-content-center align-items-center">
-    <div class="card" style="width: 600px;">
-        <div class="card-header">
-            <h5 class="card-title m-2">Add User</h5>
-        </div>
-        <div class="card-body p-4">
-            <form asp-controller="Users" asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-
-                <div class="form-floating mb-3">
-                    <input asp-for="UserCode" class="form-control" />
-                    <label asp-for="UserCode"></label>
-                    <span asp-validation-for="UserCode" class="text-danger"></span>
-                </div>
-
-                <div class="form-floating mb-3" hidden>
-                    <input asp-for="UserPassword" class="form-control" value="1234" />
-                    <label asp-for="UserPassword"></label>
-                    <span asp-validation-for="UserPassword" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="UserADLogin" class="form-control" />
-                    <label asp-for="UserADLogin"></label>
-                    <span asp-validation-for="UserADLogin" class="text-danger"></span>
-                </div>
-
-                <div class="form-floating mb-3">
-                    <input asp-for="UserFullName" class="form-control"  />
-                    <label asp-for="UserFullName"></label>
-                    <span asp-validation-for="UserFullName" class="text-danger"></span>
-                </div>
-
-                <div class="form-floating mb-3">
-                    <input asp-for="UserProfile" class="form-control"  />
-                    <label asp-for="UserProfile"></label>
-                    <span asp-validation-for="UserProfile" class="text-danger"></span>
-                </div>
-
-                <div class="form-floating mb-3">
-                    <input asp-for="UserStatus" class="form-control" />
-                    <label asp-for="UserStatus"></label>
-                    <span asp-validation-for="UserStatus" class="text-danger"></span>
-                </div>
-
-
-                <div class="d-flex align-items-center justify-content-end gap-2 mt-3">
-                    <input type="submit" value="Create" class="btn btn-success text-white" />
-                    <a class="btn btn-secondary text-white" asp-action="Index">BACK</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="displaytable"></div>
-
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
-
-<script>
-    $(document).ready(function () {
-        $("#laptable").click(function () {
-            $('#lapid').val(null);
-            $('#lapdes').val(null);
-            $.ajax({
-                url: "@Url.Action("ProfilePartialView", "Profiles")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            });
-        });
-
-        // Close the alert after 6 seconds
-        setTimeout(function () {
-            $("#alert").alert("close");
-        }, 5000);
     });
 </script>
- *@
+
+
+

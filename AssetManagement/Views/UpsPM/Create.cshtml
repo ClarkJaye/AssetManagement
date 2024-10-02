@@ -4,49 +4,31 @@
     ViewData["Title"] = "Create";
 }
 
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
 
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
+<div class="m-4 px-1">
+    <h4> Create UPS Preventive Maintenance </h4>
+    <hr />
 
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-
-<h4> Create UpsPM</h4>
-<hr />
-<div>
+    <div>
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-4">
+                    <label asp-for="UpsPMStore" class="control-label"></label>
+                    <select asp-for="UpsPMStore" class="form-control" asp-items="ViewBag.UpsPMStore" id="UpsStore">
+                        <option selected disabled>select ups store</option>
+                    </select>
+                </div>
+                <div class="form-group col-4">
                     <label asp-for="UpsPMCode" class="control-label"></label>
-                    <select asp-for="UpsPMCode" class ="form-control" asp-items="ViewBag.UpsPMCode"></select>
+                    <select asp-for="UpsPMCode" class="form-control" asp-items="ViewBag.UpsPMCode" id="UpsCode">
+                        <option selected disabled>select ups code</option>
+                    </select>
                 </div>
                 <div class="form-group col-4">
                     <label asp-for="PMDate" class="control-label"></label>
-                    <input asp-for="PMDate"  class="form-control" />
+                    <input asp-for="PMDate" class="form-control" />
                     <span asp-validation-for="PMDate" class="text-danger"></span>
                 </div>
                 <div class="form-group col-4">
@@ -54,14 +36,39 @@
                     <input asp-for="UpsPMRemarks" class="form-control" />
                     <span asp-validation-for="UpsPMRemarks" class="text-danger"></span>
                 </div>
-                <div class="form-group col-4">
-                <input type="submit" value="Create" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index">BACK</a>
+                <div class="form-group col-4 mt-4">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn btn-secondary" asp-action="Index">Back</a>
                 </div>
             </div>
         </form>
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#UpsStore').change(function () {
+            var selectedStore = $(this).val();
+            if (selectedStore) {
+                $.getJSON('@Url.Action("GetUpsCodesByStore")', { upsStore: selectedStore }, function (data) {
+                    var upsCodeDropdown = $('#UpsCode');
+                    upsCodeDropdown.empty(); // Clear previous options
+                    upsCodeDropdown.append('<option value="">Select UPS Code</option>');
+                    $.each(data, function (index, item) {
+                        upsCodeDropdown.append('<option value="' + item.ups_code + '">' + item.ups_code + '</option>');
+                    });
+                });
+            } else {
+                $('#UpsCode').empty();
+                $('#UpsCode').append('<option value="">Select UPS Code</option>');
+            }
+        });
+    });
+</script>

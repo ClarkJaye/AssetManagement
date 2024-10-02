@@ -4,56 +4,79 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>UpsPM</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<div class="m-4 px-1">
+    <h4> Edit UPS Preventive Maintenance</h4>
+    <hr />
+    <div>
+        <form asp-action="Edit" class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UpsPMStore" class="control-label"></label>
-                <select asp-for="UpsPMStore" class="form-control" asp-items="ViewBag.UpsPMStore"></select>
-                <span asp-validation-for="UpsPMStore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpsPMCode" class="control-label"></label>
-                <select asp-for="UpsPMCode" class="form-control" asp-items="ViewBag.UpsPMCode"></select>
-                <span asp-validation-for="UpsPMCode" class="text-danger"></span>
-            </div>
             <input type="hidden" asp-for="PMNO" />
-            <div class="form-group">
+            <div class="form-group col-md-4">
+                <label asp-for="UpsPMStore" class="control-label"></label>
+                <select asp-for="UpsPMStore" class="form-control" asp-items="ViewBag.UpsPMStore" id="UpsStore">
+                    <option value="">Select UPS Store</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label asp-for="UpsPMCode" class="control-label"></label>
+                <select asp-for="UpsPMCode" class="form-control" asp-items="ViewBag.UpsPMCode" id="UpsCode">
+                    <option value="">Select UPS Code</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
                 <label asp-for="PMDate" class="control-label"></label>
                 <input asp-for="PMDate" class="form-control" />
                 <span asp-validation-for="PMDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="UpsPMRemarks" class="control-label"></label>
                 <input asp-for="UpsPMRemarks" class="form-control" />
                 <span asp-validation-for="UpsPMRemarks" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4" disabled>
                 <label asp-for="PMCreatedBy" class="control-label"></label>
-                <select asp-for="PMCreatedBy" class="form-control" asp-items="ViewBag.PMCreatedBy"></select>
+                <select asp-for="PMCreatedBy" class="form-select" asp-items="ViewBag.PMCreatedBy"></select>
                 <span asp-validation-for="PMCreatedBy" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4" hidden>
                 <label asp-for="PMCreatedAt" class="control-label"></label>
                 <input asp-for="PMCreatedAt" class="form-control" />
                 <span asp-validation-for="PMCreatedAt" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group mt-4 mb-2 col">
+                <input type="submit" value="Save" class="btn btn-red" />
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#UpsPMStore').change(function () {
+            var selectedStore = $(this).val();
+            if (selectedStore) {
+                $.getJSON('@Url.Action("GetUpsCodesByStore")', { upsStore: selectedStore }, function (data) {
+                    var upsCodeDropdown = $('#UpsPMCode');
+                    upsCodeDropdown.empty(); // Clear previous options
+                    upsCodeDropdown.append('<option value="">Select UPS Code</option>');
+                    $.each(data, function (index, item) {
+                        upsCodeDropdown.append('<option value="' + item.ups_code + '">' + item.ups_code + '</option>');
+                    });
+                });
+            } else {
+                $('#UpsPMCode').empty();
+                $('#UpsPMCode').append('<option value="">Select UPS Code</option>');
+            }
+        });
+    });
+</script>

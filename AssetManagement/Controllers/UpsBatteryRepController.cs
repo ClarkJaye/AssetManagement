@@ -142,49 +142,76 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["UpsBattCode"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsBatteryRep.UpsBattCode);
-            ViewData["UpsBattStore"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsBatteryRep.UpsBattStore);
+            ViewData["UpsBattStore"] = new SelectList(_context.tbl_ictams_ups.Select(u => u.ups_store).Distinct(), upsBatteryRep.UpsBattCode);
+            ViewData["UpsBattCode"] = new SelectList(_context.tbl_ictams_ups.Where(u => u.ups_store == upsBatteryRep.UpsBattStore), "ups_code", "ups_code", upsBatteryRep.UpsBattCode);
             ViewData["BatteryRepCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", upsBatteryRep.BatteryRepCreatedBy);
             return View(upsBatteryRep);
         }
 
-        // POST: UpsBatteryReps/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UpsBattStore,UpsBattCode,BatteryRepNo,BatteryRepDate,BatteryRepRemarks,BatteryRepCreatedBy,BatteryRepCreatedAt")] UpsBatteryRep upsBatteryRep)
+        public async Task<IActionResult> Edit(UpsBatteryRep upsBatteryRep)
         {
-            if (id != upsBatteryRep.BatteryRepNo)
+            if (upsBatteryRep.BatteryRepNo == 0)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            // Check if the UpsPMStore and UpsPMCode exist in the related table
+            var validStore = await _context.tbl_ictams_ups.AnyAsync(u => u.ups_store == upsBatteryRep.UpsBattStore);
+            var validCode = await _context.tbl_ictams_ups.AnyAsync(u => u.ups_code == upsBatteryRep.UpsBattCode && u.ups_store == upsBatteryRep.UpsBattStore);
+
+            if (!validStore)
             {
-                try
-                {
-                    _context.Update(upsBatteryRep);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UpsBatteryRepExists(upsBatteryRep.BatteryRepNo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("UpsPMStore", "Selected UPS Store does not exist.");
             }
-            ViewData["UpsBattCode"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsBatteryRep.UpsBattCode);
-            ViewData["UpsBattStore"] = new SelectList(_context.Ups, "ups_store", "ups_store", upsBatteryRep.UpsBattStore);
-            ViewData["BatteryRepCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", upsBatteryRep.BatteryRepCreatedBy);
-            return View(upsBatteryRep);
+
+            if (!validCode)
+            {
+                ModelState.AddModelError("UpsPMCode", "Selected UPS Code does not exist or is not related to the selected store.");
+            }
+
+            if (!ModelState.IsValid) 
+            {
+                // Re-populate the select lists and return the view with errors
+                ViewData["UpsBattStore"] = new SelectList(_context.tbl_ictams_ups.Select(u => u.ups_store).Distinct(), upsBatteryRep.UpsBattStore);
+                ViewData["UpsBattCode"] = new SelectList(_context.tbl_ictams_ups.Where(u => u.ups_store == upsBatteryRep.UpsBattStore), "ups_code", "ups_code", upsBatteryRep.UpsBattCode);
+                ViewData["BatteryRepCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", upsBatteryRep.BatteryRepCreatedBy);
+                return View(upsBatteryRep);
+            }
+
+            try
+            {
+                _context.Update(upsBatteryRep);
+                TempData["SuccessNotification"] = "Successfully updated!";
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UpsBatteryRepExists(upsBatteryRep.BatteryRepNo))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
+
+        // GET: UpsBatteryReps/GetUpsCodesByStore
+        public async Task<JsonResult> GetUpsCodesByStore(string upsStore)
+        {
+            var upsCodes = await _context.tbl_ictams_ups
+                .Where(u => u.ups_store == upsStore)
+                .Select(u => new { u.ups_code })
+                .ToListAsync();
+
+            return Json(upsCodes);
+        }
+
 
         public async Task<IActionResult> Delete(int[] selectedIds)
         {

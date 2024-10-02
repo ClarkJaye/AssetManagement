@@ -4,12 +4,20 @@
     ViewData["Title"] = "Users";
 }
 
-<!-- Begin Card Structure -->
-<div class="card">
-    <div class="card-header">
-        <h4 class="card-title m-2">User Management</h4>
-    </div>
-    <div class="card-body">
+
+<div class="m-4 px-1">
+    <h4>Users</h4>
+    @if (TempData["Welcome"] != null)
+    {
+        <div class="toast-notification animated-toast">
+            <p>@TempData["Welcome"]</p>
+        </div>
+    }
+</div>
+
+<hr />
+
+<div class=" m-4">
         <form method="post" action="@Url.Action("DeleteAsEdit", "Users")">
             <!-- Delete Confirmation Modal -->
             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -34,13 +42,18 @@
             <!-- Action Buttons -->
             <div class="d-flex align-items-center justify-content-between gap-2 mb-2 mx-2">
                 <div>
-                    <button type="button" class="multi-delete-button btn btn-sm btn-danger d-none" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                        <span class="fas fa-trash-alt"></span> Delete
+                    <button type="button" class="multi-delete-button btn btn-sm btn-danger disabled" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <span class="fas fa-ban"></span> Temporary Delete
                     </button>
                 </div>
-                <div>
-                    <a class="btn btn-sm btn-red text-white" asp-action="Create">Create New</a>
-                    <a class="btn btn-sm btn-secondary text-white" asp-action="Inactive">Show Deleted</a>
+                <div class="d-flex align-items-center gap-2">
+                    <a class="btn btn-red" asp-controller="Users" asp-action="Create">
+                        <i class="fas fa-pencil-alt"></i>    
+                        <span>Create New</span>
+                    </a>
+                    <a class="btn btn-outline-secondary" asp-controller="Users" asp-action="Inactive">
+                        <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+                    </a>
                 </div>
             </div>
 
@@ -50,7 +63,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <div class="d-flex align-content-center flex-column gap-1">
+                                <div class="d-flex flex-column gap-1">
                                     <Label for="select-all-checkbox" style="cursor:pointer;">ALL</Label>
                                     <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
                                 </div>
@@ -71,7 +84,9 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td><input type="checkbox" name="selectedIds" value="@item.UserCode" class="item-checkbox custom-checkbox" /></td>
+                                <td class="text-center">
+                                    <input type="checkbox" name="selectedIds" value="@item.UserCode" class="item-checkbox custom-checkbox" />
+                                </td>
                                 <td>@Html.DisplayFor(modelItem => item.UserCode)</td>
                                 <td>@Html.DisplayFor(modelItem => item.UserADLogin)</td>
                                 <td>@Html.DisplayFor(modelItem => item.UserFullName)</td>
@@ -82,11 +97,12 @@
                                 <td>@Html.DisplayFor(modelItem => item.Status.status_name)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Profile.ProfileName)</td>
                                 <td class="text-center">
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <a class="btn btn-sm btn-success respassword" data-user-id="@item.UserCode">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <a class="btn btn-sm btn-outline-success respassword" data-user-id="@item.UserCode">
                                             <span class="fas fa-undo"></span> Reset
                                         </a>
-                                        <a class="btn btn-sm btn-primary" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserCode">
+                                        |
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="Users" asp-action="Edit" asp-route-id="@item.UserCode">
                                             <span class="fas fa-pencil-alt"></span> Edit
                                         </a>
                                     </div>
@@ -97,11 +113,7 @@
                 </table>
             </div>
         </form>
-    </div>
 </div>
-
-
-
 
 <!-- Alert Handling -->
 @if (TempData["AlertMessage2"] != null)
@@ -125,8 +137,9 @@
         });
     </script>
 }
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
+
     document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("select-all-checkbox");
         const checkboxes = document.querySelectorAll('input[name="selectedIds"]');
@@ -148,12 +161,13 @@
             cb.addEventListener("change", toggleDeleteButton);
         });
 
+        //Enable Delete Button when selct in checkbox
         function toggleDeleteButton() {
             const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
             if (anyChecked) {
-                deleteButtonContainer.classList.remove('d-none');
+                deleteButtonContainer.classList.remove('disabled');
             } else {
-                deleteButtonContainer.classList.add('d-none');
+                deleteButtonContainer.classList.add('disabled');
             }
         }
 
@@ -176,7 +190,15 @@
             info: true,
             autoWidth: false,
             responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }]
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
         });
+
+
     });
 </script>

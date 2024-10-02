@@ -413,45 +413,68 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
+
             try
             {
-                var findUserExistName = await _context.tbl_ictams_users.Where(x => x.UserFullName == user.UserFullName).FirstOrDefaultAsync();
-                var findUserExist = await _context.tbl_ictams_users.Where(x => x.UserCode == user.UserCode && x.Status.status_code == "AC" && x.UserFullName == user.UserFullName).FirstOrDefaultAsync();
-                if (findUserExist != null)
+                // Retrieve the existing user record
+                var existingUser = await _context.tbl_ictams_users.FindAsync(id);
+
+                if (existingUser == null)
                 {
-                    TempData["AlertMessage"] = "Duplicate Entry: User Full Name Already Present. The provided user full name already exists in the system. Please ensure each user's full name is unique.";
-                    return RedirectToAction(nameof(Edit));
+                    return NotFound();
                 }
-                if (findUserExistName != null)
+
+                // Check for duplicates in UserFullName (but exclude current user)
+                var duplicateUser = await _context.tbl_ictams_users
+                    .Where(x => x.UserCode != user.UserCode && x.UserFullName == user.UserFullName && x.Status.status_code == "AC")
+                    .FirstOrDefaultAsync();
+
+                if (duplicateUser != null)
                 {
-                    TempData["AlertMessage"] = "Duplicate Entry: User Full Name Already Present. The provided user full name already exists in the system. Please ensure each user's full name is unique.";
-                    return RedirectToAction(nameof(Edit));
+                    TempData["AlertMessage"] = "Duplicate Entry: The provided user full name already exists in the system.";
+                    return RedirectToAction(nameof(Edit), new { id = user.UserCode });
                 }
+
+                // Compare the fields UserCode, UserFullName, UserStatus, and UserProfile
+                bool isModified = existingUser.UserCode != user.UserCode ||
+                                  existingUser.UserFullName != user.UserFullName ||
+                                  existingUser.UserProfile != user.UserProfile ||
+                                  existingUser.UserStatus != user.UserStatus;
+
+                if (!isModified)
+                {
+                    TempData["AlertMessage"] = "No changes have been made.";
+                    return RedirectToAction(nameof(Edit), new { id = user.UserCode });
+                }
+
+                // Update fields if changes were made
                 var ucode = HttpContext.Session.GetString("UserName");
-                user.UserUpdated = ucode;
-                user.UserDateUpdated = DateTime.Now;
-                _context.Update(user);
+                existingUser.UserFullName = user.UserFullName;
+                existingUser.UserProfile = user.UserProfile;
+                existingUser.UserStatus = user.UserStatus;
+                existingUser.UserUpdated = ucode;
+                existingUser.UserDateUpdated = DateTime.Now;
+
                 await _context.SaveChangesAsync();
-                // ...
-                TempData["SuccessNotification"] = "Successfully update a  user!";
-                // ...
+
+                TempData["SuccessNotification"] = "Successfully updated the user!";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!UserExists(user.UserCode))
                 {
-
+                    return NotFound();
                 }
                 else
                 {
                     throw;
                 }
-
-                return RedirectToAction(nameof(Index));
             }
+
             return RedirectToAction(nameof(Index));
         }
+
 
         public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
         {

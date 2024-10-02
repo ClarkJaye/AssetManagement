@@ -1,0 +1,62 @@
+﻿@using AssetManagement.Models.View_Model;
+@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Create Profiles";
+    var alertMessage = TempData["AlertMessage"] as string;
+}
+
+
+@if (!string.IsNullOrEmpty(alertMessage))
+{
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @alertMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <script>
+        // Remove alert message after 3 seconds
+        setTimeout(function () {
+            var alertElement = document.getElementById('alertMessage');
+            if (alertElement) {
+                alertElement.remove();
+            }
+        }, 3000);
+    </script>
+}
+
+<h4>Profile Create</h4>
+<hr />
+<div>
+    <form asp-controller="Profiles" asp-action="CreateUpdate">
+        <div class="row form-group">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col">
+                <label asp-for="Profile.ProfileName" class="control-label"></label>
+                <input asp-for="Profile.ProfileName" class="form-control" />
+                <span asp-validation-for="Profile.ProfileName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col" >
+                <label  asp-for="Profile.ProfileStatus" class="control-label">
+                    </label>
+                    <select asp-for="Profile.ProfileStatus" class="form-control" asp-items="ViewBag.ProfileStatus"></select>
+            </div>
+
+            <div class="form-group col">
+                <label asp-for="Profile.ProfileDescription" class="control-label"></label>
+                <input asp-for="Profile.ProfileDescription" class="form-control" />
+                <span asp-validation-for="Profile.ProfileDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group col" >
+                <label asp-for="Profile.ProfileCreated" class="control-label"></label>
+                <select asp-for="Profile.ProfileCreated" class="form-control" asp-items="ViewBag.ProfileCreated"></select>
+            </div>
+
+            <div class="form-group col" style="margin-top:23px;">
+                <input type="submit" value="Add" class="btn btn-success" />
+                <a class="btn btn-secondary text-white" asp-controller="Profiles" asp-action="Index">Back</a>
+            </div>
+        </div>
+    </form>
+</div>

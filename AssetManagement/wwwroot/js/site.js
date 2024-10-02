@@ -50,4 +50,3 @@ function toggleDropdown4() {
     var dropdown = document.getElementById("myDept");
     dropdown.classList.toggle("show");
 }
-

@@ -120,7 +120,8 @@ namespace AssetManagement.Controllers
             _context.Entry(vendor).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            TempData["SuccessNotification"] = "Successfully Retreived!";
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Vendors/Create
@@ -129,9 +130,7 @@ namespace AssetManagement.Controllers
             return View();
         }
 
-        // POST: Vendors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("VendorID,VendorName,VendorAddress,VendorStatus,VCreatedby,DateCreated,VUpdateby,DateUpdated")] Vendor vendor)

@@ -4,93 +4,68 @@
     ViewData["Title"] = "Create";
 }
 
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-}
-
-@if (!string.IsNullOrEmpty(alertMessage))
+@if (@TempData["AlertMessage"] != null)
 {
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<h4>Second Owner Allocation</h4>
-<hr />
-<div >
-    
+
+<div class="mx-4">
+    <h4>Second Owner Allocation</h4>
+    <hr />
+    <div>
         <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="SecAllocId" class="control-label"></label>
-                <input asp-for="SecAllocId" class="form-control" />
-                <span asp-validation-for="SecAllocId" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="AllocId" class="control-label"></label>
-                <input asp-for="AllocId" readonly value="@ViewBag.AllocId" class="form-control" style="background-color: white;" />
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="SecLaptopCode" class="control-label"></label>
-                <input asp-for="SecLaptopCode" readonly value="@ViewBag.LaptopCode" class="form-control" style="background-color: white;" />
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" readonly value="@ViewBag.Serial" class="form-control" style="background-color: white;" />
-            </div>
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-2" hidden>
+                    <label asp-for="SecAllocId" class="control-label"></label>
+                    <input asp-for="SecAllocId" class="form-control" />
+                    <span asp-validation-for="SecAllocId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="AllocId" class="control-label"></label>
+                    <input asp-for="AllocId" readonly value="@ViewBag.AllocId" class="form-control" style="background-color: white;" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="SecLaptopCode" class="control-label"></label>
+                    <input asp-for="SecLaptopCode" readonly value="@ViewBag.LaptopCode" class="form-control" style="background-color: white;" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="SerialNumber" class="control-label"></label>
+                    <input asp-for="SerialNumber" readonly value="@ViewBag.Serial" class="form-control" style="background-color: white;" />
+                </div>
 
-            <div class="form-group col-2" id="ownertable">
-                <label asp-for="SecOwnerCode" class="control-label"></label>
-                <input asp-for="SecOwnerCode" class="form-control" id="oid" hidden />
-                <input class="form-control" id="odes" readonly style="background-color: white;" />
-            </div>
+                <div class="form-group col-md-2" id="ownertable">
+                    <label asp-for="SecOwnerCode" class="control-label"></label>
+                    <input asp-for="SecOwnerCode" class="form-control" id="oid" hidden />
+                    <input class="form-select" id="odes" readonly placeholder="Select Owner Below" />
+                </div>
 
-            <div class="form-group col-2" hidden>
-                <label asp-for="SecAllocationStatus" class="control-label"></label>
-                <select asp-for="SecAllocationStatus" class ="form-control" asp-items="ViewBag.SecAllocationStatus"></select>
+                <div class="form-group col-md-2" hidden>
+                    <label asp-for="SecAllocationStatus" class="control-label"></label>
+                    <select asp-for="SecAllocationStatus" class="form-select" asp-items="ViewBag.SecAllocationStatus"></select>
+                </div>
+                <div class="form-group col-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn bg-secondary text-white " asp-controller="LaptopAllocations" asp-action="LapAllocPartialView">Back</a>
+                </div>
             </div>
-            <div class="form-group col-2" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index" asp-controller="SecondOwnerAllocs">BACK</a>
-            </div>
-        </div>
         </form>
+    </div>
 </div>
+
 
 <div class="displaytable"></div>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
         //OWNER
@@ -101,7 +76,7 @@
 
             $('#odes').val(null);
             $.ajax({
-                url: "@Url.Action("OwnerPartialView","Owners")",
+                url: "@Url.Action("OwnerPartialView", "Owners")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);

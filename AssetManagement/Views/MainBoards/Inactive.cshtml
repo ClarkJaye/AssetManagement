@@ -1,42 +1,24 @@
 ﻿@model IEnumerable<AssetManagement.Models.MainBoard>
 
 @{
-    ViewData["Title"] = "Inactive";
+    ViewData["Title"] = "Main board Inactive";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
 
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
+<div class="mx-4">
+    <div class="mb-2">
+        <a class="btn btn-secondary" asp-controller="Mainboards" asp-action="Index">
+            <i class="fas fa-arrow-left"></i> 
+            <span>Back to Lists</span>
+        </a>
+    </div>
 
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
+    <h4 class="title">Inactive Main Board</h4>
 
-    .search {
-        margin-top: 10px;
-    }
+    <hr />
 
-</style>
-
-
-<div class="createform"></div>
-<a class="btn bg-secondary text-white " asp-action="Index">Back</a>
-<h4 class="title">Inactive Main Board</h4>
-<div class="table-container">
-    <table class="table custom-fontsize p-4">
+    <div class="mt-4">
+        <table id="inactiveMainboardsTable" class="table">
         <thead>
             <tr>
                 <th>
@@ -57,7 +39,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.BoardUpdatedDate)
                 </th>
-                <th></th>
+                <th class="text-center">ACTION</th>
             </tr>
         </thead>
         <tbody>
@@ -82,8 +64,10 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.BoardUpdatedDate)
                     </td>
-                    <td class="d-flex flex-row gap-2">
-                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.BoardID" data-id="@item.BoardID">Activate</a>
+                    <td class="d-flex justify-content-center">
+                        <a class="btn btn-sm btn-success btn-activate" asp-action="Activate" asp-route-id="@item.BoardID" data-id="@item.BoardID">
+                            <span class="fas fa-undo"></span> Retrieve
+                        </a>
                     </td>
                 </tr>
             }
@@ -91,23 +75,26 @@
     </table>
 </div>
 
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('.btn-activate').click(function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            $.ajax({
-                url: '@Url.Action("Activate")',
-                type: 'POST',
-                data: { id: id },
-                success: function () {
-                    location.reload();
-                },
-                error: function () {
-                    console.log('Error occurred while activating the module.');
+        // Initialize DataTables
+        $('#inactiveMainboardsTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
                 }
-            });
+            }
         });
+
     });
 </script>

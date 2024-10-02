@@ -1,53 +1,25 @@
 ﻿@model IEnumerable<AssetManagement.Models.GraphicsCard>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Graphics Card";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
 
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-    .search {
-        margin-top: 10px;
-    }
-
-</style>
-@if (TempData["Welcome"] != null)
-{
-    <div class="toast-notification animated-toast">
+<div class="m-4 px-1">
+    <h4>Graphics Cards</h4>
+    @if (TempData["Welcome"] != null)
+    {
         <p>@TempData["Welcome"]</p>
-    </div>
-}
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-}
+    }
+</div>
 
-@if (!string.IsNullOrEmpty(alertMessage))
+@if (@TempData["AlertMessage"] != null)
 {
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-
-
 
 @if (TempData["SuccessNotification"] != null)
 {
@@ -64,87 +36,152 @@
     </script>
 }
 
-<div class="createform"></div>
-<a id="createbtn" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn">Create</a>
-<a class="btn  bg-secondary retbtn text-white h5 p-2" asp-action="Inactive">Retrieve Data</a>
-<h4 class="title ">
-    Graphics Cards
-</h4>
-<input type="text" class="search" id="filterInput" placeholder="Search...">
-<div class="table-container">
-    <table class="table custom-fontsize p-4">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GraphicsDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraphicsStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraphicsCreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraphicsCreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraphicsUpdatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraphicsUpdatedDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraphicsDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraphicsStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraphicsCreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraphicsCreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraphicsUpdatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraphicsUpdatedDate)
-            </td>
-            <td>
-                <div class="d-flex flex-row gap-2 ">
-                    <a class="btn btn-sm bg-success text-white custom-fontsize editbtn" data-id="@item.GraphicsID">Edit</a>
-                    <form asp-action="Delete" method="post" class="delete-form">
-                        <input type="hidden" name="id" value="@item.GraphicsID" />
-                        <a class="btn btn-sm  bg-danger text-white custom-fontsize btn-delt">Delete</a>
 
-                    </form>
-                </div>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="m-4 px-1">
+    <a id="createbtn" class="btn btn-outline-red createbtn">
+        <i class="fas fa-pencil-alt"></i>
+        <span>Create New</span>
+    </a>
 </div>
 
+<div class="m-4 px-1 createform"></div>
+
+<hr />
+
+<div class="m-4">
+    <div class="d-flex align-items-center justify-content-end px-2 mb-3">
+        <a class="btn btn-outline-secondary" asp-controller="GraphicsCards" asp-action="Inactive">
+            <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table id="graphicsCardTable" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsCreatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsCreatedDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsUpdatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsUpdatedDate)
+                    </th>
+                    <th class="text-center">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsCreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsCreatedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsUpdatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsUpdatedDate)
+                        </td>
+                       
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="GraphicsCards" asp-action="Edit" asp-route-id="@item.GraphicsID">
+                                    <span class="fas fa-pencil-alt"></span> Edit
+                                </a> |
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.GraphicsID">
+                                    <span class="fas fa-trash-alt"></span> Delete
+                                </button>
+                            </div>
+                        </td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <h5>Are you sure you want to delete this?</h5>
+                <p id="modal-item-description"></p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteGraphicsId" name="graphicsId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Initialize DataTables
+        $('#graphicsCardTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
+        });
+
+
         $(".btn-delt").click(function () {
             $(this).closest("form").submit();
         })
 
         $("#createbtn").click(function () {
             $(this).hide();
-            $('.table-responsive ,.title ,.btn').hide();
+            $('.table-responsive ,.title ,.createbtn').hide();
 
             $.ajax({
-                url: "@Url.Action("Create","GraphicsCards")",
+                url: "@Url.Action("Create", "GraphicsCards")",
                 type: "GET",
                 success: function (res) {
                     $(".createform").html(res);
@@ -152,35 +189,16 @@
             })
         })
 
-        $(".editbtn").click(function () {
-            $(".createbtn ,.retbtn").hide();
-            var id = $(this).data("id");
+        // Pass the selected ID to the modal
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
 
-            // Remove the 'highlighted-row' class from any other row
-            $("tr.highlighted-row").removeClass("highlighted-row");
-
-            // Add the 'highlighted-row' class to the clicked row
-            $(this).closest("tr").addClass("highlighted-row");
-
-            $.ajax({
-                url: "@Url.Action("Edit","GraphicsCards")",
-                type: "GET",
-                data: { id: id },
-                success: function (res) {
-                    $(".createform").html(res);
-                }
-            })
-        })
+            // Update the modal's form action with the correct ID
+            var form = $('#deleteForm');
+            form.attr('action', '/GraphicsCards/Delete/' + id);
+        });
     })
 
-    //FILTERING
-
-    $(document).ready(function () {
-        $('#filterInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            $('tbody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
+   
 </script>

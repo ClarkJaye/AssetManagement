@@ -414,7 +414,7 @@ namespace AssetManagement.Controllers
             }
 
             var AllocatedChecker = await _context.tbl_ictams_laptopinv.Where(x => x.laptoptinvCode == laptopInventory.laptoptinvCode).FirstOrDefaultAsync();
-            if(AllocatedChecker.Quantity > 0)
+            if (AllocatedChecker.Quantity > 0)
             {
                 TempData["AlertMessage"] = "You can't Edit this!";
                 return RedirectToAction("Edit");

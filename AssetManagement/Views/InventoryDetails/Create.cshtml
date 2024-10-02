@@ -4,83 +4,56 @@
     ViewData["Title"] = "Create";
 }
 
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-
+<div class="mx-4">
 <h4>InventoryDetails</h4>
 <hr />
 <div>
     <form asp-action="Create">
         <div class="row form-group">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2">
+            <div class="form-group col-md-2">
                 <label asp-for="laptoptinvCode" class="control-label"></label>
                 <input value="@ViewBag.Code" readonly style="background-color: white;" asp-for="laptoptinvCode" class="form-control" />
             </div>
-            <div class="form-group col-2">
+            <div class="form-group col-md-2">
                 <label asp-for="SerialCode" class="control-label"></label>
                 <input asp-for="SerialCode" class="form-control" required />
                 <span asp-validation-for="SerialCode" class="text-danger"></span>
             </div>
-            <div class="form-group col-2">
+            <div class="form-group col-md-2">
                 <label asp-for="PO" class="control-label"></label>
                 <input asp-for="PO" class="form-control" required />
                 <span asp-validation-for="PO" class="text-danger"></span>
             </div>
-            <div class="form-group col-2">
+            <div class="form-group col-md-2">
                 <label asp-for="Price" class="control-label"></label>
                 <input type="number" asp-for="Price" class="form-control" required />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <div class="form-group col-2" id="vendortable">
+            <div class="form-group col-md-2" id="vendortable">
                 <label asp-for="LTDVendor" class="control-label"></label>
-                <input asp-for="LTDVendor" value="0" class="form-control" id="vid" hidden />
-            <input class="form-control" id="vname" readonly style="background-color: white;" />
+                <input asp-for="LTDVendor" value="0" class="form-select" id="vid" hidden />
+                <input class="form-select" id="vname" readonly placeholder="Select Vendor Below" />
             </div>
-            <div class="form-group col-2">
+            <div class="form-group col-md-2">
                 <label asp-for="PurchaseDate" class="control-label"></label>
                 <input asp-for="PurchaseDate" class="form-control" required/>
                 <span asp-validation-for="PurchaseDate" class="text-danger"></span>
             </div>
-            <div class="form-group col-2" style="margin-top: 23px;">
-                <input type="submit" value="Create" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-controller="LaptopInventories" asp-action="Index">Back</a>
+            <div class="form-group col-md-2" style="margin-top: 23px;">
+                <input type="submit" value="Create" class="btn btn-red " />
+                <a class="btn btn-outline-secondary" asp-controller="LaptopInventories" asp-action="Index">Back to List</a>
             </div>
         </div>
     </form>
 </div>
 
+</div>
 
 <div class="displaytable">
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 

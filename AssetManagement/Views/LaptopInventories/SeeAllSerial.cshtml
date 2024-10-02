@@ -3,32 +3,24 @@
 @{
     Layout = null;
 }
+
+
 <style>
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
+    .table tbody tr {
+        cursor: pointer !important;
     }
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
+        .table tbody tr:hover {
+            background: var(--bs-gray-400) !important;
+        }
 
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-    tr{
-        cursor: pointer;
+    .highlighted-row {
+        background: var(--bs-gray-400) !important;
     }
 </style>
-<input type="text" id="filterInput" placeholder="Search...">
-<div class="table-container">
-    <table class="table custom-fontsize  ">
+
+<div class="table-container table-responsive mt-5" style="cursor: pointer;">
+    <table class="table">
         <thead>
             <tr>
                 <th>

@@ -4,7 +4,7 @@
             <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">
                 <img src="~/img/prg_newlogo.png" width="50" class="mx-2">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria- controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -34,11 +34,11 @@
                     @if (openAccessModules != null && openAccessModules.Any() || OpenAccessModulesC4 != null && OpenAccessModulesC4.Any())
                     {
                         <li class="nav-item dropdown">
-                            <a id="maintenance" class="nav-link d-flex align-items-center gap-2 dropbtn dropdown-toggle" data-toggle="dropdown">
+                            <a id="maintenance" class="nav-link d-flex align-items-center gap-2 dropbtn dropdown-toggle" data-bs-toggle="dropdown">
                                 <i class="fas fa-cogs"></i>
                                 <p class="m-0">Maintenance</p>
                             </a>
-                            <ul class="dropdown-menu" style="width: 150px; max-height:300px; overflow-x: hidden;">
+                            <ul class="dropdown-menu" style="width: 150px; max-height:350px; overflow-x: hidden;">
                                 <li>
                                     @if (openAccessModules != null && openAccessModules.Any())
                                     {
@@ -53,10 +53,13 @@
                                 </li>
                                 @if (OpenAccessModulesC4 != null && OpenAccessModulesC4.Any())
                                 {
-                                    <li>
-                                        <a href="" id="deviceModalBtn" data-toggle="modal" data-target="#deviceModal" style="cursor: pointer;">
+                                    <li class="dropdown-submenu">
+                                        <a href="" id="deviceModalBtn" data-bs-toggle="modal" data-bs-target="#deviceTypesModal" style="cursor: pointer;">
+                                            <i class="fas fa-laptop"></i>
                                             Device
+                                            <span class="caret"></span>
                                         </a>
+
                                     </li>
                                 }
                             </ul>
@@ -329,27 +332,26 @@
 
 
 
+
 <!-- Device Modal -->
-<div class="modal fade" id="deviceModal" tabindex="-1" role="dialog" aria-labelledby="deviceModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="deviceTypesModal" tabindex="-1" aria-labelledby="deviceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deviceModalLabel">Device Options</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="deviceModalLabel">Devices Options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Form elements for Level, Brand, Model, CPU, Hard Disk, Memory, OS -->
                 @if (OpenAccessModulesC4 != null && OpenAccessModulesC4.Any())
                 {
-                    <ul class="device-options">
+                    <div class="row dev-opt">
                         @foreach (var item in OpenAccessModulesC4)
                         {
-                            <a style="font-size: 12px; font-weight: bold;" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
-
+                            <div class="col-4 box-opt p-0">
+                                <a class="text-dark" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                            </div>
                         }
-                    </ul>
+                    </div>
                 }
                 else
                 {
@@ -359,6 +361,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 <!-- Logout Modal -->
 <div class="modal fade" id="deleteModal1" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -379,3 +385,4 @@
         </div>
     </div>
 </div>
+

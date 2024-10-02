@@ -3,110 +3,93 @@
 @{
     ViewData["Title"] = "Index";
 }
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
+<div class="mx-4">
+    <div class="mb-4">
+        <a class="btn btn-sm btn-secondary" asp-controller="GraphicsCards" asp-action="Index">Back to List</a>
+    </div>
 
+    <h4 class="title">Inactive Graphics Cards</h4>
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-    .search {
-        margin-top: 10px;
-    }
-
-</style>
-
-
-<div class="createform"></div>
-<a class="btn bg-secondary text-white " asp-action="Index">Back</a>
-<h4 class="title">Inactive Graphics Cards</h4>
-<div class="table-container">
-    <table class="table custom-fontsize p-4">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.GraphicsDescription)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GraphicsStatus)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GraphicsCreatedBy)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GraphicsCreatedDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GraphicsUpdatedBy)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GraphicsUpdatedDate)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="mt-4">
+        <table id="inactiveGrapCardsTable" class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GraphicsDescription)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GraphicsStatus)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GraphicsCreatedBy)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GraphicsCreatedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GraphicsUpdatedBy)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GraphicsUpdatedDate)
-                    </td>
-                    <td class="d-flex flex-row gap-2">
-                        <a class="btn btn-sm bg-success text-white custom-fontsize btn-activate" asp-action="Activate" asp-route-id="@item.GraphicsID" data-id="@item.GraphicsID">Activate</a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsCreatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsCreatedDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsUpdatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GraphicsUpdatedDate)
+                    </th>
+                    <th class="text-center">ACTION</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsCreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsCreatedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsUpdatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GraphicsUpdatedDate)
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <a class="btn btn-sm btn-success btn-activate" asp-controller="GraphicsCards" asp-action="Activate" asp-route-id="@item.GraphicsID" data-id="@item.GraphicsID">
+                                <span class="fas fa-undo"></span> Retrieve
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('.btn-activate').click(function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            $.ajax({
-                url: '@Url.Action("Activate")',
-                type: 'POST',
-                data: { id: id },
-                success: function () {
-                    location.reload();
-                },
-                error: function () {
-                    console.log('Error occurred while activating the module.');
+        // Initialize DataTables
+        $('#inactiveGrapCardsTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
                 }
-            });
+            }
         });
+
     });
 </script>

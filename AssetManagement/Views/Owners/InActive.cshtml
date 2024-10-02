@@ -1,0 +1,207 @@
+﻿@using AssetManagement.Models.View_Model;
+@model OwnerViewModel
+
+
+@{
+    ViewData["Title"] = "Owners Inactive";
+}
+
+<div class="mx-4">
+    <h4>Owner Inactive</h4>
+    @if (TempData["Welcome"] != null)
+    {
+        <div class="toast-notification animated-toast">
+            <p>@TempData["Welcome"]</p>
+        </div>
+    }
+
+
+    <div class="mb-2">
+        <a class="btn btn-outline-secondary" asp-controller="Owners" asp-action="Index">Back to Lists</a>
+    </div>
+
+    <hr />
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the selected item(s)?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="mt-4">
+        <table class="table" id="ownersTable">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.OwnerCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.OwnerFullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.OwnerLocation)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.OwnerOffice)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.DateCreated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.DateUpdated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.Createdby)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.Updatedby)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner.Department)
+                    </th>
+                    <th class="text-center">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OwnerList)
+                {
+                    <tr>
+                        <td class="text-center">
+                            <input type="checkbox" name="selectedIds" id="select-all-checkbox" class="custom-checkbox" value="@item.OwnerCode" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OwnerCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OwnerFullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Location.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Store.StoreName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateUpdated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                        </td>
+                        <td class="text-center">
+                            <form asp-controller="Owners" asp-action="Retrieve">
+                                <input type="hidden" name="OwnerCode" value="@item.OwnerCode" />
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <span class="fas fa-undo"></span> Retrieve
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllCheckbox = document.getElementById("select-all-checkbox");
+        const checkboxes = document.querySelectorAll('input[name="selectedIds"]');
+        const deleteButtonContainer = document.querySelector('.multi-delete-button');
+
+        const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+        const deleteForm = document.querySelector("form[action*='DeleteAsEdit']");
+
+        confirmDeleteButton.addEventListener("click", function () {
+            deleteForm.submit();
+        });
+
+        selectAllCheckbox.addEventListener("change", function () {
+            checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+            toggleDeleteButton();
+        });
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", toggleDeleteButton);
+        });
+
+        //Enable Delete Button when selct in checkbox
+        function toggleDeleteButton() {
+            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            if (anyChecked) {
+                deleteButtonContainer.classList.remove('disabled');
+            } else {
+                deleteButtonContainer.classList.add('disabled');
+            }
+        }
+
+        // Initialize DataTables
+        $('#ownersTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
+        });
+    });
+
+</script>

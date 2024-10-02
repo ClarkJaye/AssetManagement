@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace AssetManagement.Models
 {
@@ -12,22 +13,33 @@ namespace AssetManagement.Models
         [DisplayName("PM NO")]
         public int PMNO { get; set; }
 
-        [Column("ups_store", TypeName = "VARCHAR(5)")]
+        [Column("ups_store")]
         [DisplayName("UPS STORE")]
         public string UpsPMStore { get; set; }
-
         [ForeignKey("UpsPMStore")]
         [DisplayName("UPS STORE")]
+        [ValidateNever]
         public Ups UpsStore { get; set; }
 
-        [Column("ups_code", TypeName = "VARCHAR(10)")]
+        [Column("ups_code")]
         [DisplayName("UPS CODE")]
         public string UpsPMCode { get; set; }
-
         [ForeignKey("UpsPMCode")]
         [DisplayName("UPS CODE")]
+        [ValidateNever]
         public Ups UpsCode { get; set; }
 
+        [Column("pm_createdby")]
+        [DisplayName("CREATED BY")]
+        public string PMCreatedBy { get; set; }
+        [ForeignKey("PMCreatedBy")]
+        [DisplayName("CREATED BY")]
+        [ValidateNever]
+        public User User { get; set; }
+
+        [Column("pm_createddt")]
+        [DisplayName("CREATED AT")]
+        public DateTime PMCreatedAt { get; set; }
 
         [Column("pm_date")]
         [DisplayName("PM DATE")]
@@ -37,16 +49,5 @@ namespace AssetManagement.Models
         [DisplayName("REMARKS")]
         public string? UpsPMRemarks { get; set; }
 
-        [Column("pm_createdby", TypeName = "VARCHAR(15)")]
-        [DisplayName("CREATED BY")]
-        public string PMCreatedBy { get; set; }
-
-        [Column("pm_createddt")]
-        [DisplayName("CREATED AT")]
-        public DateTime PMCreatedAt { get; set; }
-
-        [ForeignKey("PMCreatedBy")]
-        [DisplayName("CREATED BY")]
-        public User User { get; set; }
     }
 }

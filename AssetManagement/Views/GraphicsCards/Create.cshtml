@@ -5,47 +5,21 @@
     Layout = null;
 }
 
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    .form-group {
-        margin-top: 10px;
-    }
-</style>
-
-<h4>Graphics Cards</h4>
-<hr />
-<div>
-    <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-3">
-                <label asp-for="GraphicsDescription" class="control-label"></label>
-                <input asp-for="GraphicsDescription" class="form-control" required />
-                <span asp-validation-for="GraphicsDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">Back</a>
-            </div>
+<form asp-controller="GraphicsCards" asp-action="Create">
+    <div class="row g-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <label asp-for="GraphicsDescription" class="form-label"></label>
+            <input asp-for="GraphicsDescription" class="form-control" required />
+            <span asp-validation-for="GraphicsDescription" class="text-danger"></span>
         </div>
-    </form>
-</div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <input type="submit" value="Add" class="btn btn-red" />
+            <a class="btn btn-secondary" asp-controller="GraphicsCards" asp-action="Index">Back</a>
+        </div>
+    </div>
+</form>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

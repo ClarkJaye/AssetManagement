@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
 using AssetManagement.Models;
 using AssetManagement.Models.View_Model;
 using AssetManagement.Utility;
+using Microsoft.IdentityModel.Tokens;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AssetManagement.Controllers
 {
@@ -164,7 +162,7 @@ namespace AssetManagement.Controllers
         }
 
         // GET: Owners
-        public async Task<IActionResult> Index(string id, string searchString)
+        public async Task<IActionResult> Index()
         {
             var ucode = HttpContext.Session.GetString("UserName");
 
@@ -213,28 +211,6 @@ namespace AssetManagement.Controllers
                         OwnerList = await assetManagementContext.ToListAsync()
                     };
 
-                    if (!string.IsNullOrEmpty(id))
-                    {
-                        var ownerCode = await _context.tbl_ictams_owners.FirstOrDefaultAsync(x => x.OwnerCode == id);
-
-                        ownerViewModel.Owner = ownerCode;
-                        ViewData["ad"] = 1;
-                        return View(ownerViewModel);
-                    }
-
-                    if (!string.IsNullOrEmpty(searchString))
-                    {
-                        var assetManagement = _context.tbl_ictams_owners
-                      .Where(p => p.Status.status_code == searchString)
-                      .Include(o => o.Location)
-                      .Include(o => o.Createdby).Include(o => o.Department).Include(o => o.Store)
-                      .Include(o => o.Status).Include(o => o.Updatedby);
-                        OwnerViewModel ownerViewModel2 = new()
-                        {
-                            OwnerList = await assetManagement.ToListAsync()
-                        };
-                        return View(ownerViewModel2);
-                    }
                     ViewData["ad"] = 0;
                     return View(ownerViewModel);
                 }
@@ -244,104 +220,185 @@ namespace AssetManagement.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditOwner(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                var owner = await _context.tbl_ictams_owners
+                    .Include(o => o.Location)
+                    .Include(o => o.Createdby)
+                    .Include(o => o.Department)
+                    .Include(o => o.Store)
+                    .Include(o => o.Status)
+                    .Include(o => o.Updatedby)
+                    .FirstOrDefaultAsync(x => x.OwnerCode == id);
 
-        public async Task<IActionResult> Cancel()
+                if (owner == null)
+                {
+                    return Json(new { success = false, message = "Owner not found." });
+                }       
+                return Json(new { success = true, data = owner });
+            }
+
+            return Json(new { success = false, message = "Invalid request." });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> InActive()
+        {
+            var assetManagement = _context.tbl_ictams_owners
+                   .Where(p => p.Status.status_code == "IN")
+                   .Include(o => o.Location)
+                   .Include(o => o.Createdby).Include(o => o.Department).Include(o => o.Store)
+                   .Include(o => o.Status).Include(o => o.Updatedby);
+            OwnerViewModel ownerViewModel2 = new()
+            {
+                OwnerList = await assetManagement.ToListAsync()
+            };
+            return View(ownerViewModel2);
+        }
+
+
+
+        public IActionResult Cancel()
         {
             ViewData["ad"] = 0;
             return RedirectToAction(nameof(Index));
         }
-        // CREATE UPDATE
-        public async Task<IActionResult> CreateUpdate([Bind("OwnerCode,OwnerFullName,OwnerDept,OwnerLocation,OwnerOffice,OwnerStatus,OwnerCreated,DateCreated,Owner_updated,DateUpdated")] Owner owner, int idCheck)
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOwner([Bind("OwnerCode,OwnerFullName,OwnerDept,OwnerLocation,OwnerOffice,OwnerStatus,OwnerCreated,DateCreated,Owner_updated,DateUpdated")] Owner owner)
         {
-            if (idCheck > 0)
+            var ucode = HttpContext.Session.GetString("UserName");
+
+            if (owner.OwnerCode == null || owner.OwnerFullName == null || owner.OwnerDept == null || owner.OwnerLocation == null || owner.OwnerOffice == null)
             {
-                if(OwnerExists(owner))
-                {
-                    var findAlloc = await _context.tbl_ictams_laptopalloc
-                        .Where(x => x.OwnerCode == owner.OwnerCode && x.Status.status_code == "AC").FirstOrDefaultAsync();
-                    var findPerip = await _context.tbl_ictams_ltperipheralalloc
-                        .Where(x => x.OwnerCode == owner.OwnerCode && x.Status.status_code == "AC").FirstOrDefaultAsync();
-                    var ownderFind = await _context.tbl_ictams_owners.FirstOrDefaultAsync(x => x.OwnerCode == owner.OwnerCode);
-                    var ownderFind2 = await _context.tbl_ictams_owners.FirstOrDefaultAsync(x => x.OwnerFullName == owner.OwnerFullName);
-                    var ucode = HttpContext.Session.GetString("UserName");
-                    if (findAlloc != null)
-                    {
-                        TempData["AlertMessage1"] = "This owner can't be edit!";
-                        return RedirectToAction(nameof(Index));
-                    }else if (findPerip != null)
-                    {
-                        TempData["AlertMessage1"] = "This owner can't be edit!";
-                        return RedirectToAction(nameof(Index));
-                    }
-                    else if (ownderFind == null)
-                    {
-                        TempData["AlertMessage1"] = "Owner Code can't be edit!";
-                        return RedirectToAction(nameof(Index));
-                    }
-
-                    else if (ownderFind.OwnerFullName == owner.OwnerFullName)
-                    {
-                        TempData["AlertMessage1"] = "Fullname already exists, Cannot be duplicated!";
-                        return RedirectToAction(nameof(Index));
-                    }
-                    else if (ownderFind2!=null)
-                    {
-                        TempData["AlertMessage1"] = "Fullname already exists, Cannot be duplicated!";
-                        return RedirectToAction(nameof(Index));
-                    }
-
-                    ownderFind.OwnerDept = owner.OwnerDept;
-                    ownderFind.OwnerFullName = owner.OwnerFullName;
-                    ownderFind.OwnerFullName = owner.OwnerFullName;
-                    ownderFind.OwnerOffice = owner.OwnerOffice;
-                    ownderFind.OwnerLocation = owner.OwnerLocation;
-                    ownderFind.Owner_updated = ucode;
-                    ownderFind.DateUpdated = DateTime.Now;
-
-                    await _context.SaveChangesAsync();
-                    // ...
-                    TempData["SuccessNotification"] = "Successfully edit  new owner!";
-                    // ...
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    TempData["AlertMessage1"] = "Owner code cannot be edit";
-                    return RedirectToAction(nameof(Index));
-                }
+                return Json(new { success = false, message = "Fill up all the required fields"});
             }
-            else
+            if (_context.tbl_ictams_owners.Any(e => e.OwnerFullName == owner.OwnerFullName))
             {
-                if (OwnerExists(owner))
-                {
-                    TempData["AlertMessage1"] = "Owner code or fullname already exists!";
-                    return RedirectToAction(nameof(Index));
-                }
-                if (owner.OwnerCode == null)
-                {
-                    TempData["AlertMessage1"] = "Owner code `should be filled!";
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    var ucode = HttpContext.Session.GetString("UserName");
-
-                    owner.OwnerCreated = ucode;
-                    owner.DateCreated = DateTime.Now;
-                    _context.Add(owner);
-                    await _context.SaveChangesAsync();
-                    // ...
-                    TempData["SuccessNotification"] = "Successfully added a new owner!";
-                    // ...
-                    return RedirectToAction(nameof(Index));
-                }
-                
-
+                return Json(new { success = false, message = "Full name already exists. Cannot be duplicated!" });
             }
-            return RedirectToAction(nameof(Index));
+
+            owner.OwnerCreated = ucode;
+            owner.DateCreated = DateTime.Now;
+
+            _context.Add(owner);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessNotification"] = "New owner added successfully!";
+            return Json(new { success = true });
+
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateOwner([Bind("OwnerCode,OwnerFullName,OwnerDept,OwnerLocation,OwnerOffice,OwnerStatus,OwnerCreated,DateCreated,Owner_updated,DateUpdated")] Owner owner)
+        {
+                if (owner.OwnerCode == null || owner.OwnerFullName == null)
+                {
+                    return Json(new { success = false, message = "Fill up all the required fields" });
+                }
+
+                var ucode = HttpContext.Session.GetString("UserName");
+
+                var existingOwner = await _context.tbl_ictams_owners.FirstOrDefaultAsync(x => x.OwnerCode == owner.OwnerCode);
+                if (existingOwner == null)
+                {
+                    return Json(new { success = false, message = "Owner code does not exist!" });
+                }
+
+                var duplicateNameOwner = await _context.tbl_ictams_owners
+                    .FirstOrDefaultAsync(x => x.OwnerFullName == owner.OwnerFullName && x.OwnerCode != owner.OwnerCode);
+                if (duplicateNameOwner != null)
+                {
+                    return Json(new { success = false, message = "Full name already exists. Cannot be duplicated!" });
+                }
+
+                // Check for active allocations preventing updates
+                var activeAlloc = await _context.tbl_ictams_laptopalloc.FirstOrDefaultAsync(x => x.OwnerCode == owner.OwnerCode && x.Status.status_code == "AC");
+                var activePerip = await _context.tbl_ictams_ltperipheralalloc.FirstOrDefaultAsync(x => x.OwnerCode == owner.OwnerCode && x.Status.status_code == "AC");
+
+                if (activeAlloc != null || activePerip != null)
+                {
+                    return Json(new { success = false, message = "Owner cannot be edited due to active allocations!" });
+                }
+
+                // Update owner information
+                existingOwner.OwnerDept = owner.OwnerDept;
+                existingOwner.OwnerFullName = owner.OwnerFullName;
+                existingOwner.OwnerOffice = owner.OwnerOffice;
+                existingOwner.OwnerLocation = owner.OwnerLocation;
+                existingOwner.Owner_updated = ucode;
+                existingOwner.DateUpdated = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessNotification"] = "Owner updated successfully!";
+                return Json(new { success = true, message = "Owner updated successfully!" });
+            
+        }
+
+        //// CREATE UPDATE
+        //[HttpPost]
+        //public async Task<IActionResult> CreateUpdate([Bind("OwnerCode,OwnerFullName,OwnerDept,OwnerLocation,OwnerOffice,OwnerStatus,OwnerCreated,DateCreated,Owner_updated,DateUpdated")] Owner owner, int idCheck)
+        //{
+        //    if (string.IsNullOrEmpty(owner.OwnerCode) || string.IsNullOrEmpty(owner.OwnerFullName) || owner?.OwnerDept == null || owner?.OwnerLocation == null || string.IsNullOrEmpty(owner.OwnerOffice))
+        //    {
+        //        return Json(new { success = false, message = "Please ensure all required fields are not empty." });
+        //    }
+
+        //    var ucode = HttpContext.Session.GetString("UserName");
+
+        //    if (idCheck > 0)
+        //    {
+        //        var existingOwner = await _context.tbl_ictams_owners.FirstOrDefaultAsync(x => x.OwnerCode == owner.OwnerCode);
+        //        var existingOwnerByName = await _context.tbl_ictams_owners.FirstOrDefaultAsync(x => x.OwnerFullName == owner.OwnerFullName);
+
+        //        if (existingOwner == null)
+        //        {
+        //            return Json(new { success = false, message = "Owner code does not exist!" });
+        //        }
+
+        //        if (existingOwnerByName != null && existingOwnerByName.OwnerFullName == owner.OwnerFullName)
+        //        {
+        //            return Json(new { success = false, message = "Full name already exists. Cannot be duplicated!" });
+        //        }
+
+        //        var activeAlloc = await _context.tbl_ictams_laptopalloc.FirstOrDefaultAsync(x => x.OwnerCode == owner.OwnerCode && x.Status.status_code == "AC");
+        //        var activePerip = await _context.tbl_ictams_ltperipheralalloc.FirstOrDefaultAsync(x => x.OwnerCode == owner.OwnerCode && x.Status.status_code == "AC");
+
+        //        if (activeAlloc != null || activePerip != null)
+        //        {
+        //            return Json(new { success = false, message = "Owner cannot be edited due to active allocations!" });
+        //        }
+
+        //        existingOwner.OwnerDept = owner.OwnerDept;
+        //        existingOwner.OwnerFullName = owner.OwnerFullName;
+        //        existingOwner.OwnerOffice = owner.OwnerOffice;
+        //        existingOwner.OwnerLocation = owner.OwnerLocation;
+        //        existingOwner.Owner_updated = ucode;
+        //        existingOwner.DateUpdated = DateTime.Now;
+
+        //        await _context.SaveChangesAsync();
+        //        return Json(new { success = true, message = "Owner updated successfully!" });
+        //    }
+        //    else
+        //    {
+        //        if (_context.tbl_ictams_owners.Any(e => e.OwnerCode == owner.OwnerCode || e.OwnerFullName == owner.OwnerFullName))
+        //        {
+        //            return Json(new { success = false, message = "Owner code or full name already exists!" });
+        //        }
+
+        //        owner.OwnerCreated = ucode;
+        //        owner.DateCreated = DateTime.Now;
+
+        //        _context.Add(owner);
+        //        await _context.SaveChangesAsync();
+
+        //        return Json(new { success = true, message = "New owner added successfully!" });
+        //    }
+        //}
 
 
         public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
@@ -360,7 +417,7 @@ namespace AssetManagement.Controllers
                     {
                         if (findLTA != null)
                         {
-                            TempData["AlertMessage1"] = "Owner  is already allocated with a device";
+                            TempData["AlertMessage"] = "Owner  is already allocated with a device";
                             return RedirectToAction(nameof(Index));
                         }
                         else
@@ -374,7 +431,7 @@ namespace AssetManagement.Controllers
                             _context.Update(owner);
                             await _context.SaveChangesAsync();
                             // ...
-                            TempData["SuccessNotification"] = "Successfully delete a owner!";
+                            TempData["SuccessNotification"] = "Successfully InActive a owner!";
                             // ...
                             return RedirectToAction(nameof(Index));
                         }
@@ -395,10 +452,34 @@ namespace AssetManagement.Controllers
                         _context.Update(ownerIN);
                         await _context.SaveChangesAsync();
                         // ...
-                        TempData["SuccessNotification"] = "Successfully retrieve a deleted owner!";
+                        TempData["SuccessNotification"] = "Successfully InActive a deleted owner!";
                         // ...
                         return RedirectToAction(nameof(Index));
                     } 
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Retrieve(string OwnerCode)
+        {
+            ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
+            var ownerIN = await _context.tbl_ictams_owners.FirstOrDefaultAsync(f => f.OwnerCode == OwnerCode && f.OwnerStatus == "IN");
+            if (ownerIN != null)
+            {
+                var statusIN = await _context.tbl_ictams_status.FindAsync(ownerIN.OwnerStatus);
+                // Update the profile
+                if (statusIN != null)
+                {
+                    var ucode = HttpContext.Session.GetString("UserName");
+                    ownerIN.Owner_updated = ucode;
+                    ownerIN.OwnerStatus = "AC";
+                    ownerIN.DateUpdated = DateTime.Now;
+                    _context.Update(ownerIN);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessNotification"] = "Successfully retrieve a InActive owner!";
+                    return RedirectToAction(nameof(Index));
                 }
             }
 

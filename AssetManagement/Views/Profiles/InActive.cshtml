@@ -2,114 +2,124 @@
 @model ProfileViewModel
 
 @{
-    //ViewData["Title"] = "Index";
+    ViewData["Title"] = "Profiles Inactive";
 }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
-<style>
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
+<div class="mx-4">
+    <h4>Owner Inactive</h4>
+    @if (TempData["Welcome"] != null)
+    {
+        <div class="toast-notification animated-toast">
+            <p>@TempData["Welcome"]</p>
+        </div>
     }
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        height: 100vh;
-    }
+    <div class="mb-2">
+        <a class="btn btn-sm btn-secondary" asp-controller="Profiles" asp-action="Index">Back to Lists</a>
+    </div>
 
 
-</style>
+    <hr />
 
-<h4>Profile Deactivated</h4>
-<p>
-    <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index">Back</a>
-</p>
+    <button type="button" class="multi-delete-button btn btn-sm btn-danger disabled" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <span class="fas fa-ban"></span> Delete Permanently
+    </button>
 
-<form method="post" action="@Url.Action("Retrieve", "Profiles")">
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th hidden>
-                    @Html.DisplayNameFor(model => model.Profile.ProfileId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Profile.ProfileName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Profile.ProfileDescription)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Profile.ProfileDtCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Profile.ProfileDtUpdated)
-                </th>
-                <th hidden>
-                    @Html.DisplayNameFor(model => model.Profile.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Profile.CreatedBy)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Profile.UpdatedBy)
-                </th>
-                <th><input type="checkbox" id="select-all-checkbox" class="green-checkbox" /></th>
-                <th> <button type="submit" class="btn btn-sm"> <i class="bi bi-recycle"></i></button></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.ProfileList)
-            {
+    <div class="mt-4">
+        <table class="table" id="profilesTable">
+            <thead>
                 <tr>
-                    <td hidden>
-                        @Html.DisplayFor(modelItem => item.ProfileId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProfileName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProfileDescription)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProfileDtCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProfileDtUpdated)
-                    </td>
-                    <td hidden>
-                        @Html.DisplayFor(modelItem => item.Status.status_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
-                    </td>
-                    <td>
-
-                        <input type="checkbox" name="selectedIds" id="select-all-checkbox" class="green-checkbox" value="@item.ProfileId" />
-
-                    </td>
+                    <th hidden>@Html.DisplayNameFor(model => model.Profile.ProfileId)</th>
+                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileDescription)</th>
+                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileDtCreated)</th>
+                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileDtUpdated)</th>
+                    <th hidden>@Html.DisplayNameFor(model => model.Profile.Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.Profile.CreatedBy)</th>
+                    <th>@Html.DisplayNameFor(model => model.Profile.UpdatedBy)</th>
+                    <th class="text-center">ACTION</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</form>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ProfileList)
+                {
+                    <tr>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.ProfileId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileDtCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProfileDtUpdated)
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
+                        </td>
+                        <td class="text-center">
+                            <form asp-controller="Profiles" asp-action="Retrieve">
+                                <input type="hidden" name="profileId" value="@item.ProfileId" />
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <span class="fas fa-undo"></span> Retrieve
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
 
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    const selectAllCheckbox = document.getElementById("select-all-checkbox");
-    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedIds"]');
-
-    selectAllCheckbox.addEventListener("change", function () {
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = selectAllCheckbox.checked;
-        }
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize DataTables
+        $('#profilesTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
+        });
     });
+
 </script>

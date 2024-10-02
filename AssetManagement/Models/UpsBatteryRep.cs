@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace AssetManagement.Models
 {
@@ -16,19 +17,28 @@ namespace AssetManagement.Models
         [Column("ups_store", TypeName = "VARCHAR(5)")]
         [DisplayName("UPS STORE")]
         public string UpsBattStore { get; set; }
-
         [ForeignKey("UpsBattStore")]
-        [DisplayName("UPS STORE")]
+        [ValidateNever]
         public Ups UpsStore { get; set; }
+
 
         [Column("ups_code", TypeName = "VARCHAR(10)")]
         [DisplayName("UPS CODE")]
         public string UpsBattCode { get; set; }
-
         [ForeignKey("UpsBattCode")]
-        [DisplayName("UPS CODE")]
+        [ValidateNever]
         public Ups UpsCode { get; set; }
 
+        [Column("battrep_createdby", TypeName = "VARCHAR(15)")]
+        [DisplayName("CREATED BY")]
+        public string BatteryRepCreatedBy { get; set; }
+        [ForeignKey("BatteryRepCreatedBy")]
+        [ValidateNever]
+        public User User { get; set; }
+
+        [Column("battrep_createddt")]
+        [DisplayName("CREATED AT")]
+        public DateTime BatteryRepCreatedAt { get; set; }
 
         [Column("battrep_dt")]
         [DisplayName("BATTERY DATE")]
@@ -37,18 +47,5 @@ namespace AssetManagement.Models
         [Column("battrep_remarks", TypeName = "VARCHAR(100)")]
         [DisplayName("REMARKS")]
         public string? BatteryRepRemarks { get; set; }
-
-        [Column("battrep_createdby", TypeName = "VARCHAR(15)")]
-        [DisplayName("CREATED BY")]
-        public string BatteryRepCreatedBy { get; set; }
-
-        [Column("battrep_createddt")]
-        [DisplayName("CREATED AT")]
-        public DateTime BatteryRepCreatedAt { get; set; }
-
-        [ForeignKey("BatteryRepCreatedBy")]
-        [DisplayName("CREATED BY")]
-        public User User { get; set; }
-
     }
 }

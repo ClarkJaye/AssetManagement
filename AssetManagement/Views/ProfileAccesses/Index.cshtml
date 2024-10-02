@@ -3,91 +3,87 @@
 @{
     ViewData["Title"] = "Index";
 }
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
+<div class="m-2 px-3">
+    <h4>Profile Access</h4>
+    @if (TempData["Welcome"] != null)
+    {
+        <div class="toast-notification animated-toast">
+            <p>@TempData["Welcome"]</p>
+        </div>
     }
+</div>
+
+<div class="m-4 px-1 form-cont-owner">
+    <a class="btn btn-outline-secondary" asp-controller="Profiles" asp-action="Index">
+        <span class="fas fa-trash-alt"></span> Back to List
+    </a>
+</div>
 
 
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        height: 100vh;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 150px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-<h4>Profile Access</h4>
-<div class="createform"></div>
-
-
-@if (TempData["Welcome"] != null)
-{
-    <div class="toast-notification animated-toast">
-        <p>@TempData["Welcome"]</p>
+<div class="card m-4">
+    <div class="card-header">
+        <h4 class="card-title m-2">Profile Access</h4>
     </div>
-}
-<h4 class="title">@ViewData["ProfileName"]</h4>
-<a class="btn btn-success btn-sm" id="profileAccess"> Modify Access </a>
-<input type="text" id="filterInput" placeholder="Search...">
-<div class="table-responsive scrollable-container table-container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Module)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Module.Category)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OpenAccess)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Module.ModuleTitle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Module.Category.category_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OpenAccess)
-                    </td>
-                    <td>
-                        <form asp-action="Delete" method="post" class="delete-form">
-                            <input type="hidden" name="id" value="@item.ProfileId" />
-                            <input type="hidden" name="id2" value="@item.ModuleId" />
-                            <input type="checkbox" class="delete-checkbox green-checkbox" id="select-all-checkbox" name="delete" value="Y" @(item.OpenAccess == "Y" ? "checked" : "") />
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+    <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between gap-2 mb-2 mx-2">
+                <div>
+                    <h4 class="title"><small class="text-muted">Access:</small> @ViewData["ProfileName"]</h4>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table id="profileAccessTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Module)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Module.Category)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OpenAccess)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Module.ModuleTitle)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Module.Category.category_name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OpenAccess)
+                                </td>
+                                <td>
+                                    <form asp-action="Delete" method="post" class="delete-form">
+                                        <input type="hidden" name="id" value="@item.ProfileId" />
+                                        <input type="hidden" name="id2" value="@item.ModuleId" />
+                                        <input type="checkbox" class="delete-checkbox custom-checkbox" id="select-all-checkbox" name="delete" value="Y" @(item.OpenAccess == "Y" ? "checked" : "") />
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+  
+    </div>
 </div>
-<div class="container-fluid d-flex justify-content-end">
-    <a asp-action="Index" asp-controller="ProfileAccesses" class="btn btn-secondary text-start me-2">Back</a>
 
 
-</div>
 
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 
@@ -145,16 +141,25 @@
 
     })
 
-
-    //FILTERING
-
     $(document).ready(function () {
-        $('#filterInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            $('tbody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+        // Initialize DataTables
+        $('#profileAccessTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
         });
     });
+
 </script>
 

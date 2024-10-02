@@ -4,45 +4,29 @@
     ViewData["Title"] = "Create";
     Layout = null;
 }
-<style>
-    .form-group{
-        margin-top: 10px;
-    }
-</style>
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-}
 
-@if (!string.IsNullOrEmpty(alertMessage))
-{
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
-    </div>
-}
 
-<h4>Vendor</h4>
-<hr />
-<div>
-    <form asp-action="Create">
-        <div class=" row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-3">
-                <label asp-for="VendorName" class="control-label"></label>
-                <input asp-for="VendorName" class="form-control" required/>
-                <span asp-validation-for="VendorName" class="text-danger"></span>
-            </div>
-            <div class="form-group col-3">
-                <label asp-for="VendorAddress" class="control-label"></label>
-                <input asp-for="VendorAddress" class="form-control" required />
-                <span asp-validation-for="VendorAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
-            </div>
+<form asp-controller="Vendors" asp-action="Create">
+    <div class="row g-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-2">
+            <label asp-for="VendorName" class="form-label"></label>
+            <input asp-for="VendorName" class="form-control" required />
+            <span asp-validation-for="VendorName" class="text-danger"></span>
         </div>
-    </form>
-</div>
+        <div class="col-md-2">
+            <label asp-for="VendorAddress" class="form-label"></label>
+            <input asp-for="VendorAddress" class="form-control" required />
+            <span asp-validation-for="VendorAddress" class="text-danger"></span>
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-secondary" asp-controller="Vendors" asp-action="Index">Back</a>
+        </div>
+    </div>
+</form>
+
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

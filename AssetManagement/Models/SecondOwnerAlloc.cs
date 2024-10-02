@@ -22,7 +22,7 @@ namespace AssetManagement.Models
 
 
         [Column("serial_number", TypeName = "VARCHAR(30)")]
-        [DisplayName("LAPTOP CODE")]
+        [DisplayName("SERIAL NUMBER")]
         public string SerialNumber { get; set; }
 
         [Column("owner_code", TypeName = "VARCHAR(15)")]

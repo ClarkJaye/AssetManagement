@@ -4,25 +4,6 @@
     ViewData["Title"] = "View All";
 }
 <style>
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
     .allocation-details {
         margin-bottom: 20px;
         background-color: #f2f2f2;
@@ -44,115 +25,129 @@
         margin-top: 10px;
     }
 </style>
+<div class="m-4">
 
-<div class="allocation-details">
-    <h4 class="allocation-title">Laptop Allocation Details for ID: @ViewBag.Id</h4>
-    <h5 class="allocation-description">Description: @ViewBag.Ids</h5>
-</div>
-<a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-controller="LaptopInventories" asp-action="Index">Back</a>
-<input type="text" id="filterInput" placeholder="Search...">
-<div>
-<table class="table custom-fontsize  ">
-    <thead>
-        <tr>
-            <th>
-                CODE
-            </th>
-            <th>
-                PO
-            </th>
-            <th>
-                SERIAL
-            </th>
-            <th>
-                PRICE
-            </th>
-            <th>
-                VENDOR
-            </th>
-            <th>
-                PURCHASE DATE
-            </th>
-            <th>
-                DEPLOYED DATE
-            </th>
-            <th>
-                STATUS
-            </th>
-            <th>
-                CREATEDBY
-            </th>
-            <th>
-                CREATED AT
-            </th>
-            <th>
-                UPDATEDBY
-            </th>
-            <th>
-                UPDATE AT
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <div class="allocation-details">
+        <h4 class="allocation-title">Laptop Allocation Details for ID: @ViewBag.Id</h4>
+        <h5 class="allocation-description">Description: @ViewBag.Ids</h5>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-4">
+        <div>
+            <a class="btn btn-outline-secondary" asp-controller="LaptopInventories" asp-action="Index">
+                Back to List
+            </a>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+        </div>
+    </div>
+
+
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
                 <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PO)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SerialCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Vendor.VendorName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PurchaseDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeployedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status.status_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdatedDate)
-                </td>
-                <td>
-                    <form method="post" asp-action="Delete" asp-controller="InventoryDetails" asp-route-id="@item.SerialCode">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    <th>
+                        CODE
+                    </th>
+                    <th>
+                        PO
+                    </th>
+                    <th>
+                        SERIAL
+                    </th>
+                    <th>
+                        PRICE
+                    </th>
+                    <th>
+                        VENDOR
+                    </th>
+                    <th>
+                        PURCHASE DATE
+                    </th>
+                    <th>
+                        DEPLOYED DATE
+                    </th>
+                    <th>
+                        STATUS
+                    </th>
+                    <th>
+                        CREATEDBY
+                    </th>
+                    <th>
+                        CREATED AT
+                    </th>
+                    <th>
+                        UPDATEDBY
+                    </th>
+                    <th>
+                        UPDATE AT
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SerialCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PurchaseDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DeployedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedDate)
+                        </td>
+                        <td>
+                            <form method="post" asp-action="Delete" asp-controller="InventoryDetails" asp-route-id="@item.SerialCode">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <span class="fas fa-trash-alt"></span> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-
-
-
-
-    //FILTERING
-
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        //FILTERING
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {
@@ -160,4 +155,5 @@
             });
         });
     });
+
 </script>

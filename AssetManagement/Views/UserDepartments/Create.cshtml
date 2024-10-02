@@ -3,55 +3,35 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
 
 
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-    .form-group {
-        margin-top: 10px;
-    }
-
-</style>
-<h4>User Department</h4>
-<hr />
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
 }
-<div>
-    
+
+<div class="m-4">
+    <h4>Add User Department</h4>
+    <hr />
         <form asp-action="Create">
-        <div class="row">
+        <div class="row form-group">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-6">
+            <div class="form-group col-4">
                 <label asp-for="UserCode" class="control-label">USER FULL NAME</label>
-                <select  asp-for="UserCode" class="form-control" asp-items="ViewBag.UserCode"></select>
+                <select  asp-for="UserCode" class="form-select" asp-items="ViewBag.UserCode">
+                    <option disabled selected>Select User</option>
+                </select>
             </div>
-            <div class="form-group col-6">
+            <div class="form-group col-4">
                 <label asp-for="DeptCode" class="control-label">DEPARTMENT NAME</label>
-                <select asp-for="DeptCode" class="form-control" asp-items="ViewBag.DeptCode"></select>
+                <select asp-for="DeptCode" class="form-select" asp-items="ViewBag.DeptCode">
+                    <option disabled selected>Select Department</option>
+                </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-4 mb-2 col d-flex align-items-center gap-2">
                 <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
+                <a class="btn bg-secondary text-white " asp-action="Index">Back</a>
             </div>
         </div>
         </form>
@@ -61,8 +41,6 @@
 <div class="displaytable"></div>
 
 <script>
-
-
     // 2 SELECT FUNCTIONALITY
     $(document).ready(function () {
         // Get the initial selected value
@@ -78,7 +56,6 @@
             $("select[name='UserStore.UserCode']").val(selectedValue);
         });
     });
-
 
 
     //AJAX

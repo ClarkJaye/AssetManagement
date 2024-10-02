@@ -66,11 +66,11 @@ namespace AssetManagement.Controllers
         }
 
 
-        public async Task<IActionResult> Cancel()
-        {
-            
+        public IActionResult Cancel()
+        {  
             return RedirectToAction(nameof(Index));
         }
+
         // GET: Profiles
         public async Task<IActionResult> Index(int id)
         {
@@ -210,7 +210,7 @@ namespace AssetManagement.Controllers
         }
 
 
-        // CREATE UPDATE ROUTE
+        // CREATE UPDATE 
         public async Task<IActionResult> CreateUpdate([Bind("ProfileId,ProfileName,ProfileDescription,ProfileStatus,ProfileCreated,ProfileDtCreated")] Profile profile)
         {
 
@@ -221,45 +221,43 @@ namespace AssetManagement.Controllers
                 {
                     return NotFound("Profile id not found");
                 }
-                    try
-                    {
-					    var ftable = await _context.tbl_ictams_profiles.FirstOrDefaultAsync(x => x.ProfileId == profile.ProfileId);
-					    var ucode = HttpContext.Session.GetString("UserName");
-                        ftable.ProfileName = profile.ProfileName.ToUpper();
-                        ftable.ProfileDescription = profile.ProfileDescription;
-					    ftable.ProfileUpdated = ucode;
-					    ftable.ProfileDtUpdated = DateTime.Now;
-						//_context.Update(profile);
-                        await _context.SaveChangesAsync();
-                    // ...
+                try
+                {
+                    var ftable = await _context.tbl_ictams_profiles.FirstOrDefaultAsync(x => x.ProfileId == profile.ProfileId);
+                    var ucode = HttpContext.Session.GetString("UserName");
+                    ftable.ProfileName = profile.ProfileName.ToUpper();
+                    ftable.ProfileDescription = profile.ProfileDescription;
+                    ftable.ProfileUpdated = ucode;
+                    ftable.ProfileDtUpdated = DateTime.Now;
+                    //_context.Update(profile);
+                    await _context.SaveChangesAsync();
                     TempData["SuccessNotification"] = "Successfully edit a  profile!";
-                    // ...
                 }
                 catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProfileExists(profile.ProfileId))
                     {
-                        if (!ProfileExists(profile.ProfileId))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        return NotFound();
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
 
             }
             else
             {
-                var existName = await _context.tbl_ictams_profiles.AnyAsync(p=>p.ProfileName == profile.ProfileName);
+                var existName = await _context.tbl_ictams_profiles.AnyAsync(p => p.ProfileName == profile.ProfileName);
                 if (existName)
                 {
                     TempData["ErrorMessage"] = "Profile name already exists!";
                     return RedirectToAction(nameof(Index));
                 }
-                if(profile.ProfileDescription == null || profile.ProfileName == null)
+                if (profile.ProfileDescription == null || profile.ProfileName == null)
                 {
                     ModelState.AddModelError("ProfileDescription", "Sorry but it's required");
-                    TempData["ErrorMessage1"] = "Please input a name!";
+                    TempData["ErrorMessage"] = "Please input a name!";
                 }
                 else
                 {
@@ -270,7 +268,7 @@ namespace AssetManagement.Controllers
 
                     var param = await _context.tbl_ictams_parameters.FirstOrDefaultAsync(p => p.parm_code == "profile_id");
                     param.parm_value = newparamCode;
- 
+
 
                     profile.ProfileId = newparamCode;
                     var ucode = HttpContext.Session.GetString("UserName");
@@ -278,21 +276,17 @@ namespace AssetManagement.Controllers
                     profile.ProfileCreated = ucode;
                     _context.Add(profile);
                     await _context.SaveChangesAsync();
-                    // ...
                     TempData["SuccessNotification"] = "Successfully added a new profile!";
-                    // ...
                 }
 
 
             }
-
             return RedirectToAction(nameof(Index));
         }
 
-    
+
 
         // DELETE AS EDIT
- 
         public async Task<IActionResult> DeleteAsEdit(int[] selectedIds)
         {
             ViewData["ProfileStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
@@ -339,36 +333,63 @@ namespace AssetManagement.Controllers
 
 
         // Retrieve Deleted Profile
+        //   [HttpPost]
+        //   public async Task<IActionResult> Retrieve(int[] selectedIds)
+        //   {
+        //       ViewData["ProfileStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
+        //       foreach (int id in selectedIds)
+        //       {
+        //           var profile = await _context.tbl_ictams_profiles.FindAsync(id);
+        //           if (profile != null)
+        //           {
+        //               // Check if the selected profile status exists in the tbl_lsm_status table
+        //               var status = await _context.tbl_ictams_status.FindAsync(profile.ProfileStatus);
+        //               if (status == null)
+        //               {
+        //                   ModelState.AddModelError("", $"Profile status '{profile.ProfileStatus}' does not exist.");
+        //               }
+        //var ucode = HttpContext.Session.GetString("UserName");
+
+        //               // Update the profile
+        //               profile.ProfileUpdated = ucode;
+        //profile.ProfileStatus = "AC";
+        //               profile.ProfileDtUpdated = DateTime.Now;
+
+        //               _context.Update(profile);
+        //               await _context.SaveChangesAsync();
+        //               // ...
+        //               TempData["SuccessNotification"] = "Successfully retrieve a deleted profile!";
+        //               // ...
+        //           }
+        //       }
+
+        //       return RedirectToAction("Index");
+        //   }
+
+
         [HttpPost]
-        public async Task<IActionResult> Retrieve(int[] selectedIds)
+        public async Task<IActionResult> Retrieve(int profileId)
         {
             ViewData["ProfileStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
-            foreach (int id in selectedIds)
+
+            var profile = await _context.tbl_ictams_profiles.FindAsync(profileId);
+            if (profile != null)
             {
-                var profile = await _context.tbl_ictams_profiles.FindAsync(id);
-                if (profile != null)
+                // Check if the selected profile status exists in the tbl_lsm_status table
+                var status = await _context.tbl_ictams_status.FindAsync(profile.ProfileStatus);
+                if (status == null)
                 {
-                    // Check if the selected profile status exists in the tbl_lsm_status table
-                    var status = await _context.tbl_ictams_status.FindAsync(profile.ProfileStatus);
-                    if (status == null)
-                    {
-                        ModelState.AddModelError("", $"Profile status '{profile.ProfileStatus}' does not exist.");
-                    }
-					var ucode = HttpContext.Session.GetString("UserName");
-
-                    // Update the profile
-                    profile.ProfileUpdated = ucode;
-					profile.ProfileStatus = "AC";
-                    profile.ProfileDtUpdated = DateTime.Now;
-
-                    _context.Update(profile);
-                    await _context.SaveChangesAsync();
-                    // ...
-                    TempData["SuccessNotification"] = "Successfully retrieve a deleted profile!";
-                    // ...
+                    ModelState.AddModelError("", $"Profile status '{profile.ProfileStatus}' does not exist.");
                 }
+                var ucode = HttpContext.Session.GetString("UserName");
+                // Update the profile
+                profile.ProfileUpdated = ucode;
+                profile.ProfileStatus = "AC";
+                profile.ProfileDtUpdated = DateTime.Now;
+                _context.Update(profile);
+                await _context.SaveChangesAsync();
+                TempData["SuccessNotification"] = "Successfully retrieve a deleted profile!";
             }
-
             return RedirectToAction("Index");
         }
 

@@ -1,79 +1,81 @@
 ﻿@model AssetManagement.Models.User
 
 @{
-    ViewData["Title"] = "Edit";
-    var alertMessage = TempData["AlertMessage"] as string;
+    ViewData["Title"] = "Edit User";
 }
 
-
-@if (!string.IsNullOrEmpty(alertMessage))
+@if (@TempData["AlertMessage"] != null)
 {
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="m-4">
+    <h4>User Edit</h4>
+    <hr />
+    <div>
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="UserCode" />
-            <div class="form-group" hidden >
-                <label asp-for="UserPassword" class="control-label"></label>
-                <input asp-for="UserPassword" class="form-control" />
-                <span asp-validation-for="UserPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserADLogin" class="control-label"></label>
-                <input asp-for="UserADLogin" class="form-control" />
-                <span asp-validation-for="UserADLogin" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserFullName" class="control-label"></label>
-                <input asp-for="UserFullName" class="form-control" />
-                <span asp-validation-for="UserFullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserProfile" class="control-label"></label>
-                <select asp-for="UserProfile" class="form-control" asp-items="ViewBag.UserProfile"></select>
-                <span asp-validation-for="UserProfile" class="text-danger"></span>
-            </div>
-            <div class="form-group" hidden>
-                <label asp-for="UserStatus" class="control-label"></label>
-                <select asp-for="UserStatus" class="form-control" asp-items="ViewBag.UserStatus"></select>
-                <span asp-validation-for="UserStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group" hidden>
-                <label asp-for="UserCreated" class="control-label"></label>
-                <input asp-for="UserCreated" class="form-control" />
-                <span asp-validation-for="UserCreated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label hidden asp-for="UserDateCreated" class="control-label"></label>
-                <input type="hidden" asp-for="UserDateCreated" class="form-control" />
-                <span asp-validation-for="UserDateCreated" class="text-danger"></span>
-            </div>
-@*            <div class="form-group">
-                <label asp-for="UserUpdated" class="control-label"></label>
-                <input asp-for="UserUpdated" class="form-control" />
-                <span asp-validation-for="UserUpdated" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label hidden asp-for="UserDateUpdated" class="control-label"></label>
-                <input type="hidden" asp-for="UserDateUpdated" class="form-control" value="@DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt")"/>
-                <span asp-validation-for="UserDateUpdated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-               <input type="submit" value="Save" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">Back</a>
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="UserCode" />
+
+                <div class="form-group col-2" hidden>
+                    <label asp-for="UserPassword" class="control-label"></label>
+                    <input asp-for="UserPassword" value="1234" class="form-control" />
+                    <span asp-validation-for="UserPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-3">
+                    <label asp-for="UserADLogin" class="control-label"></label>
+                    <input asp-for="UserADLogin" class="form-control" />
+                    <span asp-validation-for="UserADLogin" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-3">
+                    <label asp-for="UserFullName" class="control-label"></label>
+                    <input asp-for="UserFullName" class="form-control" />
+                    <span asp-validation-for="UserFullName" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-2">
+                    <label asp-for="UserProfile" class="control-label"></label>
+                    <select asp-for="UserProfile" class="form-select" asp-items="ViewBag.UserProfile"></select>
+                    <span asp-validation-for="UserProfile" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-2" hidden>
+                    <label asp-for="UserStatus" class="control-label"></label>
+                    <select asp-for="UserStatus" class="form-control" asp-items="ViewBag.UserStatus"></select>
+                    <span asp-validation-for="UserStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-2" hidden>
+                    <label asp-for="UserCreated" class="control-label"></label>
+                    <input asp-for="UserCreated" class="form-control" />
+                    <span asp-validation-for="UserCreated" class="text-danger"></span>
+                </div>
+                <div class="form-group  col-2" hidden>
+                    <label asp-for="UserDateCreated" class="control-label"></label>
+                    <input asp-for="UserDateCreated" class="form-control" />
+                    <span asp-validation-for="UserDateCreated" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-2" hidden>
+                    <label asp-for="UserDateUpdated" class="control-label"></label>
+                    <input asp-for="UserDateUpdated" class="form-control" value="@DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt")" />
+                    <span asp-validation-for="UserDateUpdated" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4 mb-2 col d-flex align-items-center gap-2">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a class="btn btn-outline-secondary " asp-action="Index">Back to List</a>
+                </div>
             </div>
         </form>
     </div>
+
 </div>
 
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

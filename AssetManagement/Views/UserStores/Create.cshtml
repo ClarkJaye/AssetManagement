@@ -5,6 +5,7 @@
     ViewData["Title"] = "Add User Store";
 }
 
+
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
@@ -16,15 +17,15 @@
 
 <style>
     .table tbody tr {
-        cursor: pointer;
+        cursor: pointer!important;
     }
 
         .table tbody tr:hover {
-            background: var(--bs-gray-400);
+            background: var(--bs-gray-400) !important;
         }
 
     .highlighted-row {
-        background: var(--bs-gray-400);
+        background: var(--bs-gray-400) !important;
     }
 </style>
 
@@ -40,9 +41,18 @@
                     <select hidden asp-for="UserStore.UserCode" class="form-control" asp-items="ViewBag.UserCode"></select>
                     <label class="control-label">USER FULL NAME</label>
                     <select id="userCode" name="userCODE" class="form-select" asp-items="ViewBag.UserCode">
-
+                        <option selected disabled>Select User</option>
                     </select>
                 </div>
+
+                <div class="form-group col-md-4" id="leveltable">
+                    <select hidden asp-for="UserStore.StoreCode" class="form-control" asp-items="ViewBag.StoreCode"></select>
+                    <label class="control-label">STORE NAME</label>
+                    <select id="storeCode" name="StoreCode" class="form-select" asp-items="ViewBag.StoreCode">
+                        <option selected disabled>Select Store</option>
+                    </select>
+                </div>
+
                 <div class="form-group col-md-4" id="partialstoretable">
                     <label hidden asp-for="UserStore.StoreCode" class="control-label"></label>
                     <input hidden asp-for="UserStore.StoreCode" class="form-select" />
@@ -59,14 +69,11 @@
     </div>
 </div>
 
-<div class="m-4">
-    <div class="filterInputs mb-2" style="width: 300px;">
-        <input type="text" id="filterInput" placeholder="Search Store..." class="form-control">
-    </div>
 
+<div class="m-4">
     <div class="table-responsive scrollable-container table-container">
 
-        <table class="table custom-fontsize p-4">
+        <table id="patialStoreViewTable" class="table">
             <thead>
                 <tr>
                     <th>
@@ -99,62 +106,77 @@
     </div>
 </div>
 
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    $(document).ready(function () {
+        // Initialize DataTables
+        $('#patialStoreViewTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous",
+                    next: "Next"
+                }
+            }
+        });
+
+
         function fillFormFields(Store_code, StoreName) {
             document.getElementById("UserStore_StoreCode").value = Store_code;
             document.getElementById("StoreName").value = StoreName;
         }
 
         // FILTERING
-        $(document).ready(function () {
-            $('#filterInput').on('keyup', function () {
-                var value = $(this).val().toLowerCase();
-                $('tbody tr').filter(function () {
-                    var storeName = $(this).find('td:nth-child(2)').text().toLowerCase();
-                    $(this).toggle(storeName.indexOf(value) > -1);
-                });
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                var storeName = $(this).find('td:nth-child(2)').text().toLowerCase();
+                $(this).toggle(storeName.indexOf(value) > -1);
             });
         });
 
         // 2 SELECT FUNCTIONALITY
-        $(document).ready(function () {
-            // Get the initial selected value
-            var initialSelectedValue = $("#userCode").val();
+        // Get the initial selected value
+        var initialSelectedValue = $("#userCode").val();
 
-            // Set the initial selected value of the hidden select
-            $("select[name='UserStore.UserCode']").val(initialSelectedValue);
+        // Set the initial selected value of the hidden select
+        $("select[name='UserStore.UserCode']").val(initialSelectedValue);
 
-            $("#userCode").change(function () {
-                var selectedValue = $(this).val();
+        $("#userCode").change(function () {
+            var selectedValue = $(this).val();
 
-                // Set the selected value of the hidden select
-                $("select[name='UserStore.UserCode']").val(selectedValue);
-            });
+            // Set the selected value of the hidden select
+            $("select[name='UserStore.UserCode']").val(selectedValue);
         });
 
 
 
         //AJAX
-        $(document).ready(function () {
 
-            $("#userCode").change(function () {
-                var userCode = $(this).val();
+        $("#userCode").change(function () {
+            var userCode = $(this).val();
 
-                $.ajax({
-                    url: "@Url.Action("UserStoreView","UserStores")",
-                    type: "GET",
-                    data: { userCODE: userCode },
-                    traditional: true,
-                    success: function (res) {
-                        $(".displaytable").html(res);
-                    }
-                });
+            $.ajax({
+                url: "@Url.Action("UserStoreView", "UserStores")",
+                type: "GET",
+                data: { userCODE: userCode },
+                traditional: true,
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
             });
         });
     });
 </script>
-  
+
 
 
 

@@ -4,51 +4,76 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>UpsServe</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<div class="m-4 px-1">
+    <h4> Edit UPS Preventive Maintenance</h4>
+    <hr />
+    <div>
+        <form asp-action="Edit" class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="UpsServeStore" class="control-label"></label>
-                <select asp-for="UpsServeStore" class="form-control" asp-items="ViewBag.UpsServeStore"></select>
+                <select asp-for="UpsServeStore" class="form-select" asp-items="ViewBag.UpsServeStore" id="UpsStore">
+                    <option selected disabled>select ups store</option>
+                </select>
                 <span asp-validation-for="UpsServeStore" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="UpsServeCode" class="control-label"></label>
-                <select asp-for="UpsServeCode" class="form-control" asp-items="ViewBag.UpsServeCode"></select>
+                <select asp-for="UpsServeCode" class="form-select" asp-items="ViewBag.UpsServeCode" id="UpsCode">
+                    <option selected disabled>select ups code</option>
+                </select>
                 <span asp-validation-for="UpsServeCode" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="UnitNo" />
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="UnitServe" class="control-label"></label>
                 <input asp-for="UnitServe" class="form-control" />
                 <span asp-validation-for="UnitServe" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="UnitCreatedBy" class="control-label"></label>
-                <select asp-for="UnitCreatedBy" class="form-control" asp-items="ViewBag.UnitCreatedBy"></select>
+                <select asp-for="UnitCreatedBy" class="form-select" asp-items="ViewBag.UnitCreatedBy"></select>
                 <span asp-validation-for="UnitCreatedBy" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="UnitCreatedAt" class="control-label"></label>
                 <input asp-for="UnitCreatedAt" class="form-control" />
                 <span asp-validation-for="UnitCreatedAt" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group mt-4 mb-2 col d-flex align-items-center gap-2">
+                <input type="submit" value="Save" class="btn btn-red" />
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#UpsStore').change(function () {
+            var selectedStore = $(this).val();
+            if (selectedStore) {
+                $.getJSON('@Url.Action("GetUpsCodesByStore")', { upsStore: selectedStore }, function (data) {
+                    var upsCodeDropdown = $('#UpsCode');
+                    upsCodeDropdown.empty(); // Clear previous options
+                    upsCodeDropdown.append('<option value="">Select UPS Code</option>');
+                    $.each(data, function (index, item) {
+                        upsCodeDropdown.append('<option value="' + item.ups_code + '">' + item.ups_code + '</option>');
+                    });
+                });
+            } else {
+                $('#UpsCode').empty();
+                $('#UpsCode').append('<option value="">Select UPS Code</option>');
+            }
+        });
+    });
+</script>

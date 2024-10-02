@@ -3,93 +3,82 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-    .custom-fontsize {
-        font-size: 11px;
-    }
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-</style>
+
 @{
     var alertMessage = TempData["AlertMessage"] as string;
+    if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
+            @alertMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 }
 
-@if (!string.IsNullOrEmpty(alertMessage))
-{
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
-    </div>
-}
-<h4>Laptop Allocation</h4>
-<hr />
-<div>
+
+
+<div class="m-4">
+
+
+    <h4>Add Laptop Allocation</h4>
+    <hr />
+    <div>
         <form asp-action="Create">
         <div class="row form-group">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2" hidden>
+            <div class="form-group col-md-2" hidden>
                 <label asp-for="AllocId" class="control-label"></label>
                 <input asp-for="AllocId" class="form-control" />
                 <span asp-validation-for="AllocId" class="text-danger"></span>
             </div>
-            <div class="form-group col-2" id="laptable">
+            <div class="form-group col-md-2" id="laptable">
                 <label asp-for="LaptopCode" class="control-label"></label>
                 <input asp-for="LaptopCode"  class="form-control" id="lapid" hidden />
-                <input class="form-control" id="lapdes" readonly style="background-color: white;" />
+                <input class="form-select" id="lapdes" readonly placeholder="Select Code" />
             </div>
-            <div class="form-group col-2" id="setable" >
+            <div class="form-group col-md-2" id="setable">
                 <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" readonly class="form-control" id="seid" required style="background-color: white;" />
+                <input asp-for="SerialNumber" readonly class="form-select" id="seid" required placeholder="Select Serial" />
                 <span asp-validation-for="SerialNumber" class="text-danger"></span>
             </div>
-            <div class="form-group col-2" id="ownertable">
+            <div class="form-group col-md-2" id="ownertable">
                 <label asp-for="OwnerCode" class="control-label"></label>
                 <input asp-for="OwnerCode"  class="form-control" id="oid" hidden />
-                <input class="form-control" id="odes" readonly style="background-color: white;" />
+                <input class="form-select" id="odes" readonly placeholder="Select Owner" />
             </div>
-            <div class="form-group col-2">
+            <div class="form-group col-md-2">
                 <label asp-for="FixedassetTag" class="control-label"></label>
                 <input asp-for="FixedassetTag" class="form-control" required />
                 <span asp-validation-for="FixedassetTag" class="text-danger"></span>
             </div>
-            <div class="form-group col-2">
+            <div class="form-group col-md-2">
                 <label asp-for="ComputerName" class="control-label"></label>
                 <input asp-for="ComputerName" class="form-control" required />
                 <span asp-validation-for="ComputerName" class="text-danger"></span>
             </div>
 
-            <div class="form-group col-2" hidden>
+            <div class="form-group col-md-2" hidden>
                 <label asp-for="AllocationStatus" class="control-label"></label>
                 <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
                 <span asp-validation-for="AllocationStatus" class="text-danger"></span>
             </div>
-            <div class="form-group col-2" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
+            <div class="form-group col-md-2" style="margin-top:23px;">
+                <input type="submit" value="Create" class="btn btn-outline-red" />
+                <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Index">Back to List</a>
             </div>
         </div>
         </form>
 </div>
 
 <div class="displaytable"></div>
+</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 

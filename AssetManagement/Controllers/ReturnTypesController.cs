@@ -192,7 +192,6 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-
             return View(returnType);
         }
 
@@ -211,6 +210,7 @@ namespace AssetManagement.Controllers
                 _context.tbl_ictams_returntype.Remove(returnType);
             }
             
+            TempData["SuccessNotification"] = "Successfully deleted!";
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

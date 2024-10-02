@@ -3,60 +3,64 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
 
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-
-
-<h4> Create UpsServe</h4>
-<hr />
-<div class="row">
+<div class="m-4 px-1">
+    <h4> Create UPS Serve </h4>
+    <hr />
+    <div>
         <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-4">
-                <label asp-for="UpsServeCode" class="control-label"></label>
-                <select asp-for="UpsServeCode" class ="form-control" asp-items="ViewBag.UpsServeCode"></select>
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-4">
+                    <label asp-for="UpsServeStore" class="control-label"></label>
+                    <select asp-for="UpsServeStore" class="form-control" asp-items="ViewBag.UpsServeStore" id="UpsStore">
+                        <option selected disabled>select ups code</option>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="UpsServeCode" class="control-label"></label>
+                    <select asp-for="UpsServeCode" class="form-control" asp-items="ViewBag.UpsServeCode" id="UpsCode">
+                        <option selected disabled>select ups code</option>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="UnitServe" class="control-label"></label>
+                    <textarea asp-for="UnitServe" class="form-control" >
+
+                    </textarea>
+                    <span asp-validation-for="UnitServe" class="text-danger"></span>
+                </div>
+                <div class="form-group col-12 mt-4 d-flex align-items-center justify-content-end gap-2">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-4">
-                <label asp-for="UnitServe" class="control-label"></label>
-                <input asp-for="UnitServe" class="form-control" />
-                <span asp-validation-for="UnitServe" class="text-danger"></span>
-            </div>
-            <div class="form-group col-4">
-                <input type="submit" value="Create" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index">BACK</a>
-            </div>
-        </div>
         </form>
+    </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#UpsStore').change(function () {
+            var selectedStore = $(this).val();
+            if (selectedStore) {
+                $.getJSON('@Url.Action("GetUpsCodesByStore")', { upsStore: selectedStore }, function (data) {
+                    var upsCodeDropdown = $('#UpsCode');
+                    upsCodeDropdown.empty(); // Clear previous options
+                    upsCodeDropdown.append('<option value="">Select UPS Code</option>');
+                    $.each(data, function (index, item) {
+                        upsCodeDropdown.append('<option value="' + item.ups_code + '">' + item.ups_code + '</option>');
+                    });
+                });
+            } else {
+                $('#UpsCode').empty();
+                $('#UpsCode').append('<option value="">Select UPS Code</option>');
+            }
+        });
+    });</script>

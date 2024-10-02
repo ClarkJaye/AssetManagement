@@ -3,18 +3,25 @@
 @{
     Layout = null;
 }
+@* <input type="text" id="filterInput" placeholder="Search..."> *@
+
+
 <style>
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
+    .table tbody tr {
+        cursor: pointer !important;
+    }
+
+        .table tbody tr:hover {
+            background: var(--bs-gray-400) !important;
+        }
+
+    .highlighted-row {
+        background: var(--bs-gray-400) !important;
     }
 </style>
-<input type="text" id="filterInput" placeholder="Search...">
 
-
-<div class="table-responsive scrollable-container" style="cursor:pointer;">
-    <table class="table custom-fontsize p-4">
+<div class="table-container table-responsive mt-5" style="cursor: pointer;">
+    <table class="table">
         <thead class="sticky-top" style="z-index:1; position:relative">
             <tr>
                 <th>

@@ -48,6 +48,7 @@ li.nav-item.dropdown.show .nav-link {
 
 .dropdown-menu ul li a {
     cursor: pointer;
+    cursor: pointer;
 }
 
 
@@ -235,50 +236,33 @@ li.nav-item.dropdown.show .nav-link {
     align-items: center;
 }
 
-.device-options {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-    justify-items: center;
-    align-items: center;
+
+.dev-opt .box-opt {
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid var(--)
 }
 
-
-    .device-options a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 10px;
-        width: 100%;
-        height: 100%;
-        padding: 12px 24px;
-        background-color: #fff;
-        color: black;
-        text-decoration: none;
-        border-radius: 4px;
-        transition: background-color 0.3s;
+    .dev-opt .box-opt:hover {
+        background-color: var(--red);
     }
 
-        .device-options a:hover {
-            background-color: lightgreen;
-            color: red;
-        }
+    .dev-opt .box-opt a:hover {
+        color: #fff !important;
+    }
 
+    .dev-opt .box-opt a {
+        display: flex;
+        border: 1px solid var(--bs-gray-200);
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+    }
 
-
-
-
-
-
-
-
-
-
-/* Add your custom styles for dropdown */
-.dropdown-content1 {
+    /* Add your custom styles for dropdown */
+    .dropdown-content1 {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
