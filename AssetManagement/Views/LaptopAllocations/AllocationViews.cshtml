@@ -7,28 +7,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
 @if (TempData["Welcome"] != null)
 {
     <div class="toast-notification animated-toast">
@@ -41,96 +20,96 @@
 <input type="text" id="filterInput" placeholder="Search...">
 
 
-    <div class="table-container">
-        <table class="table custom-fontsize p-4 ">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AllocId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Owner)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ComputerName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SerialNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FixedassetTag)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateDeployed)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateCreated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateUpdated)
-                    </th>
-                    <th>
-                      LAPTOP CODE
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Createdby)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Updatedby)
-                    </th>
-       
+<div class="table-container">
+    <table class="table custom-fontsize p-4 ">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllocId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Owner)
+                </th>
+                @* <th>
+                @Html.DisplayNameFor(model => model.ComputerName)
+                </th> *@
+                <th>
+                    @Html.DisplayNameFor(model => model.SerialNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FixedassetTag)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateDeployed)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateUpdated)
+                </th>
+                <th>
+                    LAPTOP CODE
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Createdby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updatedby)
+                </th>
 
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AllocId)
-                        </td>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AllocId)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
                     </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ComputerName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SerialNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FixedassetTag)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateDeployed)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    @*   <td>
+                    @Html.DisplayFor(modelItem => item.ComputerName)
+                    </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FixedassetTag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateDeployed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-    </div>
+</div>
 
 
 

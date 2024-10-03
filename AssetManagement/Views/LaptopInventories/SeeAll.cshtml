@@ -66,6 +66,12 @@
                         VENDOR
                     </th>
                     <th>
+                        Computer Name
+                    </th>
+                    <th>
+                        SERVICE YEARS
+                    </th>
+                    <th>
                         PURCHASE DATE
                     </th>
                     <th>
@@ -107,6 +113,54 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ComputerName)
+                        </td>
+                        <td>
+
+                            @{
+                                if (item.PurchaseDate != null)
+                                {
+                                    var purchaseDate = item.PurchaseDate.Value;
+                                    var now = DateTime.Now;
+
+                                    var totalDays = (now - purchaseDate).Days;
+
+                                    var years = now.Year - purchaseDate.Year;
+                                    var months = now.Month - purchaseDate.Month;
+                                    var days = now.Day - purchaseDate.Day;
+
+                                    if (days < 0)
+                                    {
+                                        months--;
+                                        days += DateTime.DaysInMonth(now.Year, now.AddMonths(-1).Month);
+                                    }
+
+                                    if (months < 0)
+                                    {
+                                        years--;
+                                        months += 12;
+                                    }
+
+                                    if (years > 0)
+                                    {
+                                        <span>@years year(s), @months month(s), @days day(s)</span>
+                                    }
+                                    else if (months > 0)
+                                    {
+                                        <span>@months month(s), @days day(s)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@days day(s)</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.PurchaseDate)

@@ -5,7 +5,7 @@
 }
 
 <div class="m-4 px-1">
-    <h4>New Laptop Owner</h4>
+    <h4>Laptop Second Owner</h4>
     @if (TempData["Welcome"] != null)
     {
         <p>@TempData["Welcome"]</p>
@@ -20,16 +20,29 @@
     </div>
 }
 
-<div class="m-4 px-1  d-flex align-items-center gap-2">
-    <a asp-controller="LaptopAllocations" asp-action="LapAllocPartialView" class="btn btn-outline-red">
-        <i class="fas fa-pencil-alt"></i>
-        <span>Create New</span>
-    </a>
+
+<!-- Action Buttons -->
+<div class="d-flex align-items-center gap-2 mb-2 mx-2 p-4">
+    <div class="d-flex align-items-center gap-2">
+        <a asp-controller="LaptopAllocations" asp-action="LapAllocPartialView" class="btn btn-outline-red">
+            <i class="fas fa-pencil-alt"></i>
+            <span>Create New</span>
+        </a>
+        <a class="btn btn-outline-secondary" asp-controller="SecondOwnerAllocs" asp-action="Inactive">
+            <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+        </a>
+    </div>
 </div>
+
 
 <hr />
 
 <div class="mx-4">
+    <div class="mb-3">
+        <button type="button" class="multi-delete-button btn btn-sm btn-danger disabled" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <span class="fas fa-ban"></span> Temporary Delete
+        </button>
+    </div>
 
     <form method="post" action="@Url.Action("DeleteAsEdit", "SecondOwnerAllocs")">
         <!-- Modal -->
@@ -48,20 +61,6 @@
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="d-flex align-items-center justify-content-between gap-2 mb-2 mx-2">
-            <div>
-                <button type="button" class="multi-delete-button btn btn-sm btn-danger disabled" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                    <span class="fas fa-trash"></span> Delete
-                </button>
-            </div>
-            <div>
-                <a class="btn btn-secondary" asp-controller="SecondOwnerAllocs" asp-action="Inactive">
-                    <span class="fas fa-trash-alt"></span> Show Temporary Deleted
-                </a>
             </div>
         </div>
 

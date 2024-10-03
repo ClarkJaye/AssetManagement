@@ -30,7 +30,7 @@ namespace AssetManagement.Models
         public InventoryDetails InventoryDetails { get; set; }
 
         [Column("ltborrower_code")]
-        [DisplayName("OWNER")]
+        [DisplayName("BORROWER NAME")]
         public string OwnerID { get; set; }
 
         [Column("ltborrowed_status")]

@@ -17,7 +17,11 @@ namespace AssetManagement.Models
 		[DisplayName("INVENTORY")]
 		public LaptopInventory LaptopInventory { get; set; }
 
-		[Key]
+        [Column("computer_name", TypeName = "VARCHAR(30)")]
+        [DisplayName("COMPUTER NAME")]
+        public string? ComputerName { get; set; }
+
+        [Key]
 		[Column("serial_number", TypeName = "VARCHAR(30)")]
 		[DisplayName("SERIAL")]
 		public string SerialCode { get; set; }
@@ -34,7 +38,11 @@ namespace AssetManagement.Models
 		[DisplayName("VENDOR")]
 		public int LTDVendor { get; set; }
 
-		[ForeignKey("LTDVendor")]
+        //[Column("serviceYear")]
+        //[DisplayName("SERVICE YEARS")]
+        //public string? ServiceYear { get; set; }
+
+        [ForeignKey("LTDVendor")]
 		[DisplayName("VENDOR")]
 		public Vendor Vendor { get; set; }
 

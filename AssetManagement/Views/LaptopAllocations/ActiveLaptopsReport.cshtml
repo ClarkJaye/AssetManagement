@@ -112,9 +112,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Owner)
                     </th>
-                    <th>
+                   @*  <th>
                         @Html.DisplayNameFor(model => model.ComputerName)
-                    </th>
+                    </th> *@
                     <th>
                         DESCRIPTION
                     </th>
@@ -175,9 +175,9 @@
                         <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
                             @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
                         </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
+                      @*   <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
                             @Html.DisplayFor(modelItem => item.ComputerName)
-                        </td>
+                        </td> *@
                         <td>
                             @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
                         </td>

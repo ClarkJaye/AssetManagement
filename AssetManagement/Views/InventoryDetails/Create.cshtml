@@ -5,48 +5,66 @@
 }
 
 <div class="mx-4">
-<h4>InventoryDetails</h4>
-<hr />
-<div>
-    <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-md-2">
-                <label asp-for="laptoptinvCode" class="control-label"></label>
-                <input value="@ViewBag.Code" readonly style="background-color: white;" asp-for="laptoptinvCode" class="form-control" />
+    <h4>Add Inventory Details</h4>
+    <hr />
+    <div>
+        <form asp-action="Create">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="laptoptinvCode" class="control-label"></label>
+                    <input value="@ViewBag.Code" readonly asp-for="laptoptinvCode" class="form-control" />
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="SerialCode" class="control-label"></label>
+                    <input asp-for="SerialCode" class="form-control" required placeholder="Enter Serial No" />
+                    <span asp-validation-for="SerialCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="ComputerName" class="control-label"></label>
+                    <input asp-for="ComputerName" class="form-control" required placeholder="Enter Computer Name" />
+                    <span asp-validation-for="ComputerName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="PO" class="control-label"></label>
+                    <input asp-for="PO" class="form-control" required placeholder="Enter PO" />
+                    <span asp-validation-for="PO" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input type="number" asp-for="Price" class="form-control" placeholder="Enter Price" required />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2" id="vendortable">
+                    <label asp-for="LTDVendor" class="control-label"></label>
+                    <input asp-for="LTDVendor" value="0" class="form-select" id="vid" hidden />
+                    <input class="form-select" id="vname" readonly placeholder="Select Vendor Below" required />
+                    <span asp-validation-for="LTDVendor" class="text-danger"></span>
+                </div>
+
+              @*   <div class="form-group col-md-2 mb-2">
+                    <label asp-for="ServiceYear" class="control-label"></label>
+                    <input asp-for="ServiceYear" class="form-control" placeholder="Enter service year" required />
+                    <span asp-validation-for="ServiceYear" class="text-danger"></span>
+                </div> *@
+
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="PurchaseDate" class="control-label"></label>
+                    <input asp-for="PurchaseDate" class="form-control" required />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="DeployedDate" class="control-label"></label>
+                    <input asp-for="DeployedDate" class="form-control" required />
+                    <span asp-validation-for="DeployedDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2" style="margin-top: 23px;">
+                    <input type="submit" value="Create" class="btn btn-red " />
+                    <a class="btn btn-outline-secondary" asp-controller="LaptopInventories" asp-action="Index">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-md-2">
-                <label asp-for="SerialCode" class="control-label"></label>
-                <input asp-for="SerialCode" class="form-control" required />
-                <span asp-validation-for="SerialCode" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2">
-                <label asp-for="PO" class="control-label"></label>
-                <input asp-for="PO" class="form-control" required />
-                <span asp-validation-for="PO" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2">
-                <label asp-for="Price" class="control-label"></label>
-                <input type="number" asp-for="Price" class="form-control" required />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2" id="vendortable">
-                <label asp-for="LTDVendor" class="control-label"></label>
-                <input asp-for="LTDVendor" value="0" class="form-select" id="vid" hidden />
-                <input class="form-select" id="vname" readonly placeholder="Select Vendor Below" />
-            </div>
-            <div class="form-group col-md-2">
-                <label asp-for="PurchaseDate" class="control-label"></label>
-                <input asp-for="PurchaseDate" class="form-control" required/>
-                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2" style="margin-top: 23px;">
-                <input type="submit" value="Create" class="btn btn-red " />
-                <a class="btn btn-outline-secondary" asp-controller="LaptopInventories" asp-action="Index">Back to List</a>
-            </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
 </div>
 
@@ -64,7 +82,7 @@
 
             $('#vname').val(null);
             $.ajax({
-                url: "@Url.Action("VendorsPartialView","Vendors")",
+                url: "@Url.Action("VendorsPartialView", "Vendors")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);

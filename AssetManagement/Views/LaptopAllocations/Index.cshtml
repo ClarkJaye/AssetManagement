@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AssetManagement.Models.LaptopAllocation>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Laptop Inventories";
 }
 
 <style>
@@ -72,9 +72,7 @@
             <span class="report-value">@ViewBag.TotalInactiveLaptops</span>
         </div>
     </div>
-
 </div>
-
 
 <hr />
 
@@ -120,7 +118,7 @@
                         <th>@Html.DisplayNameFor(model => model.Owner)</th>
                         <th>@Html.DisplayNameFor(model => model.ComputerName)</th>
                         <th>DESCRIPTION</th>
-                        <th>CODE</th>
+                        <th>LAPTOP CODE</th>
                         <th>PO</th>
                         <th>@Html.DisplayNameFor(model => model.SerialNumber)</th>
                         <th>@Html.DisplayNameFor(model => model.FixedassetTag)</th>

@@ -4,22 +4,14 @@
     Layout = null;
 }
 
+<!-- Action Buttons -->
+<div class="d-flex align-items-center mb-2 mt-5">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
+</div>
 
-<style>
-    .table tbody tr {
-        cursor: pointer !important;
-    }
-
-        .table tbody tr:hover {
-            background: var(--bs-gray-400) !important;
-        }
-
-    .highlighted-row {
-        background: var(--bs-gray-400) !important;
-    }
-</style>
-
-<div class="table-container table-responsive mt-5" style="cursor: pointer;">
+<div class="table-container table-responsive" style="cursor: pointer;">
     <table class="table">
         <thead>
             <tr>
@@ -31,6 +23,9 @@
                 </th>
                 <th>
                     SERIAL
+                </th>
+                <th>
+                    COMPUTER NAME
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Price)
@@ -62,44 +57,58 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @if (Model != null && Model.Any())
             {
-                <tr data-id="@item.SerialCode">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PO)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SerialCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Vendor.VendorName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PurchaseDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DeployedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status.status_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UpdatedDate)
+                @foreach (var item in Model)
+                {
+                    <tr data-id="@item.SerialCode">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SerialCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ComputerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PurchaseDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DeployedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedDate)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="12" class="text-center">
+                        No data available.
                     </td>
                 </tr>
             }
@@ -109,8 +118,6 @@
 
 <script>
     $(document).ready(function () {
-
-
         // Add click event listener to each row in the table
         $('table tbody tr').click(function () {
             // Get the id from the clicked row's data-id attribute
@@ -126,13 +133,9 @@
 
         });
 
-    });
 
+        //FILTERING
 
-
-    //FILTERING
-
-    $(document).ready(function () {
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {
@@ -140,4 +143,9 @@
             });
         });
     });
+
+
+
+
+
 </script>

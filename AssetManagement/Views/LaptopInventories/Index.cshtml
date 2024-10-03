@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AssetManagement.Models.LaptopInventory>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Laptop Inventory";
 }
 
 
@@ -38,14 +38,6 @@
     }
 </div>
 
-@if (@TempData["AlertMessage"] != null)
-{
-    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["AlertMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
 <div class="d-flex align-items-center justify-content-between">
     <!-- Action Buttons -->
     <div class="d-flex align-items-center gap-2 mb-2 p-4">
@@ -62,11 +54,15 @@
     <!-- Total -->
     <div class="report-view d-flex flex-column justify-content-end">
         <div class="report-item">
-            <span class="report-label">Total <span class="text-success">Active</span> Laptops:</span>
+            <span class="report-label">Total Laptops:</span>
+            <span class="report-value">@ViewBag.TotalLaptops</span>
+        </div>
+        <div class="report-item">
+            <span class="report-label">Total <span class="text-success">Available</span> Laptops:</span>
             <span class="report-value">@ViewBag.TotalAvailableLaptops</span>
         </div>
         <div class="report-item">
-            <span class="report-label">Total <span class="text-danger">Inactive</span> Laptops:</span>
+            <span class="report-label">Total <span class="text-danger">Not Available</span> Laptops:</span>
             <span class="report-value">@ViewBag.TotalAllocatedLaptops</span>
         </div>
     </div>
@@ -124,13 +120,7 @@
                         </th>
                         <th>
                             AVAILABLE
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateCreated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateUpdated)
-                        </th>
+                        </th>                     
                         <th>
                             @Html.DisplayNameFor(model => model.Level)
                         </th>
@@ -154,6 +144,12 @@
                         </th>
                         <th hidden>
                             @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DateCreated)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DateUpdated)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Createdby)
@@ -186,13 +182,7 @@
                             <td id="alloc">
                                 @Html.DisplayFor(modelItem => item.AllocatedNo)
                             </td>
-                            <td class="available-column">Available</td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
-                            </td>
+                            <td class="available-column">Available</td>                         
                             <td>
                                 @Html.DisplayFor(modelItem => item.Level.LevelDescription)
                             </td>
@@ -216,6 +206,12 @@
                             </td>
                             <td hidden>
                                 @Html.DisplayFor(modelItem => item.Status.status_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateCreated)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateUpdated)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Createdby.UserFullName)

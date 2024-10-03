@@ -577,9 +577,10 @@ namespace AssetManagement.Controllers
         public IActionResult Create()
         {
 
+            ViewData["LaptopCode"] = new SelectList(_context.tbl_ictams_laptopinv, "laptoptinvCode", "laptoptinvCode"); 
+            ViewData["SerialNumber"] = new SelectList(_context.tbl_ictams_laptopinvdetails, "SerialCode", "SerialCode"); 
             ViewData["AllocationStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
             ViewData["AllocCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["LaptopCode"] = new SelectList(_context.tbl_ictams_laptopinv, "laptoptinvCode", "laptoptinvCode");
             ViewData["OwnerCode"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerCode");
             ViewData["AllocUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
             return View();
@@ -648,14 +649,6 @@ namespace AssetManagement.Controllers
                 }
             }
 
-            
-
-            if (LaptopAllocationExistsComputerName(laptopAllocation.ComputerName))
-            {
-                TempData["AlertMessage"] = "Computer name cannot be duplicated!";
-                return RedirectToAction("Create");
-            }
-
             if (LaptopAllocationExistsOwner(laptopAllocation.OwnerCode))
             {
                 TempData["AlertMessage"] = "The Selected Owner is already allocated with a device or Inventory Laptop! Select another Owner to Allocate with! Need to wait after 4 years!";
@@ -695,8 +688,8 @@ namespace AssetManagement.Controllers
                 var ucode = HttpContext.Session.GetString("UserName");
                 laptopAllocation.AllocId = "LTA" + newparamCode.ToString().PadLeft(12, '0');
                 laptopAllocation.FixedassetTag = laptopAllocation.FixedassetTag.ToUpper();
-                laptopAllocation.ComputerName = laptopAllocation.ComputerName.ToUpper();
                 laptopAllocation.SerialNumber = laptopAllocation.SerialNumber.ToUpper();
+                laptopAllocation.ComputerName = laptopAllocation.ComputerName.ToUpper();
                 laptopAllocation.AllocCreated = ucode;
                 laptopAllocation.DateCreated = DateTime.Now;
                 laptopAllocation.DateDeployed = DateTime.Now;

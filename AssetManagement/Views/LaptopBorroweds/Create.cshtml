@@ -4,102 +4,68 @@
     ViewData["Title"] = "Create";
 }
 
-<style>
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-</style>
 
 @{
     var alertMessage = TempData["AlertMessage"] as string;
+    if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
+            @alertMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 }
 
-@if (!string.IsNullOrEmpty(alertMessage))
-{
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
-    </div>
-}
-<h4>Laptop Borrowed</h4>
-<hr />
-<div>
+<div class="m-4">
+    <h4>Laptop Borrowed</h4>
+    <hr />
+
+    <div>
         <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2" id="laptable">
-                <label asp-for="UnitID" class="control-label"></label>
-                <input asp-for="UnitID" class="form-control" id="lapid" hidden />
-                <input class="form-control" id="lapdes" readonly style="background-color: white;" />
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-2" id="laptable">
+                    <label asp-for="UnitID" class="control-label"></label>
+                    <input asp-for="UnitID" class="form-control" id="lapid" hidden />
+                    <input class="form-select" id="lapdes" readonly placeholder="Select Unit Below" />
+                </div>
+                <div class="form-group col-md-2" id="setable">
+                    <label asp-for="SerialNumber" class="control-label"></label>
+                    <input asp-for="SerialNumber" readonly class="form-select" id="seid" required placeholder="Select Serial Below" />
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2" id="ownertable">
+                    <label asp-for="OwnerID" class="control-label"></label>
+                    <input asp-for="OwnerID" class="form-control" id="oid" hidden />
+                    <input class="form-select" id="odes" readonly placeholder="Select Owner Below" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="Remark" class="control-label"></label>
+                    <input asp-for="Remark" class="form-control" />
+                    <span asp-validation-for="Remark" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3" style="margin-top:23px;">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn btn-outline-secondary " asp-action="LapInvPartialView">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-2" id="setable">
-                <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" readonly class="form-control" id="seid" required style="background-color: white;" />
-                <span asp-validation-for="SerialNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="ownertable">
-                <label asp-for="OwnerID" class="control-label"></label>
-                <input asp-for="OwnerID" class="form-control" id="oid" hidden />
-                <input class="form-control" id="odes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="Remark" class="control-label"></label>
-                <input asp-for="Remark" class="form-control" />
-                <span asp-validation-for="Remark" class="text-danger"></span>
-            </div>
-            <div class="form-group col-3" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="LapInvPartialView">BACK </a>
-            </div>
-        </div>
         </form>
+    </div>
 </div>
 
-<div class="displaytable"></div> 
+<div class="mx-4">
+    <div class="displaytable"></div>
+</div>
+
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
-<script>
-    $(document).ready(function () {
-
-        //OWNER
-
-        $("#ownertable").click(function () {
-
-            $('#oid').val(null);
-
-            $('#odes').val(null);
-            $.ajax({
-                url: "@Url.Action("OwnerPartialViewBorrowed","Owners")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-
-
-    })
-</script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 
@@ -109,13 +75,28 @@
 
             $('#lapdes').val(null);
             $.ajax({
-                url: "@Url.Action("LapInvPartialView","LaptopInventories")",
+                url: "@Url.Action("LapInvPartialView", "LaptopInventories")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);
                 }
             })
         })
+
+        $("#ownertable").click(function () {
+
+            $('#oid').val(null);
+
+            $('#odes').val(null);
+            $.ajax({
+                url: "@Url.Action("OwnerPartialViewBorrowed", "Owners")",
+                type: "GET",
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            })
+        })
+
 
         $("#setable").click(function () {
             $('#seid').val(null);
@@ -141,7 +122,7 @@
 
             $('#odes').val(null);
             $.ajax({
-                url: "@Url.Action("OwnerPartialView","Owners")",
+                url: "@Url.Action("OwnerPartialView", "Owners")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);

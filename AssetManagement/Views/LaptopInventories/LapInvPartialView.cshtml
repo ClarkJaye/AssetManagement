@@ -5,73 +5,67 @@
 @{
     ViewData["Title"] = "Index";
 }
+<!-- Action Buttons -->
+<div class="d-flex align-items-center justify-content-end mb-4">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
+</div>
 
-<style>
-    .table tbody tr {
-        cursor: pointer !important;
-    }
-
-        .table tbody tr:hover {
-            background: var(--bs-gray-400) !important;
-        }
-
-    .highlighted-row {
-        background: var(--bs-gray-400) !important;
-    }
-</style>
-
-    <div class="table-container table-responsive mt-5" style="cursor: pointer;">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.laptoptinvCode)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Description)
-                    </th>
-                    <th hidden>
-                        @Html.DisplayNameFor(model => model.Quantity)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateCreated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateUpdated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Level)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Brand)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Model)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CPU)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.HardDisk)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Memory)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OS)
-                    </th>
-                    <th hidden>
-                        @Html.DisplayNameFor(model => model.Status)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Createdby)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Updatedby)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
+<div class="table-container table-responsive" style="cursor: pointer;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.laptoptinvCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateUpdated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Level)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Brand)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Model)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CPU)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HardDisk)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Memory)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OS)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Createdby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updatedby)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
                 @foreach (var item in Model)
                 {
                     <tr data-id="@item.laptoptinvCode" data-ld="@item.Description">
@@ -81,7 +75,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
-                    <td hidden>
+                        <td hidden>
                             @Html.DisplayFor(modelItem => item.Quantity)
                         </td>
                         <td>
@@ -122,10 +116,19 @@
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="12" class="text-center">
+                        No data available.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-    </div>
+</div>
 
 
 
@@ -136,7 +139,7 @@
         $('table tbody tr').click(function () {
             // Get the id from the clicked row's data-id attribute
             var id = $(this).data('id');
-            var ld = $(this).data('ld');
+            // var ld = $(this).data('ld');
 
 
             // Remove the 'highlighted-row' class from any other row
@@ -145,7 +148,7 @@
             // Add the 'highlighted-row' class to the clicked row
             $(this).closest("tr").addClass("highlighted-row");
             $('#lapid').val(id);
-            $('#lapdes').val(ld);
+            // $('#lapdes').val(ld);
 
 
         });

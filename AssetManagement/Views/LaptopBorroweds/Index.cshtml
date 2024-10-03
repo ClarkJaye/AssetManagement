@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AssetManagement.Models.LaptopBorrowed>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Laptop Borrowed";
 }
 
 
@@ -11,7 +11,7 @@
     {
         <p>@TempData["Welcome"]</p>
     }
-</div>
+
 
 @if (@TempData["AlertMessage"] != null)
 {
@@ -21,27 +21,27 @@
     </div>
 }
 
+<!-- Action Buttons -->
+<div class="d-flex align-items-center gap-2 mb-2">
+    <div>
+        <a id="createbtn" class="btn btn-outline-red" asp-action="Create">
+            <span class="fas fa-pencil-alt"></span> Create New
+        </a>
+    </div>
+    <div>
+        <a class="btn btn-outline-secondary" asp-action="Inactive">
+            <span class="fas fa-trash-alt"></span> Returned
+        </a>
+    </div>
+</div>
+
 <hr />
 
-<div class="mx-4">
     <div class="table-responsive">
 
-        <!-- Action Buttons -->
-        <div class="d-flex align-items-center gap-2 mb-2">
-            <div>
-                <a id="createbtn" class="btn btn-outline-red" asp-action="Create">
-                    <span class="fas fa-pencil-alt"></span> Create New
-                </a>
-            </div>
-            <div>
-                <a class="btn btn-outline-secondary" asp-action="Returned">
-                    <span class="fas fa-trash-alt"></span> Returned
-                </a>
-            </div>
-        </div>
 
 
-        <table class="table">
+        <table id="borrowedTable" class="table">
             <thead>
                 <tr>
                     <th>
@@ -124,17 +124,35 @@
         </table>
 
     </div>
+
 </div>
 
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
         $(".btn-delt").click(function () {
             $(this).closest("form").submit();
         })
+
+
+        // Initialize DataTables
+        $('#borrowedTable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
+        });
     });
 
 </script>

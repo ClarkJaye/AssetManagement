@@ -258,7 +258,7 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("laptoptinvCode,SerialCode,PO,Price,LTDVendor,PurchaseDate,LTStatus,Created,DateCreated")] InventoryDetails inventoryDetails)
+        public async Task<IActionResult> Create([Bind("laptoptinvCode,ComputerName,SerialCode,PO,Price,LTDVendor,ServiceYear,ComputerName,PurchaseDate,DeployedDate,LTStatus,Created,DateCreated")] InventoryDetails inventoryDetails)
         {
             try
             {
@@ -280,6 +280,7 @@ namespace AssetManagement.Controllers
                 inventoryDetails.SerialCode = inventoryDetails.SerialCode.ToUpper();
                 inventoryDetails.PO = inventoryDetails.PO.ToUpper();
                 inventoryDetails.LTStatus = "AV";
+                inventoryDetails.ComputerName = inventoryDetails.ComputerName;
                 inventoryDetails.DateCreated = DateTime.Now;
                 _context.Add(inventoryDetails);
 

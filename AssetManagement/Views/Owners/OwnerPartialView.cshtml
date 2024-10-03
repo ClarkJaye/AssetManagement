@@ -8,21 +8,15 @@
     ViewData["Title"] = "Index";
 }
 
-<style>
-    .table tbody tr {
-        cursor: pointer !important;
-    }
 
-        .table tbody tr:hover {
-            background: var(--bs-gray-400) !important;
-        }
+<!-- Action Buttons -->
+<div class="d-flex align-items-center justify-content-end mt-5 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
+</div>
 
-    .highlighted-row {
-        background: var(--bs-gray-400) !important;
-    }
-</style>
-
-<div class="table-container table-responsive mt-5" style="cursor: pointer;">
+<div class="table-responsive" style="cursor: pointer;">
     <table class="table">
             <thead>
                 <tr>

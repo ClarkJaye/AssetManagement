@@ -66,6 +66,33 @@ namespace AssetManagement.Controllers
             return View(await assetManagementContext.ToListAsync());
         }
 
+        public JsonResult GetSerialNumbers(string laptopCode)
+        {
+            var existingSerialNumbers = _context.tbl_ictams_laptopalloc
+                .Where(l => l.LaptopCode == laptopCode)
+                .Select(l => l.SerialNumber)
+                .ToList();
+
+            var serialNumbers = _context.tbl_ictams_laptopinvdetails
+                .Where(l => l.laptoptinvCode == laptopCode && !existingSerialNumbers.Contains(l.SerialCode))
+                .Select(l => new { l.SerialCode })
+                .ToList();
+
+            return Json(serialNumbers);
+        }
+
+
+        public JsonResult GetComputerName(string laptopCode, string serialNumber)
+        {
+            var computerName = _context.tbl_ictams_laptopinvdetails
+                .Where(l => l.laptoptinvCode == laptopCode && l.SerialCode == serialNumber)
+                .Select(l => l.ComputerName)
+                .FirstOrDefault();
+
+            return Json(computerName);
+        }
+
+
 
         public async Task<IActionResult> ExportToExcel()
         {
@@ -218,11 +245,11 @@ namespace AssetManagement.Controllers
             int? userProfile = HttpContext.Session.GetInt32("UserProfile");
             if (userProfile.HasValue)
             {
-
                 var hasOpenAccess = await _context.tbl_ictams_profileaccess
-          .AnyAsync(pa => pa.OpenAccess == "Y" &&
-                          pa.Module.ModuleTitle == "Laptop Inventories" &&  // Adjust the module name as needed
-                          pa.ProfileId == userProfile.Value);
+                    .AnyAsync(pa => pa.OpenAccess == "Y" &&
+                                    pa.Module.ModuleTitle == "Laptop Inventories" &&  // Adjust the module name as needed
+                                    pa.ProfileId == userProfile.Value);
+
                 if (!hasOpenAccess)
                 {
                     return RedirectToAction("Index", "Home");
@@ -230,21 +257,45 @@ namespace AssetManagement.Controllers
                 else
                 {
                     await FindStatus();
-                    var countAvailLT = await _context.tbl_ictams_laptopinv.Where(x => x.Quantity > x.AllocatedNo && x.LTStatus == "AV").SumAsync(x => x.Quantity - x.AllocatedNo);
+
+                    // Count total laptops
+                    var totalLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity);
+
+                    // Count available laptops (where Quantity > AllocatedNo and status is 'AV')
+                    var countAvailLT = await _context.tbl_ictams_laptopinv
+                        .Where(x => x.Quantity > x.AllocatedNo && x.LTStatus == "AV")
+                        .SumAsync(x => x.Quantity - x.AllocatedNo);
+
+                    // Count total allocated laptops
                     var totalAllocatedLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.AllocatedNo);
 
-                    var assetManagementContext = _context.tbl_ictams_laptopinv.Where(x => x.LTStatus == "AV" || x.LTStatus == "CO").Include(l => l.Brand).Include(l => l.CPU).Include(l => l.Createdby).Include(l => l.HardDisk).Include(l => l.Level).Include(l => l.Memory).ThenInclude(CA => CA.Capacity).Include(l => l.Model).Include(l => l.OS).Include(l => l.Status).Include(l => l.Updatedby);
+                    // Fetch inventory details
+                    var assetManagementContext = _context.tbl_ictams_laptopinv
+                        .Where(x => x.LTStatus == "AV" || x.LTStatus == "CO")
+                        .Include(l => l.Brand)
+                        .Include(l => l.CPU)
+                        .Include(l => l.Createdby)
+                        .Include(l => l.HardDisk)
+                        .Include(l => l.Level)
+                        .Include(l => l.Memory).ThenInclude(CA => CA.Capacity)
+                        .Include(l => l.Model)
+                        .Include(l => l.OS)
+                        .Include(l => l.Status)
+                        .Include(l => l.Updatedby);
 
+                    // Set totals in ViewBag to use in the view
+                    ViewBag.TotalLaptops = totalLaptops;
                     ViewBag.TotalAvailableLaptops = countAvailLT;
                     ViewBag.TotalAllocatedLaptops = totalAllocatedLaptops;
 
+                    // Return the view with the laptop inventory data
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
 
             return RedirectToAction("Index", "Home");
-            
         }
+
 
 
         public async Task<IActionResult> RetrieveRow(string laptopCode)

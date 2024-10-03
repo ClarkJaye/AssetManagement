@@ -4,26 +4,14 @@
     Layout = null;
 }
 
-
-<style>
-    .table tbody tr {
-        cursor: pointer;
-    }
-
-        .table tbody tr:hover {
-            background: var(--bs-gray-400);
-        }
-
-    .highlighted-row {
-        background: var(--bs-gray-400);
-    }
-</style>
-
-<div style="width: 300px;">
-    <input class="form-control" type="text" id="filterInput" placeholder="Search...">
+<!-- Action Buttons -->
+<div class="d-flex align-items-center justify-content-end mt-5 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
 </div>
 
-<div class="table-responsive scrollable-container table-container mt-2">
+<div class="table-responsive scrollable-container table-container">
     <table class="table table-responsive">
         <thead class="sticky-top" style="z-index:1; position:relative">
             <tr>

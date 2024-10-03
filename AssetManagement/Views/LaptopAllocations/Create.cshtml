@@ -5,112 +5,117 @@
 }
 
 
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-    if (!string.IsNullOrEmpty(alertMessage))
-    {
-        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
-            @alertMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-}
-
-
-
 <div class="m-4">
-
-
     <h4>Add Laptop Allocation</h4>
     <hr />
     <div>
         <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-md-2" hidden>
-                <label asp-for="AllocId" class="control-label"></label>
-                <input asp-for="AllocId" class="form-control" />
-                <span asp-validation-for="AllocId" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2" id="laptable">
-                <label asp-for="LaptopCode" class="control-label"></label>
-                <input asp-for="LaptopCode"  class="form-control" id="lapid" hidden />
-                <input class="form-select" id="lapdes" readonly placeholder="Select Code" />
-            </div>
-            <div class="form-group col-md-2" id="setable">
-                <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" readonly class="form-select" id="seid" required placeholder="Select Serial" />
-                <span asp-validation-for="SerialNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2" id="ownertable">
-                <label asp-for="OwnerCode" class="control-label"></label>
-                <input asp-for="OwnerCode"  class="form-control" id="oid" hidden />
-                <input class="form-select" id="odes" readonly placeholder="Select Owner" />
-            </div>
-            <div class="form-group col-md-2">
-                <label asp-for="FixedassetTag" class="control-label"></label>
-                <input asp-for="FixedassetTag" class="form-control" required />
-                <span asp-validation-for="FixedassetTag" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-2">
-                <label asp-for="ComputerName" class="control-label"></label>
-                <input asp-for="ComputerName" class="form-control" required />
-                <span asp-validation-for="ComputerName" class="text-danger"></span>
-            </div>
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-2" hidden>
+                    <label asp-for="AllocId" class="control-label"></label>
+                    <input asp-for="AllocId" class="form-control" />
+                    <span asp-validation-for="AllocId" class="text-danger"></span>
+                </div>
 
-            <div class="form-group col-md-2" hidden>
-                <label asp-for="AllocationStatus" class="control-label"></label>
-                <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
-                <span asp-validation-for="AllocationStatus" class="text-danger"></span>
+                <div class="form-group col-md-2">
+                    <label asp-for="LaptopCode" class="control-label"></label>
+                    <select asp-for="LaptopCode" class="form-select" asp-items="ViewBag.LaptopCode" id="laptopCode">
+                        <option selected disabled>select laptop code</option>
+                    </select>
+                    <span asp-validation-for="LaptopCode" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label asp-for="SerialNumber" class="control-label"></label>
+                    <select asp-for="SerialNumber" class="form-select" id="serialNumber" disabled>
+                        <option selected disabled>select serial number</option>
+                    </select>
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label asp-for="ComputerName" class="control-label"></label>
+                    <input asp-for="ComputerName" class="form-control" id="ComputerName" readonly placeholder="Select Code and Serial First" />
+                    <span asp-validation-for="ComputerName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2" id="ownertable">
+                    <label asp-for="OwnerCode" class="control-label"></label>
+                    <input asp-for="OwnerCode" class="form-control" id="oid" hidden />
+                    <input class="form-select" id="odes" required readonly placeholder="Select Owner" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label asp-for="FixedassetTag" class="control-label"></label>
+                    <input asp-for="FixedassetTag" class="form-control" required />
+                    <span asp-validation-for="FixedassetTag" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2" hidden>
+                    <label asp-for="AllocationStatus" class="control-label"></label>
+                    <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
+                    <span asp-validation-for="AllocationStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
+                    <input type="submit" value="Create" class="btn btn-outline-red" />
+                    <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Index">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-md-2" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn btn-outline-red" />
-                <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Index">Back to List</a>
-            </div>
-        </div>
         </form>
-</div>
+    </div>
 
-<div class="displaytable"></div>
+    <div class="displaytable"></div>
 </div>
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 
-        $("#laptable").click(function () {
+        // On laptop code change, update serial numbers
+        $("#laptopCode").change(function () {
+            var laptopCode = $(this).val();
 
-            $('#lapid').val(null);
+            if (laptopCode) {
+                $.ajax({
+                    url: '@Url.Action("GetSerialNumbers", "LaptopInventories")',
+                    type: 'GET',
+                    data: { laptopCode: laptopCode },
+                    success: function (data) {
+                        $('#serialNumber').empty().append('<option selected disabled>Select serial number</option>');
+                        $.each(data, function (i, item) {
+                            $('#serialNumber').append($('<option>', {
+                                value: item.serialCode,
+                                text: item.serialCode
+                            }));
+                        });
+                        $('#serialNumber').prop('disabled', false);
+                    }
+                });
+            }
+        });
 
-            $('#lapdes').val(null);
-            $.ajax({
-                url: "@Url.Action("LapInvPartialView","LaptopInventories")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
+        // On serial number change, update computer name
+        $("#serialNumber").change(function () {
+            var laptopCode = $('#laptopCode').val();
+            var serialNumber = $(this).val();
 
-        $("#setable").click(function () {
-            $('#seid').val(null);
-
-            var laptopCode = $('#lapid').val();
-
-            $.ajax({
-                url: "@Url.Action("SeeAllSerial", "LaptopInventories")",
-                type: "GET",
-                data: { id: laptopCode },
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
+            if (laptopCode && serialNumber) {
+                $.ajax({
+                    url: '@Url.Action("GetComputerName", "LaptopInventories")',
+                    type: 'GET',
+                    data: { laptopCode: laptopCode, serialNumber: serialNumber },
+                    success: function (data) {
+                        $('#ComputerName').val(data);
+                    }
+                });
+            }
+        });
 
         //OWNER
 
@@ -120,7 +125,7 @@
 
             $('#odes').val(null);
             $.ajax({
-                url: "@Url.Action("OwnerPartialView","Owners")",
+                url: "@Url.Action("OwnerPartialView", "Owners")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);

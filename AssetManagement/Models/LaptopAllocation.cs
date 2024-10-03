@@ -28,14 +28,13 @@ namespace AssetManagement.Models
         [DisplayName("SERIAL")]
         public InventoryDetails InventoryDetails { get; set; }
 
+        [Column("computer_name", TypeName = "VARCHAR(30)")]
+        [DisplayName("COMPUTER NAME")]
+        public string? ComputerName { get; set; }
 
         [Column("fixedasset_tag", TypeName = "VARCHAR(30)")]
         [DisplayName("ASSET TAG")]
         public string? FixedassetTag { get; set; }
-
-        [Column("computer_name", TypeName = "VARCHAR(30)")]
-        [DisplayName("COMPUTER NAME")]
-        public string? ComputerName { get; set; }
 
         [Column("date_deployed")]
         [DisplayName("DATE DEPLOYED")]
