@@ -35,9 +35,29 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
+
+
+    <script>
+        // Initialize DataTables
+        $('.table-datatable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: true,
+            columnDefs: [{ targets: [0, 0], orderable: false }],
+            language: {
+                paginate: {
+                    previous: "Previous", // Change "Previous"
+                    next: "Next" // Change "Next"
+                }
+            }
+        });
+    </script>
 </body>
 </html>
-
 
 
 @*     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

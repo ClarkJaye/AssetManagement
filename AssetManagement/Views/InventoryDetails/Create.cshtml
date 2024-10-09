@@ -41,13 +41,6 @@
                     <input class="form-select" id="vname" readonly placeholder="Select Vendor Below" required />
                     <span asp-validation-for="LTDVendor" class="text-danger"></span>
                 </div>
-
-              @*   <div class="form-group col-md-2 mb-2">
-                    <label asp-for="ServiceYear" class="control-label"></label>
-                    <input asp-for="ServiceYear" class="form-control" placeholder="Enter service year" required />
-                    <span asp-validation-for="ServiceYear" class="text-danger"></span>
-                </div> *@
-
                 <div class="form-group col-md-2 mb-2">
                     <label asp-for="PurchaseDate" class="control-label"></label>
                     <input asp-for="PurchaseDate" class="form-control" required />
@@ -58,7 +51,7 @@
                     <input asp-for="DeployedDate" class="form-control" required />
                     <span asp-validation-for="DeployedDate" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2 mb-2" style="margin-top: 23px;">
+                <div class="form-group col-md-2 mb-2 d-flex align-items-center gap-2" style="margin-top: 23px;">
                     <input type="submit" value="Create" class="btn btn-red " />
                     <a class="btn btn-outline-secondary" asp-controller="LaptopInventories" asp-action="Index">Back to List</a>
                 </div>

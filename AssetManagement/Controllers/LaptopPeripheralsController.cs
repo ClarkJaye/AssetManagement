@@ -101,13 +101,16 @@ namespace AssetManagement.Controllers
                 else
                 {
                     await FindStatusLTP();
-                    var countAvailLT = await _context.tbl_ictams_ltperipheral.Where(x => x.PeripheralQty > x.PeripheralAllocation && x.PeripheralStatus == "AV").SumAsync(x => x.PeripheralQty - x.PeripheralAllocation);
-                    var totalAllocatedLaptops = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralAllocation);
+                    // Count total laptops
+                    var totallPeripherals = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralQty);
+                    var countAvailPer = await _context.tbl_ictams_ltperipheral.Where(x => x.PeripheralQty > x.PeripheralAllocation && x.PeripheralStatus == "AV").SumAsync(x => x.PeripheralQty - x.PeripheralAllocation);
+                    var totalAllocatedPer = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralAllocation);
 
                     var assetManagementContext = await _context.tbl_ictams_ltperipheral.Where(LP => LP.PeripheralStatus == "AV" || LP.PeripheralStatus == "CO").Include(l => l.Brand).Include(l => l.CreatedBy).Include(l => l.DeviceType).Include(l => l.Status).Include(l => l.UpdatedBy).Include(l => l.Vendor).ToListAsync();
 
-                    ViewBag.TotalAvailableLaptops = countAvailLT;
-                    ViewBag.TotalAllocatedLaptops = totalAllocatedLaptops;
+                    ViewBag.TotalPeripherals = totallPeripherals;
+                    ViewBag.TotalAvailablePer = countAvailPer;
+                    ViewBag.TotalAllocatedPer = totalAllocatedPer;
                     return View(assetManagementContext);
                 }
             }
@@ -116,41 +119,78 @@ namespace AssetManagement.Controllers
 
         }
 
-        public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
+        public async Task<IActionResult> DeleteAsEdit(string peripheralCode)
         {
             ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
-            var peripheralCodes = await _context.tbl_ictams_ltperipheral
-                .Where(p => selectedIds.Contains(p.PeripheralCode))
-                .ToListAsync();
 
-            if (peripheralCodes.Count == 0)
+            // Retrieve the peripheral with the specified PeripheralCode
+            var peripheral = await _context.tbl_ictams_ltperipheral
+                .FirstOrDefaultAsync(p => p.PeripheralCode == peripheralCode);
+
+            if (peripheral == null)
             {
+                TempData["AlertMessage"] = "Peripheral not found.";
                 return RedirectToAction(nameof(Index));
             }
 
-            var ltinvExist = await _context.tbl_ictams_ltperipheralalloc
-                .AnyAsync(x => selectedIds.Contains(x.PeripheralCode));
+            // Check if the peripheral is allocated to any owner
+            var isAllocated = await _context.tbl_ictams_ltperipheralalloc
+                .AnyAsync(x => x.PeripheralCode == peripheralCode);
 
-            if (ltinvExist)
+            if (isAllocated)
             {
-                TempData["AlertMessage"] = "Cannot be deleted. It is already allocated to the specific owner!";
+                TempData["AlertMessage"] = "Cannot be deleted. It is already allocated to a specific owner!";
                 return RedirectToAction(nameof(Index));
             }
 
-            foreach (var peripheralCode in peripheralCodes)
-            {
-                peripheralCode.PeripheralUpdatedBy = HttpContext.Session.GetString("UserName");
-                peripheralCode.PeripheralStatus = "IN";
-                peripheralCode.PeripheralUpdatedAt = DateTime.Now;
+            // Update the peripheral details to mark it as 'deleted'
+            peripheral.PeripheralUpdatedBy = HttpContext.Session.GetString("UserName");
+            peripheral.PeripheralStatus = "IN"; // Mark it as 'IN'
+            peripheral.PeripheralUpdatedAt = DateTime.Now;
 
-                _context.Update(peripheralCode);
-            }
-
+            _context.Update(peripheral);
             await _context.SaveChangesAsync();
 
             TempData["SuccessNotification"] = "Successfully deleted!";
             return RedirectToAction(nameof(Index));
         }
+
+
+        //public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
+        //{
+        //    ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
+        //    var peripheralCodes = await _context.tbl_ictams_ltperipheral
+        //        .Where(p => selectedIds.Contains(p.PeripheralCode))
+        //        .ToListAsync();
+
+        //    if (peripheralCodes.Count == 0)
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    var ltinvExist = await _context.tbl_ictams_ltperipheralalloc
+        //        .AnyAsync(x => selectedIds.Contains(x.PeripheralCode));
+
+        //    if (ltinvExist)
+        //    {
+        //        TempData["AlertMessage"] = "Cannot be deleted. It is already allocated to the specific owner!";
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    foreach (var peripheralCode in peripheralCodes)
+        //    {
+        //        peripheralCode.PeripheralUpdatedBy = HttpContext.Session.GetString("UserName");
+        //        peripheralCode.PeripheralStatus = "IN";
+        //        peripheralCode.PeripheralUpdatedAt = DateTime.Now;
+
+        //        _context.Update(peripheralCode);
+        //    }
+
+        //    await _context.SaveChangesAsync();
+
+        //    TempData["SuccessNotification"] = "Successfully deleted!";
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         public async Task<IActionResult> Retrieve(string[] selectedIds)
         {
@@ -227,17 +267,17 @@ namespace AssetManagement.Controllers
             if (laptopPeripheral.PeripheralBrand.Equals(0))
             {
                 TempData["AlertMessage"] = "Please select a brand";
-                return RedirectToAction("Create");
+                return View(laptopPeripheral);
             }
             if (laptopPeripheral.PeripheralDevice.Equals(0))
             {
                 TempData["AlertMessage"] = "Please select a device!";
-                return RedirectToAction("Create");
+                return View(laptopPeripheral);
             }
             if (laptopPeripheral.PeripheralVendor.Equals(0))
             {
                 TempData["AlertMessage"] = "Please select a vendor!";
-                return RedirectToAction("Create");
+                return View(laptopPeripheral);
             }
             else
             {
@@ -258,8 +298,6 @@ namespace AssetManagement.Controllers
                 _context.Add(laptopPeripheral);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
-
 
             }
             

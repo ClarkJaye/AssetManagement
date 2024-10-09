@@ -3,28 +3,7 @@
 @{
     ViewData["Title"] = "View All";
 }
-<style>
-    .allocation-details {
-        margin-bottom: 20px;
-        background-color: #f2f2f2;
-        padding: 20px;
-        border-radius: 5px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
 
-    .allocation-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .allocation-description {
-        font-size: 18px;
-        color: #666;
-        margin-top: 10px;
-    }
-</style>
 <div class="m-4">
 
     <div class="allocation-details">
@@ -96,99 +75,134 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @if (Model != null && Model.Any())
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PO)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SerialCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Vendor.VendorName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ComputerName)
-                        </td>
-                        <td>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SerialCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ComputerName)
+                            </td>
+                            <td>
 
-                            @{
-                                if (item.PurchaseDate != null)
-                                {
-                                    var purchaseDate = item.PurchaseDate.Value;
-                                    var now = DateTime.Now;
-
-                                    var totalDays = (now - purchaseDate).Days;
-
-                                    var years = now.Year - purchaseDate.Year;
-                                    var months = now.Month - purchaseDate.Month;
-                                    var days = now.Day - purchaseDate.Day;
-
-                                    if (days < 0)
+                                @{
+                                    if (item.PurchaseDate != null)
                                     {
-                                        months--;
-                                        days += DateTime.DaysInMonth(now.Year, now.AddMonths(-1).Month);
-                                    }
+                                        var purchaseDate = item.PurchaseDate.Value;
+                                        var now = DateTime.Now;
 
-                                    if (months < 0)
-                                    {
-                                        years--;
-                                        months += 12;
-                                    }
+                                        var totalDays = (now - purchaseDate).Days;
 
-                                    if (years > 0)
-                                    {
-                                        <span>@years year(s), @months month(s), @days day(s)</span>
-                                    }
-                                    else if (months > 0)
-                                    {
-                                        <span>@months month(s), @days day(s)</span>
+                                        var years = now.Year - purchaseDate.Year;
+                                        var months = now.Month - purchaseDate.Month;
+                                        var days = now.Day - purchaseDate.Day;
+
+                                        if (days < 0)
+                                        {
+                                            months--;
+                                            days += DateTime.DaysInMonth(now.Year, now.AddMonths(-1).Month);
+                                        }
+
+                                        if (months < 0)
+                                        {
+                                            years--;
+                                            months += 12;
+                                        }
+
+                                        if (years > 0)
+                                        {
+                                            <span>@years year(s), @months month(s), @days day(s)</span>
+                                        }
+                                        else if (months > 0)
+                                        {
+                                            <span>@months month(s), @days day(s)</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@days day(s)</span>
+                                        }
                                     }
                                     else
                                     {
-                                        <span>@days day(s)</span>
+                                        <span>N/A</span>
                                     }
                                 }
-                                else
-                                {
-                                    <span>N/A</span>
-                                }
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PurchaseDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DeployedDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedDate)
-                        </td>
-                        <td>
-                            <form method="post" asp-action="Delete" asp-controller="InventoryDetails" asp-route-id="@item.SerialCode">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">
-                                    <span class="fas fa-trash-alt"></span> Delete
-                                </button>
-                            </form>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PurchaseDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeployedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status.status_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateCreated)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UpdatedDate)
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a class="btn btn-outline-primary btn-sm" asp-controller="InventoryDetails" asp-action="Edit">
+                                        <span class="fas fa-pencil-alt"></span> Edit
+                                    </a>
+                                    |
+                                    <form method="post" asp-action="Delete" asp-controller="InventoryDetails" asp-route-id="@item.SerialCode">
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete the selected item(s)?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="multi-delete-button btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <span class="fas fa-trash-alt"></span> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="20" class="text-center">
+                            No data available.
                         </td>
                     </tr>
                 }

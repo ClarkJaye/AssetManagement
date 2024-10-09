@@ -16,15 +16,20 @@
                 <div class="form-group col-md-2">
                     <label asp-for="AllocID" class="control-label"></label>
                     <input asp-for="AllocID" readonly value="@ViewBag.Id" class="form-control" />
+                    <span asp-validation-for="AllocID" class="text-red"></span>
                 </div>
                 <div class="form-group col-md-2" id="ownertable">
                     <label asp-for="RTtype" class="control-label"></label>
                     <input asp-for="RTtype" class="form-control" id="oid" hidden />
-                    <input class="form-select" id="odes" readonly />
+                    <input class="form-select" id="odes" readonly required placeholder="Select Return Type Below" />
+                    <span asp-validation-for="RTtype" class="text-red"></span>
+
                 </div>
                 <div class="form-group col-md-2" hidden>
                     <label asp-for="RTStatus" class="control-label"></label>
                     <select asp-for="RTStatus" class="form-control" asp-items="ViewBag.RTStatus"></select>
+                    <span asp-validation-for="RTStatus" class="text-red"></span>
+
                 </div>
                 <div class="form-groupcol-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
                     <input type="submit" value="Create" class="btn btn-red" />

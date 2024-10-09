@@ -120,10 +120,6 @@
         //OWNER
 
         $("#ownertable").click(function () {
-
-            $('#oid').val(null);
-
-            $('#odes').val(null);
             $.ajax({
                 url: "@Url.Action("OwnerPartialView", "Owners")",
                 type: "GET",
@@ -133,6 +129,27 @@
             })
         })
 
+
+
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty();  // Clear the content of the display table
+        }
+
+        // Hide the display table when clicking anywhere outside the input fields
+        $(document).click(function (event) {
+            // Check if the clicked element is not within the periptable or ownertable
+            if (!$(event.target).closest('#laptopCode, #serialNumber, #ownertable, .displaytable').length) {
+                hideTable();  // Hide the display table if clicked outside
+            }
+        });
+
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();  // Hide the table when the 'Esc' key is pressed
+            }
+        });
 
 
     })

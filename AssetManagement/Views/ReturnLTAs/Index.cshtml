@@ -20,7 +20,7 @@
         </div>
     }
     <div>
-        <a id="createbtn" class="btn btn-red createbtn" asp-controller="LaptopAllocations" asp-action="ReturnPartialView">
+        <a id="createbtn" class="btn btn-outline-red createbtn" asp-controller="LaptopAllocations" asp-action="ReturnPartialView">
             <span class="fas fa-pencil-alt"></span> Create
         </a>
     </div>
@@ -30,7 +30,7 @@
 
 <div class="m-4">
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-striped table-datatable">
             <thead>
                 <tr>
                     <th hidden>
@@ -107,7 +107,7 @@
                             <div class="d-flex flex-row gap-2 ">
                                 @if (item.ReturnType.Return_Inv != "N")
                                 {
-                                    <a class="btn btn-sm btn-outline-success editbtn" asp-action="Edit" asp-route-id="@item.ReturnID">Edit</a>
+                                    <a class="btn btn-sm btn-outline-primary editbtn" asp-action="Edit" asp-route-id="@item.ReturnID">Edit</a>
                                 }
                             </div>
                         </td>
@@ -159,15 +159,5 @@
                 }
             })
         })
-
-
-        $('#filterInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            $('tbody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
     })
-
-
 </script>

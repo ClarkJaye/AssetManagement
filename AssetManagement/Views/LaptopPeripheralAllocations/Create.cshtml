@@ -3,146 +3,138 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
 
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-}
-
-@if (!string.IsNullOrEmpty(alertMessage))
+@if (@TempData["AlertMessage"] != null)
 {
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<h4>Laptop Peripheral Allocation</h4>
-<hr />
-<div>
+<div class="m-4">
+    <h4>Laptop Peripheral Allocation</h4>
+    <hr />
+    <div>
         <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2" hidden
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-3 mb-3" hidden>
                 <label asp-for="PeripheralAllocationId" class="control-label"></label>
                 <input asp-for="PeripheralAllocationId" class="form-control" />
                 <span asp-validation-for="PeripheralAllocationId" class="text-danger"></span>
             </div>
-            <div class="form-group col-2" id="periptable">
-                <label asp-for="PeripheralCode" class="control-label"></label>
-                <input asp-for="PeripheralCode" class ="form-control" id="peripid" hidden/>
-                <input class="form-control" id="peripdes" readonly style="background-color: white;" />
+                <div class="form-group col-md-3 mb-3" id="periptable">
+                    <label asp-for="PeripheralCode" class="control-label"></label>
+                    <input asp-for="PeripheralCode" class="form-select" id="peripid" required placeholder="Select Peripheral Code Below" />
+                    <span asp-validation-for="PeripheralCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="SerialNumber" class="control-label"></label>
+                    <input asp-for="SerialNumber" class="form-control" required placeholder="Enter Serial Number" />
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3" id="ownertable">
+                    <label asp-for="OwnerCode" class="control-label"></label>
+                    <input asp-for="OwnerCode" class="form-control" id="oid" hidden />
+                    <input class="form-select" id="odes" readonly required placeholder="Select Owner Code Below" />
+                    <span asp-validation-for="OwnerCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="FixedAssetTag" class="control-label"></label>
+                    <input asp-for="FixedAssetTag" class="form-control" required placeholder="Enter Asset Tag" />
+                    <span asp-validation-for="FixedAssetTag" class="text-danger"></span>
+                </div>
+              
+                <div class="form-group col-md-3 mb-3" hidden>
+                    <label asp-for="AgeYears" class="control-label"></label>
+                    <input asp-for="AgeYears" class="form-control" />
+                    <span asp-validation-for="AgeYears" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="PONumber" class="control-label"></label>
+                    <input asp-for="PONumber" class="form-control" required placeholder="Enter PO Number" />
+                    <span asp-validation-for="PONumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="DatePurchased" class="control-label"></label>
+                    <input asp-for="DatePurchased" class="form-control" required />
+                    <span asp-validation-for="DatePurchased" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="UnitPrice" class="control-label"></label>
+                    <input type="number" value="0" asp-for="UnitPrice" class="form-control" required />
+                    <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3" hidden>
+                    <label asp-for="PeripheralAllocStatus" class="control-label"></label>
+                    <select asp-for="PeripheralAllocStatus" class="form-control" asp-items="ViewBag.PeripheralAllocStatus"></select>
+                </div>
+
+                <div class="form-group col-md-3 mb-3 d-flex align-items-center gap-2" style="margin-top: 23px;">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-2" id="ownertable">
-                <label asp-for="OwnerCode" class="control-label"></label>
-                <input asp-for="OwnerCode" class="form-control" id="oid" hidden />
-                <input class="form-control" id="odes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" class="form-control" required/>
-                <span asp-validation-for="SerialNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="FixedAssetTag" class="control-label"></label>
-                <input asp-for="FixedAssetTag" class="form-control" required />
-                <span asp-validation-for="FixedAssetTag" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="DatePurchased" class="control-label"></label>
-                <input asp-for="DatePurchased" class="form-control" required />
-                <span asp-validation-for="DatePurchased" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="AgeYears" class="control-label"></label>
-                <input asp-for="AgeYears" class="form-control" />
-                <span asp-validation-for="AgeYears" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="PONumber" class="control-label"></label>
-                <input asp-for="PONumber" class="form-control" required/>
-                <span asp-validation-for="PONumber" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="UnitPrice" class="control-label"></label>
-                <input type="number" value="0" asp-for="UnitPrice" class="form-control" />
-                <span asp-validation-for="UnitPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="PeripheralAllocStatus" class="control-label"></label>
-                <select asp-for="PeripheralAllocStatus" class ="form-control" asp-items="ViewBag.PeripheralAllocStatus"></select>
-            </div>
-            <div class="form-group col-2" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
-            </div>
-        </div>
         </form>
     </div>
 
-
-<div class="displaytable">
+    <div class="displaytable"></div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 
-        $("#periptable").click(function () {
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty();  // Clear the content of the display table
+        }
 
-            $('#peripid').val(null);
-
-            $('#peripdes').val(null);
+        // Show table for Peripheral Code when clicked
+        $("#periptable").click(function (event) {
+            event.stopPropagation();  // Prevent click from bubbling up
             $.ajax({
-                url: "@Url.Action("LTPeripPartialView","LaptopPeripherals")",
+                url: "@Url.Action("LTPeripPartialView", "LaptopPeripherals")",
                 type: "GET",
                 success: function (res) {
-                    $(".displaytable").html(res);
+                    $(".displaytable").html(res);  // Display the content in the display table
                 }
-            })
-        })
+            });
+        });
 
-        //OWNER
-
-        $("#ownertable").click(function () {
-
-            $('#oid').val(null);
-
-            $('#odes').val(null);
+        // Show table for Owner Code when clicked
+        $("#ownertable").click(function (event) {
+            event.stopPropagation();  // Prevent click from bubbling up
             $.ajax({
-                url: "@Url.Action("LTPOwner","Owners")",
+                url: "@Url.Action("LTPOwner", "Owners")",
                 type: "GET",
                 success: function (res) {
-                    $(".displaytable").html(res);
+                    $(".displaytable").html(res);  // Display the content in the display table
                 }
-            })
-        })
+            });
+        });
 
+        // Hide the display table when clicking anywhere outside the input fields
+        $(document).click(function (event) {
+            // Check if the clicked element is not within the periptable or ownertable
+            if (!$(event.target).closest('#periptable, #ownertable, .displaytable').length) {
+                hideTable();  // Hide the display table if clicked outside
+            }
+        });
 
-
-    })
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();  // Hide the table when the 'Esc' key is pressed
+            }
+        });
+    });
 </script>
+

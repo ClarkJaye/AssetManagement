@@ -3,30 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
 @if (TempData["Welcome"] != null)
 {
     <div class="toast-notification animated-toast">

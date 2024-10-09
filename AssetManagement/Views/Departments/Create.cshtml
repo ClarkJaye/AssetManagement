@@ -1,0 +1,29 @@
+﻿@model AssetManagement.Models.Department
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+
+
+<form asp-controller="Departments" asp-action="Create">
+    <div class="row g-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-2">
+            <label asp-for="Dept_name" class="form-label"></label>
+            <input asp-for="Dept_name" class="form-control" required placeholder="Enter Department Name"/>
+            <span asp-validation-for="Dept_name" class="text-danger"></span>
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-red">Save</button>
+            <a class="btn btn-outline-secondary" asp-controller="Departments" asp-action="Index">Back</a>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

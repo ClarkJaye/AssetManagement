@@ -504,11 +504,15 @@ namespace AssetManagement.Controllers
                         return RedirectToAction("ChangePassword", "Users");
                     }
 
-                    var totalActiveLaptops = await _context.tbl_ictams_laptopalloc.CountAsync(x => x.AllocationStatus == "AC");
-                    var totalInactiveLaptops = await _context.tbl_ictams_laptopalloc.CountAsync(x => x.AllocationStatus == "IN");
+                    // Count total laptops
+                    var totalLaps = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity);
+                    var totalAllocLaps = await _context.tbl_ictams_laptopalloc.CountAsync(x => x.AllocationStatus == "AC");
+                    var totalNotAllocLaps = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity - x.AllocatedNo);
+                    //var totalNotAllocLaps = await _context.tbl_ictams_laptopalloc.CountAsync(x => x.AllocationStatus == "IN");
 
-                    ViewBag.TotalActiveLaptops = totalActiveLaptops;
-                    ViewBag.TotalInactiveLaptops = totalInactiveLaptops;
+                    ViewBag.TotalLaptops = totalLaps;
+                    ViewBag.TotalAllocLaptops = totalAllocLaps;
+                    ViewBag.TotalNotAllocLaptops = totalNotAllocLaps;
 
                     var assetManagementContext = _context.tbl_ictams_laptopalloc.Where(x => x.AllocationStatus != "IN")
                         .Include(l => l.Status)
@@ -576,8 +580,14 @@ namespace AssetManagement.Controllers
         // GET: LaptopAllocations/Create
         public IActionResult Create()
         {
+            var activeLaptops = _context.tbl_ictams_laptopinv
+                                        .Where(l => l.LTStatus != "IN") 
+                                        .ToList();
 
-            ViewData["LaptopCode"] = new SelectList(_context.tbl_ictams_laptopinv, "laptoptinvCode", "laptoptinvCode"); 
+            ViewData["LaptopCode"] = new SelectList(activeLaptops, "laptoptinvCode", "laptoptinvCode");
+
+            //ViewData["LaptopCode"] = new SelectList(_context.tbl_ictams_laptopinv, "laptoptinvCode", "laptoptinvCode"); 
+
             ViewData["SerialNumber"] = new SelectList(_context.tbl_ictams_laptopinvdetails, "SerialCode", "SerialCode"); 
             ViewData["AllocationStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
             ViewData["AllocCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
@@ -674,13 +684,11 @@ namespace AssetManagement.Controllers
                 param.parm_value = newparamCode;
  
 
-                var allocQuantity = await _context.tbl_ictams_laptopinv.Where(a=>a.laptoptinvCode == laptopAllocation.LaptopCode)
-                    .MaxAsync(a=>a.AllocatedNo);
+                var allocQuantity = await _context.tbl_ictams_laptopinv.Where(a=>a.laptoptinvCode == laptopAllocation.LaptopCode).MaxAsync(a=>a.AllocatedNo);
                 var newallocQuantity = allocQuantity + 1;
                 var inv_alloc = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(a => a.laptoptinvCode == laptopAllocation.LaptopCode);
                 inv_alloc.AllocatedNo = newallocQuantity;
-                var inv_details = await _context.tbl_ictams_laptopinvdetails
-                    .FirstOrDefaultAsync(a => a.SerialCode == laptopAllocation.SerialNumber);
+                var inv_details = await _context.tbl_ictams_laptopinvdetails.FirstOrDefaultAsync(a => a.SerialCode == laptopAllocation.SerialNumber);
                 inv_details.LTStatus = "AC";
                 inv_details.DeployedDate = DateTime.Now;
 
@@ -821,89 +829,6 @@ namespace AssetManagement.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
-        //public async Task<IActionResult> Retrieve(string[] selectedIds)
-        //{
-        //    ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
-        //    foreach (string id in selectedIds)
-        //    {
-        //        var allocationID = await _context.tbl_ictams_laptopalloc.FindAsync(id);
-        //        if (allocationID != null)
-        //        {
-
-        //            var findLaptop = await _context.tbl_ictams_laptopinv
-        //        .Where(x => x.laptoptinvCode == allocationID.LaptopCode)
-        //        .FirstOrDefaultAsync();
-
-        //            var findQuantity = findLaptop.Quantity - findLaptop.AllocatedNo;
-
-        //            var FindQ = await _context.tbl_ictams_ltborrowed
-        //               .Where(z => z.StatusID == "AC")
-        //               .CountAsync(x => x.UnitID == allocationID.LaptopCode);
-
-
-        //            if (FindQ == findQuantity)
-        //            {
-        //                TempData["AlertMessage"] = "The available laptop has been borrowed!";
-        //                return RedirectToAction("Index");
-        //            }
-
-   
-        //            var status = await _context.tbl_ictams_status.FindAsync(allocationID.AllocId);
-        //            if (status == null)
-        //            {
-        //                ModelState.AddModelError("", $"Profile status '{allocationID.AllocId}' does not exist.");
-        //            }
-
-                    
- 
-        //            var laptopSecOwn = allocationID.AllocId;
-        //            var laptopSecAlloc = await _context.tbl_ictams_ltsecowner.FirstOrDefaultAsync(a => a.AllocId == laptopSecOwn);
-
-        //            if (laptopSecAlloc != null)
-        //            {
-        //                TempData["AlertMessage"] = "Cannot retrieve data. It is already allocated to second owner!";
-        //                return RedirectToAction("Index");
-        //            }
-
-        //            var laptopCode = allocationID.LaptopCode;
-
-        //            var laptopInv = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(a => a.laptoptinvCode == laptopCode);
-
-        //            if (laptopInv != null)
-        //            {
-
-        //                if (laptopInv.Quantity == laptopInv.AllocatedNo)
-        //                {
-        //                    TempData["AlertMessage"] = "Cannot retrieve. It’s already completed!";
-        //                    return RedirectToAction("Index");
-        //                }
-        //                else
-        //                {
-
-        //                    laptopInv.AllocatedNo += 1;
-        //                }
-        //            }
-
-   
-        //            var ucode = HttpContext.Session.GetString("UserName");
-        //            allocationID.AllocUpdated = ucode;
-        //            allocationID.AllocationStatus = "AC";
-        //            allocationID.DateUpdated = DateTime.Now;
-
-        //            _context.Update(allocationID);
-        //            await _context.SaveChangesAsync();
-
-    
-        //            TempData["SuccessNotification"] = "Successfully retrieved!  ";
-
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //    }
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
 
         private bool LaptopAllocationExists(string id)
         {

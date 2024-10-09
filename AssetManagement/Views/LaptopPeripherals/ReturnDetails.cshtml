@@ -4,32 +4,19 @@
     ViewData["Title"] = "Index";
     Layout = null;
 }
+
 <style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
+    input {
+        width: 400px !important;
     }
 </style>
+
+
 <h4 class="title">
-    Return Peripheral 
+    Return Peripheral
 </h4>
-<table class="table">
+
+<table class="table table-striped table-datatable">
     <thead>
         <tr>
             <th>
@@ -82,6 +69,7 @@
                 </td>
             </tr>
         }
+
     </tbody>
 </table>
 

@@ -26,20 +26,36 @@ namespace AssetManagement.Models
 
         [ForeignKey("SerialNumber")]
         [DisplayName("SERIAL NUMBER")]
-
         public InventoryDetails InventoryDetails { get; set; }
+
+
+        [Column("computer_name", TypeName = "VARCHAR(50)")]
+        [DisplayName("COMPUTER NAME")]
+        public string? ComputerName { get; set; }
 
         [Column("ltborrower_code")]
         [DisplayName("BORROWER NAME")]
         public string OwnerID { get; set; }
+
+        [Column("ltborrower_dept")]
+        [DisplayName("BORROWER DEPARTMENT")]
+        public string Department { get; set; }
 
         [Column("ltborrowed_status")]
         [DisplayName("STATUS")]
         public string StatusID { get; set; }
 
         [Column("ltborrowed_date")]
-        [DisplayName("DATE BORROWED")]
+        [DisplayName("DATE Of BORROWED")]
         public DateTime DateBorrow { get; set; }
+
+        [Column("return_date")]
+        [DisplayName("RETURN DATE")]
+        public DateTime Return_date { get; set; }
+
+        [Column("expected_return_date")]
+        [DisplayName("EXPECTED RETURN DATE")]
+        public DateTime Expected_return { get; set; }
 
         [Column("ltborrowed_remarks")]
         [DisplayName("REMARKS")]

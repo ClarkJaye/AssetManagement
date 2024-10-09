@@ -56,7 +56,7 @@
                 <span>Create New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Inactive">
-                <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+                <span class="fas fa-laptop"></span> Show Inactive Laptop
             </a>
         </div>
     </div>
@@ -64,12 +64,43 @@
 
     <div class="report-view d-flex flex-column justify-content-end">
         <div class="report-item">
-            <span class="report-label">Total <span class="text-success">Active</span> Laptops:</span>
-            <span class="report-value">@ViewBag.TotalActiveLaptops</span>
+            <span class="report-label">Total Laptops:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalNotAllocLaptops != null)
+                {
+                    <text>@ViewBag.TotalLaptops</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
         <div class="report-item">
-            <span class="report-label">Total <span class="text-danger   ">Inactive</span> Laptops:</span>
-            <span class="report-value">@ViewBag.TotalInactiveLaptops</span>
+            <span class="report-label">Total <span class="text-success">Allocated</span> Laptops:</span>
+            <span class="report-value">
+                @if (ViewBag.totalAllocLaps != null)
+                {
+                    <text>@ViewBag.TotalAllocLaptops</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
+        </div>
+        <div class="report-item">
+            <span class="report-label">Total <span class="text-danger   ">Not Allocated</span> Laptops:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalNotAllocLaptops != null)
+                {
+                    <text>@ViewBag.TotalNotAllocLaptops</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
     </div>
 </div>

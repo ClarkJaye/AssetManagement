@@ -68,18 +68,17 @@ namespace AssetManagement.Controllers
 
         public JsonResult GetSerialNumbers(string laptopCode)
         {
-            var existingSerialNumbers = _context.tbl_ictams_laptopalloc
-                .Where(l => l.LaptopCode == laptopCode)
-                .Select(l => l.SerialNumber)
-                .ToList();
-
+            // Get serial numbers from inventory details that are available and not already allocated
             var serialNumbers = _context.tbl_ictams_laptopinvdetails
-                .Where(l => l.laptoptinvCode == laptopCode && !existingSerialNumbers.Contains(l.SerialCode))
+                .Where(l => l.laptoptinvCode == laptopCode && l.LTStatus == "AV")
+                .Where(l => !_context.tbl_ictams_laptopalloc
+                    .Any(alloc => alloc.SerialNumber == l.SerialCode && alloc.LaptopCode == laptopCode && alloc.AllocationStatus != "AC" && alloc.AllocationStatus != "IN" ))
                 .Select(l => new { l.SerialCode })
                 .ToList();
 
             return Json(serialNumbers);
         }
+
 
 
         public JsonResult GetComputerName(string laptopCode, string serialNumber)
@@ -453,8 +452,6 @@ namespace AssetManagement.Controllers
 
 
         // POST: LaptopInventories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("laptoptinvCode,Description,LTLevel,LTBrand,LTModel,LTcpu,LTHardisk,LTMemory,LTOS,Quantity,AllocatedNo,LTStatus,LTCreated,DateCreated,LTUpdated,DateUpdated")] LaptopInventory laptopInventory)
@@ -464,48 +461,56 @@ namespace AssetManagement.Controllers
                 return NotFound();
             }
 
-            var AllocatedChecker = await _context.tbl_ictams_laptopinv.Where(x => x.laptoptinvCode == laptopInventory.laptoptinvCode).FirstOrDefaultAsync();
-            if (AllocatedChecker.Quantity > 0)
+            // Check if the laptop is already allocated
+            var laptop = await _context.tbl_ictams_laptopinv
+                .FirstOrDefaultAsync(l => l.laptoptinvCode == laptopInventory.laptoptinvCode);
+
+            if (laptop == null)
             {
-                TempData["AlertMessage"] = "You can't Edit this!";
-                return RedirectToAction("Edit");
+                return NotFound();
             }
-            var laptopInventory1 = await _context.tbl_ictams_laptopinv.Where(c => c.laptoptinvCode == laptopInventory.laptoptinvCode).FirstOrDefaultAsync();
+
+            // Check if the laptop has allocated quantity
+            if (laptop.Quantity > 0)
+            {
+                TempData["AlertMessage"] = "You can't edit this, because it has a quantity!";
+                return RedirectToAction("Edit", new { id = laptopInventory.laptoptinvCode });
+            }
+
             try
             {
-                var ucode = HttpContext.Session.GetString("UserName");
-                laptopInventory1.LTUpdated = ucode;
-                laptopInventory1.DateUpdated = DateTime.Now;
-                laptopInventory1.LTStatus = "AV";
-                laptopInventory1.Description = laptopInventory.Description;
-                laptopInventory1.LTLevel = laptopInventory.LTLevel;
-                laptopInventory1.LTOS = laptopInventory.LTOS;
-                laptopInventory1.LTBrand = laptopInventory.LTBrand;
-                laptopInventory1.LTcpu = laptopInventory.LTcpu;
-                laptopInventory1.LTHardisk = laptopInventory.LTHardisk;
-                laptopInventory1.LTMemory = laptopInventory.LTMemory;
-                laptopInventory1.LTModel = laptopInventory.LTModel;
-                laptopInventory1.LTCreated = laptopInventory.LTCreated;
-                laptopInventory1.DateCreated = laptopInventory.DateCreated;
+                // Update laptop details
+                var updatedBy = HttpContext.Session.GetString("UserName");
+                laptop.LTUpdated = updatedBy;
+                laptop.DateUpdated = DateTime.Now;
+                laptop.LTStatus = "AV"; // Example: Status as "Available" on edit
 
+                // Update the editable fields from the form input
+                laptop.Description = laptopInventory.Description;
+                laptop.LTLevel = laptopInventory.LTLevel;
+                laptop.LTOS = laptopInventory.LTOS;
+                laptop.LTBrand = laptopInventory.LTBrand;
+                laptop.LTcpu = laptopInventory.LTcpu;
+                laptop.LTHardisk = laptopInventory.LTHardisk;
+                laptop.LTMemory = laptopInventory.LTMemory;
+                laptop.LTModel = laptopInventory.LTModel;
+                laptop.LTCreated = laptopInventory.LTCreated;
+                laptop.DateCreated = laptopInventory.DateCreated;
+
+                // Save the changes
                 await _context.SaveChangesAsync();
-                // ...
+
                 TempData["SuccessNotification"] = "Successfully edited!";
-            // ...
                 return RedirectToAction(nameof(Index));
             }
-                catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LaptopInventoryExists(laptopInventory.laptoptinvCode))
                 {
-                    if (!LaptopInventoryExists(laptopInventory.laptoptinvCode))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                } 
-            return RedirectToAction(nameof(Index));
+                    return NotFound();
+                }
+                throw; // Rethrow the exception if there's a concurrency conflict
+            }
         }
 
 

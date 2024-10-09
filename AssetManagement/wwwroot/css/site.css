@@ -179,7 +179,50 @@ h1, h2, h3, h4, h5, h6 {
     }
 */
 
+.allocation-details {
+    margin-bottom: 20px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+.allocation-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.allocation-description {
+    font-size: 18px;
+    color: #666;
+    margin-top: 10px;
+}
+
+
+.report-view {
+    text-align: right;
+}
+
+.report-item {
+    margin-bottom: 10px;
+}
+
+.report-label {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333;
+}
+
+.report-value {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #f2f2f2;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: green;
+}
 
 /*Custom Datatable*/
 input#dt-search-0 {

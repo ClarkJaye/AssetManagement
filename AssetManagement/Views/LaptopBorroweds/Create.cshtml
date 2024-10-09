@@ -4,49 +4,63 @@
     ViewData["Title"] = "Create";
 }
 
-
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-    if (!string.IsNullOrEmpty(alertMessage))
-    {
-        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
-            @alertMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-}
-
 <div class="m-4">
-    <h4>Laptop Borrowed</h4>
+    <h4>Borrow Laptop</h4>
     <hr />
 
     <div>
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-md-2" id="laptable">
+
+                <div class="form-group col-md-2 mb-3">
                     <label asp-for="UnitID" class="control-label"></label>
-                    <input asp-for="UnitID" class="form-control" id="lapid" hidden />
-                    <input class="form-select" id="lapdes" readonly placeholder="Select Unit Below" />
+                    <input asp-for="UnitID" class="form-control" id="UnitID" readonly required />
+                    <span asp-validation-for="UnitID" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2" id="setable">
+
+                <div class="form-group col-md-2 mb-3">
                     <label asp-for="SerialNumber" class="control-label"></label>
-                    <input asp-for="SerialNumber" readonly class="form-select" id="seid" required placeholder="Select Serial Below" />
+                    <select asp-for="SerialNumber" class="form-select" id="SerialNumber" disabled required>
+                        <option selected disabled>Select serial number</option>
+                    </select>
                     <span asp-validation-for="SerialNumber" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2" id="ownertable">
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="ComputerName" class="control-label"></label>
+                    <input asp-for="ComputerName" class="form-control" id="ComputerName" readonly required placeholder="Computer Name"/>
+                    <span asp-validation-for="ComputerName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3" id="ownertable">
                     <label asp-for="OwnerID" class="control-label"></label>
                     <input asp-for="OwnerID" class="form-control" id="oid" hidden />
-                    <input class="form-select" id="odes" readonly placeholder="Select Owner Below" />
+                    <input class="form-select" id="odes" readonly placeholder="Select Borrower Below" required />
+                    <span asp-validation-for="OwnerID" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2">
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="Department" class="control-label"></label>
+                    <input asp-for="Department" class="form-control" required placeholder="Enter Department"/>
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="Expected_return" class="control-label"></label>
+                    <input asp-for="Expected_return" class="form-control" type="date" required />
+                    <span asp-validation-for="Expected_return" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
                     <label asp-for="Remark" class="control-label"></label>
-                    <input asp-for="Remark" class="form-control" />
+                    <input asp-for="Remark" class="form-control" placeholder="Enter Remarks" required />
                     <span asp-validation-for="Remark" class="text-danger"></span>
                 </div>
+
                 <div class="form-group col-md-3" style="margin-top:23px;">
                     <input type="submit" value="Create" class="btn btn-red" />
-                    <a class="btn btn-outline-secondary " asp-action="LapInvPartialView">Back to List</a>
+                    <a class="btn btn-outline-secondary" asp-action="LapInvPartialView">Back to List</a>
                 </div>
             </div>
         </form>
@@ -58,7 +72,6 @@
 </div>
 
 
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -67,60 +80,8 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-
-        $("#laptable").click(function () {
-
-            $('#lapid').val(null);
-
-            $('#lapdes').val(null);
-            $.ajax({
-                url: "@Url.Action("LapInvPartialView", "LaptopInventories")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
+    $(document).ready(function () { 
         $("#ownertable").click(function () {
-
-            $('#oid').val(null);
-
-            $('#odes').val(null);
-            $.ajax({
-                url: "@Url.Action("OwnerPartialViewBorrowed", "Owners")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-
-        $("#setable").click(function () {
-            $('#seid').val(null);
-
-            var laptopCode = $('#lapid').val();
-
-            $.ajax({
-                url: "@Url.Action("SeeAllSerial", "LaptopInventories")",
-                type: "GET",
-                data: { id: laptopCode },
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-
-        //OWNER
-
-        $("#ownertable").click(function () {
-
-            $('#oid').val(null);
-
-            $('#odes').val(null);
             $.ajax({
                 url: "@Url.Action("OwnerPartialView", "Owners")",
                 type: "GET",
@@ -130,7 +91,80 @@
             })
         })
 
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty();  
+        }
 
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#ownertable, .displaytable').length) {
+                hideTable(); 
+            }
+        });
+
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();  
+            }
+        });
+
+
+        // Disable SerialNumber field initially
+        $('#SerialNumber').prop('disabled', true);
+
+        // Check if UnitID has a value on page load
+        var unitID = $('#UnitID').val();
+        if (unitID) {
+            loadSerialNumbers(unitID);
+        }
+
+        // Function to load serial numbers based on UnitID
+        function loadSerialNumbers(laptopCode) {
+            $.ajax({
+                url: '@Url.Action("GetSerialNumbers", "LaptopInventories")',
+                type: 'GET',
+                data: { laptopCode: laptopCode },
+                success: function (data) {
+                    $('#SerialNumber').empty().append('<option selected disabled>Select serial number</option>');
+
+                    if (data && data.length > 0) {
+                        $.each(data, function (i, item) {
+                            $('#SerialNumber').append($('<option>', {
+                                value: item.serialCode,
+                                text: item.serialCode
+                            }));
+                        });
+                        $('#SerialNumber').prop('disabled', false); // Enable dropdown if data exists
+                    } else {
+                        $('#SerialNumber').append('<option selected disabled>No serial numbers available</option>');
+                        $('#SerialNumber').prop('disabled', true); // Disable the dropdown
+                    }
+                },
+                error: function () {
+                    $('#SerialNumber').empty().append('<option selected disabled>Error loading serial numbers</option>');
+                    $('#SerialNumber').prop('disabled', true); // Disable the dropdown in case of error
+                }
+            });
+        }
+
+
+        // On serial number change, update computer name
+        $('#SerialNumber').change(function () {
+            var laptopCode = $('#UnitID').val();
+            var serialNumber = $(this).val();
+
+            if (laptopCode && serialNumber) {
+                $.ajax({
+                    url: '@Url.Action("GetComputerName", "LaptopInventories")',
+                    type: 'GET',
+                    data: { laptopCode: laptopCode, serialNumber: serialNumber },
+                    success: function (data) {
+                        $('#ComputerName').val(data);
+                    }
+                });
+            }
+        });
 
     })
 </script>

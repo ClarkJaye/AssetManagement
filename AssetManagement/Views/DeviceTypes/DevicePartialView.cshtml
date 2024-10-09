@@ -3,16 +3,17 @@
 @{
     Layout = null;
 }
-<style>
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-</style>
-<input type="text" id="filterInput" placeholder="Search...">
-<div class="table-responsive scrollable-container">
-    <table class="table custom-fontsize p-4" style="cursor:pointer;">
+
+<!-- Action Buttons -->
+<div class="d-flex align-items-center justify-content-end mt-5 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-responsive table-striped">
         <thead class="sticky-top" style="z-index:1; position:relative">
             <tr>
                 <th>
@@ -33,7 +34,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.DateUpdated)
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -63,16 +63,16 @@
         </tbody>
     </table>
 </div>
+
+
+
 <script>
     $(document).ready(function () {
-
-
         // Add click event listener to each row in the table
         $('table tbody tr').click(function () {
             // Get the id from the clicked row's data-id attribute
             var id = $(this).data('id');
             var dd = $(this).data('dd');
-
 
             // Remove the 'highlighted-row' class from any other row
             $("tr.highlighted-row").removeClass("highlighted-row");
@@ -81,15 +81,10 @@
             $(this).closest("tr").addClass("highlighted-row");
             $('#devid').val(id);
             $('#devdes').val(dd);
-
-
         });
 
-    });
 
-    //FILTERING
-
-    $(document).ready(function () {
+        //FILTERING
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {

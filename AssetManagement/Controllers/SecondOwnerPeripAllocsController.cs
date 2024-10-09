@@ -216,47 +216,88 @@ namespace AssetManagement.Controllers
             return View(secondOwnerPeripAlloc);
         }
 
+
         // GET: SecondOwnerPeripAllocs/Delete/5
         //DELETE
-        public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
+        public async Task<IActionResult> DeleteAsEdit(string peripheralCode)
         {
-            //ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
-            foreach (string id in selectedIds)
+            ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
+
+            // Retrieve the peripheral with the specified PeripheralCode
+            var peripheral = await _context.tbl_ictams_ltperipheral
+                .FirstOrDefaultAsync(p => p.PeripheralCode == peripheralCode);
+
+            if (peripheral == null)
             {
-                var ltsecownerID = await _context.tbl_ictams_ltpsecowner.FindAsync(id);
-                if (ltsecownerID != null)
-                {
-                    // Check if the selected profile status exists in the tbl_lsm_status table
-                    var status = await _context.tbl_ictams_status.FindAsync(ltsecownerID.SecAllocId);
-                    if (status == null)
-                    {
-                        ModelState.AddModelError("", $"Profile status '{ltsecownerID.SecAllocId}' does not exist.");
-                    }
-
-                    // Find the corresponding LaptopCode in tbl_ictams_laptopinv and deduct 1 from AllocatedNo
-                    var laptopCode = ltsecownerID.SecPeripheralCode;
-                    var laptopInv = await _context.tbl_ictams_ltperipheral.FirstOrDefaultAsync(a => a.PeripheralCode == laptopCode);
-                    if (laptopInv != null)
-                    {
-                        laptopInv.PeripheralAllocation -= 1;
-                    }
-
-                    // Update the profile
-                    var ucode = HttpContext.Session.GetString("UserName");
-                    ltsecownerID.AllocUpdated = ucode;
-                    ltsecownerID.SecAllocationStatus = "IN";
-                    ltsecownerID.DateUpdated = DateTime.Now;
-
-                    _context.Update(ltsecownerID);
-                    await _context.SaveChangesAsync();
-                    // ...
-                    TempData["SuccessNotification"] = "Successfully deleted a second owner allocation!";
-                    // ...
-                    return RedirectToAction(nameof(Index));
-                }
+                TempData["AlertMessage"] = "Peripheral not found.";
+                return RedirectToAction(nameof(Index));
             }
+
+            // Check if the peripheral is allocated to any owner
+            var isAllocated = await _context.tbl_ictams_ltpsecowner
+                .AnyAsync(x => x.SecPeripheralCode == peripheralCode);
+
+            if (isAllocated)
+            {
+                TempData["AlertMessage"] = "Cannot be deleted. It is already allocated to a specific owner!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Update the peripheral details to mark it as 'deleted'
+            peripheral.PeripheralUpdatedBy = HttpContext.Session.GetString("UserName");
+            peripheral.PeripheralStatus = "IN"; // Mark it as 'IN'
+            peripheral.PeripheralUpdatedAt = DateTime.Now;
+
+            _context.Update(peripheral);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessNotification"] = "Successfully deleted!";
             return RedirectToAction(nameof(Index));
         }
+
+
+        //// GET: SecondOwnerPeripAllocs/Delete/5
+        ////DELETE
+        //public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
+        //{
+        //    //ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
+        //    foreach (string id in selectedIds)
+        //    {
+        //        var ltsecownerID = await _context.tbl_ictams_ltpsecowner.FindAsync(id);
+        //        if (ltsecownerID != null)
+        //        {
+        //            // Check if the selected profile status exists in the tbl_lsm_status table
+        //            var status = await _context.tbl_ictams_status.FindAsync(ltsecownerID.SecAllocId);
+        //            if (status == null)
+        //            {
+        //                ModelState.AddModelError("", $"Profile status '{ltsecownerID.SecAllocId}' does not exist.");
+        //            }
+
+        //            // Find the corresponding LaptopCode in tbl_ictams_laptopinv and deduct 1 from AllocatedNo
+        //            var laptopCode = ltsecownerID.SecPeripheralCode;
+        //            var laptopInv = await _context.tbl_ictams_ltperipheral.FirstOrDefaultAsync(a => a.PeripheralCode == laptopCode);
+        //            if (laptopInv != null)
+        //            {
+        //                laptopInv.PeripheralAllocation -= 1;
+        //            }
+
+        //            // Update the profile
+        //            var ucode = HttpContext.Session.GetString("UserName");
+        //            ltsecownerID.AllocUpdated = ucode;
+        //            ltsecownerID.SecAllocationStatus = "IN";
+        //            ltsecownerID.DateUpdated = DateTime.Now;
+
+        //            _context.Update(ltsecownerID);
+        //            await _context.SaveChangesAsync();
+        //            // ...
+        //            TempData["SuccessNotification"] = "Successfully deleted a second owner allocation!";
+        //            // ...
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
+
         public async Task<IActionResult> Retrieve(string[] selectedIds)
         {
             //ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");

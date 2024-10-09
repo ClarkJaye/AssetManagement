@@ -179,18 +179,13 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> CreateSecReturn([Bind("ReturnID,AllocID,RTtype,RTStatus,CreatedBy,DateCreated,RTUpdated,DateUpdated")] ReturnLTA returnLTA )
         {
             var ucode = HttpContext.Session.GetString("UserName");
-
             var findFirstOwner = await _context.tbl_ictams_ltnewalloc   .Where(x => x.AllocId == returnLTA.AllocID && x.SecAllocationStatus == "AC").FirstOrDefaultAsync();
             if (findFirstOwner != null)
             {
                 findFirstOwner.SecAllocationStatus = "IN";
             }
-
             var findRType = await _context.tbl_ictams_returntype.Where(x => x.TypeID == returnLTA.RTtype).FirstOrDefaultAsync();
-
-
             var allocationID = await _context.tbl_ictams_laptopalloc.FirstOrDefaultAsync(x => x.AllocId == returnLTA.AllocID);
-
 
             if (findRType != null && findRType.Return_Inv == "N")
             {
@@ -216,8 +211,6 @@ namespace AssetManagement.Controllers
                     returnLTA.RTStatus = "AC";
                 }
             }
-
-
 
             var paramCode = await _context.tbl_ictams_parameters
                    .Where(p => p.parm_code == "ltaret_id")

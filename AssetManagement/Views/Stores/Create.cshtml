@@ -1,0 +1,36 @@
+﻿@model AssetManagement.Models.Store
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+
+
+<form asp-controller="Stores" asp-action="Create">
+    <div class="row form-group">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group col-md-4 mb-3">
+            <label asp-for="Store_code" class="form-label"></label>
+            <input asp-for="Store_code" class="form-control" required placeholder="Enter Store Code" type="number" />
+            <span asp-validation-for="Store_code" class="text-danger"></span>
+        </div>
+
+        <div class="form-group  col-md-4 mb-3">
+            <label asp-for="StoreName" class="form-label"></label>
+            <input asp-for="StoreName" class="form-control" required placeholder="Enter Store Name" />
+            <span asp-validation-for="StoreName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-4 mt-4">
+            <button type="submit" class="btn btn-red">Save</button>
+            <a class="btn btn-outline-secondary" asp-controller="Stores" asp-action="Index">Back</a>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

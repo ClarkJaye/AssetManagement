@@ -1,0 +1,75 @@
+﻿@model AssetManagement.Models.Store
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+
+<div class="m-4 px-1">
+    <h4>Edit Store</h4>
+    @if (TempData["Welcome"] != null)
+    {
+        <p>@TempData["Welcome"]</p>
+    }
+
+    <div>
+        <a class="btn btn-outline-secondary" asp-controller="Stores" asp-action="Index">Back to List</a>
+    </div>
+
+    <hr />
+
+    @if (@TempData["AlertMessage"] != null)
+    {
+        <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["AlertMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+
+    <div>
+        <form asp-action="Edit">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Store_code" />
+                <div class="form-group col-4">
+                    <label asp-for="Store_code" class="control-label"></label>
+                    <input asp-for="Store_code" class="form-control" disabled />
+                    <span asp-validation-for="Store_code" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="StoreName" class="control-label"></label>
+                    <input asp-for="StoreName" class="form-control" />
+                    <span asp-validation-for="StoreName" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="StoreStatus" class="control-label"></label>
+                    <input asp-for="StoreStatus" />
+                    <span asp-validation-for="StoreStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="SCreatedby" class="control-label"></label>
+                    <input asp-for="SCreatedby" />
+                    <span asp-validation-for="SCreatedby" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="DateCreated" class="control-label"></label>
+                    <input asp-for="DateCreated" class="form-control" />
+                    <span asp-validation-for="DateCreated" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4 mt-4">
+                    <input type="submit" value="Save" class="btn btn-red" />
+                    <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

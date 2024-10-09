@@ -3,111 +3,88 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
 
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-
-<h4>Laptop Peripheral</h4>
-<hr />
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-}
-@if (!string.IsNullOrEmpty(alertMessage))
+@if (@TempData["AlertMessage"] != null)
 {
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<div>
+
+
+<div class="m-4">
+    <h4>Laptop Peripheral</h4>
+    <hr />
+
+    <div>
         <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-3" hidden>
-                <label asp-for="PeripheralCode" class="control-label"></label>
-                <input asp-for="PeripheralCode" class="form-control" />
-                <span asp-validation-for="PeripheralCode" class="text-danger"></span>
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-3 mb-3" hidden>
+                    <label asp-for="PeripheralCode" class="control-label"></label>
+                    <input asp-for="PeripheralCode" class="form-control" />
+                    <span asp-validation-for="PeripheralCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="PeripheralDescription" class="control-label"></label>
+                    <input asp-for="PeripheralDescription" class="form-control" required placeholder="Enter Description" />
+                    <span asp-validation-for="PeripheralDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3" id="brandtable">
+                    <label asp-for="PeripheralBrand" class="control-label"></label>
+                    <input asp-for="PeripheralBrand" class="form-control" id="brandid" hidden required />
+                    <input class="form-select" id="branddes" readonly placeholder="Select Brand" required />
+                </div>
+                <div class="form-group col-md-3 mb-3" id="devtable">
+                    <label asp-for="PeripheralDevice" class="control-label"></label>
+                    <input asp-for="PeripheralDevice" class="form-control" id="devid" hidden />
+                    <input class="form-select" id="devdes" readonly placeholder="Select Devices" required />
+                </div>
+                <div class="form-group col-md-3 mb-3" id="vendortable">
+                    <label asp-for="PeripheralVendor" class="control-label"></label>
+                    <input asp-for="PeripheralVendor" class="form-control" id="vid" hidden />
+                    <input class="form-select" id="vname" readonly placeholder="Select Vendor" required />
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="PeripheralQty" class="control-label"></label>
+                    <input asp-for="PeripheralQty" class="form-control" value="0" required placeholder="Enter Quantity" />
+                    <span asp-validation-for="PeripheralQty" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3" hidden>
+                    <label asp-for="PeripheralAllocation" class="control-label"></label>
+                    <input asp-for="PeripheralAllocation" class="form-control" required />
+                    <span asp-validation-for="PeripheralAllocation" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-3 mb-3 d-flex align-items-center gap-2" style="margin-top: 23px;">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="LaptopPeripherals">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-3">
-                <label asp-for="PeripheralDescription" class="control-label"></label>
-                <input asp-for="PeripheralDescription" class="form-control" />
-                <span asp-validation-for="PeripheralDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group col-3" id="brandtable">
-                <label asp-for="PeripheralBrand" class="control-label"></label>
-                <input asp-for="PeripheralBrand" value="0" class ="form-control" id="brandid" hidden/>
-                <input class="form-control" id="branddes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-3" id="devtable">
-                <label asp-for="PeripheralDevice" class="control-label"></label>
-                <input asp-for="PeripheralDevice" value="0" class="form-control" id="devid" hidden />
-                <input class="form-control" id="devdes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-3" id="vendortable">
-                <label asp-for="PeripheralVendor" class="control-label"></label>
-                <input asp-for="PeripheralVendor" value="0" class="form-control" id="vid" hidden />
-                <input class="form-control" id="vname" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-3">
-                <label asp-for="PeripheralQty" class="control-label"></label>
-                <input asp-for="PeripheralQty" class="form-control" />
-                <span asp-validation-for="PeripheralQty" class="text-danger"></span>
-            </div>
-            <div class="form-group col-3" hidden>
-                <label asp-for="PeripheralAllocation" class="control-label"></label>
-                <input asp-for="PeripheralAllocation" class="form-control" />
-                <span asp-validation-for="PeripheralAllocation" class="text-danger"></span>
-            </div>
-        
-            <div class="form-group col-2" style="margin-top: 23px;">
-                <input type="submit" value="Create" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index" asp-controller="LaptopPeripherals">BACK</a>
-            </div>
-        </div>
         </form>
     </div>
-<div class="displaytable">
+    <div class="displaytable"></div>
 </div>
+
+
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     //Brand
     $(document).ready(function () {
 
         $("#brandtable").click(function () {
-
-            $('#brandid').val(null);
-
-            $('#branddes').val(null);
             $.ajax({
-                url: "@Url.Action("BrandPartialView","Brands")",
+                url: "@Url.Action("BrandPartialView", "Brands")",
                 type: "GET",
-                success: function (res) {   
+                success: function (res) {
                     $(".displaytable").html(res);
                 }
             })
@@ -115,12 +92,8 @@
 
         //Vendor
         $("#vendortable").click(function () {
-
-            $('#vid').val(null);
-
-            $('#vname').val(null);
             $.ajax({
-                url: "@Url.Action("VendorsPartialView","Vendors")",
+                url: "@Url.Action("VendorsPartialView", "Vendors")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);
@@ -129,18 +102,33 @@
         })
         //Device
         $("#devtable").click(function () {
-
-            $('#devid').val(null);
-
-            $('#devdes').val(null);
             $.ajax({
-                url: "@Url.Action("DevicePartialView","DeviceTypes")",
+                url: "@Url.Action("DevicePartialView", "DeviceTypes")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);
                 }
             })
         })
+
+
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty();
+        }
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#brandtable, #devtable, #vendortable, .displaytable').length) {
+                hideTable();
+            }
+        });
+
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();
+            }
+        });
 
     })
 

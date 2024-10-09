@@ -1,0 +1,160 @@
+﻿@model IEnumerable<AssetManagement.Models.Store>
+@{
+    ViewData["Title"] = "Stores";
+}
+
+
+<div class="m-4 px-1">
+    <h4>Stores List</h4>
+    @if (TempData["Welcome"] != null)
+    {
+        <p>@TempData["Welcome"]</p>
+    }
+</div>
+
+@if (@TempData["AlertMessage"] != null)
+{
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="m-4 px-1">
+    <a id="createbtn" class="btn btn-outline-red createbtn">
+        <i class="fas fa-pencil-alt"></i>
+        <span>Create New</span>
+    </a>
+</div>
+
+<div class="m-4 px-1 createform"></div>
+
+<hr />
+
+<div class="m-4 disTable">
+    <div class="d-flex align-items-center justify-content-end px-2 mb-3">
+        <a class="btn btn-outline-secondary" asp-controller="Stores" asp-action="Inactive">
+            <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-datatable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Store_code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StoreName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StoreStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateCreated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateUpdated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Createdby)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Updatedby)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Store_code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StoreName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StoreStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateUpdated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-center gap-2 ">
+                                <a class="btn btn-sm btn-outline-primary" data-id="@item.Store_code" asp-action="Edit" asp-route-id="@item.Store_code">
+                                    <span class="fas fa-pencil-alt"></span> Edit
+                                </a>
+                                |
+                                <form asp-action="Delete">
+                                    <input type="hidden" name="id" value="@item.Store_code" />
+                                    <a class="btn btn-sm btn-outline-danger btn-delt">
+                                        <span class="fas fa-trash-alt"></span> Delete
+                                    </a>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".btn-delt").click(function () {
+            $(this).closest("form").submit();
+        })
+
+        $("#createbtn").click(function () {
+            $(this).hide();
+            $('.disTable').hide();
+
+            $.ajax({
+                url: "@Url.Action("Create", "Stores")",
+                type: "GET",
+                success: function (res) {
+                    $(".createform").html(res);
+                }
+            })
+        })
+
+    })
+
+
+</script>

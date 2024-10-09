@@ -17,7 +17,7 @@ namespace AssetManagement.Controllers
         private readonly AssetManagementContext _context;
 
         public LaptopBorrowedsController(AssetManagementContext context)
-            : base(context) // Pass the 'context' dependency to the base constructor
+            : base(context)
         {
             _context = context;
         }
@@ -104,7 +104,6 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-
             var laptopBorrowed = await _context.tbl_ictams_ltborrowed
                 .Include(l => l.LaptopInventory)
                 .Include(l => l.Owner)
@@ -116,81 +115,85 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-
             return View(laptopBorrowed);
         }
 
         // GET: LaptopBorroweds/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(string id)
         {
-            //ViewBag.Id = id;
-            //return View();
-            ViewData["SerialNumber"] = new SelectList(_context.tbl_ictams_laptopinvdetails, "SerialCode", "SerialCode");
-            ViewData["UnitID"] = new SelectList(_context.tbl_ictams_laptopinv, "laptoptinvCode", "laptoptinvCode");
-            ViewData["OwnerID"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerCode");
-            ViewData["StatusID"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
-            ViewData["CreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["RTUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            return View();
+            var laptopInventory = _context.tbl_ictams_laptopinv.FirstOrDefault(l => l.laptoptinvCode == id);
+            var laptop = _context.tbl_ictams_laptopinvdetails.FirstOrDefault(ld => ld.laptoptinvCode == laptopInventory.laptoptinvCode);
+
+            if (laptopInventory == null)
+            {
+                return NotFound(); 
+            }
+
+            var laptopBorrowed = new LaptopBorrowed
+            {
+                UnitID = laptop.laptoptinvCode          
+            };
+
+            return View(laptopBorrowed);
         }
 
         // POST: LaptopBorroweds/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BorrowedID,UnitID,SerialNumber,OwnerID,StatusID,DateBorrow,Remark,CreatedBy,DateCreated,RTUpdated,DateUpdated")] LaptopBorrowed laptopBorrowed)
+        public async Task<IActionResult> Create([Bind("BorrowedID,UnitID,SerialNumber,OwnerID,StatusID,ComputerName,DateBorrow,Remark,CreatedBy,DateCreated,RTUpdated,DateUpdated")] LaptopBorrowed laptopBorrowed)
         {
-            var findLaptop = await _context.tbl_ictams_laptopinv
-                .Where(x => x.laptoptinvCode == laptopBorrowed.UnitID)
-                .FirstOrDefaultAsync();
+            // Check if laptop inventory exists
+            var findLaptop = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(x => x.laptoptinvCode == laptopBorrowed.UnitID);
+            var availableQuantity = findLaptop.Quantity - findLaptop.AllocatedNo;
 
-            var findQuantity = findLaptop.Quantity - findLaptop.AllocatedNo;
+            // Check how many laptops are currently borrowed
+            var borrowedCount = await _context.tbl_ictams_ltborrowed.Where(z => z.StatusID == "AC").CountAsync(x => x.UnitID == laptopBorrowed.UnitID);
 
-            var FindQ = await _context.tbl_ictams_ltborrowed
-                .Where(z => z.StatusID == "AC")
-                .CountAsync(x => x.UnitID == laptopBorrowed.UnitID);
-
-            if ( FindQ >= findQuantity  )
+            if (borrowedCount >= availableQuantity)
             {
-                TempData["AlertMessage"] = "Out of quantity!";  
+                TempData["AlertMessage"] = "Out of quantity!";
                 return RedirectToAction("Create");
             }
 
-            var findOwner = await _context.tbl_ictams_ltborrowed.Where(x=>x.OwnerID == laptopBorrowed.OwnerID && x.StatusID == "AC").FirstOrDefaultAsync();
-
-            if(findOwner != null)
+            // Check if the owner has already borrowed a laptop
+            var findOwner = await _context.tbl_ictams_ltborrowed.Where(x => x.OwnerID == laptopBorrowed.OwnerID && x.StatusID == "AC").FirstOrDefaultAsync();
+            if (findOwner != null)
             {
-                TempData["AlertMessage"] = "Owner is already exists!";
+                TempData["AlertMessage"] = "Owner has already borrowed a laptop!";
                 return RedirectToAction("Create");
             }
 
-            var paramCode = await _context.tbl_ictams_parameters
-                    .Where(p => p.parm_code == "ltbr_id")
-                    .MaxAsync(p => p.parm_value);
+            // Generate a new borrowed ID and update status
+            var paramCode = await _context.tbl_ictams_parameters.Where(p => p.parm_code == "ltbr_id").MaxAsync(p => p.parm_value);
             var newparamCode = paramCode + 1;
 
-            var param = await _context.tbl_ictams_parameters
-                .FirstOrDefaultAsync(p => p.parm_code == "ltbr_id");
-            param.parm_value = newparamCode;
 
             var ucode = HttpContext.Session.GetString("UserName");
-            laptopBorrowed.BorrowedID = "LTB" + newparamCode.ToString().PadLeft(12, '0'); ;
+            laptopBorrowed.BorrowedID = "LTB" + newparamCode.ToString().PadLeft(12, '0');
+            laptopBorrowed.ComputerName = laptopBorrowed.ComputerName.ToUpper();
             laptopBorrowed.DateBorrow = DateTime.Now;
-            laptopBorrowed.CreatedBy = ucode;
-            laptopBorrowed.Remark = laptopBorrowed.Remark.ToUpper();
             laptopBorrowed.DateCreated = DateTime.Now;
-            laptopBorrowed.StatusID = "AC";
+            laptopBorrowed.Remark = laptopBorrowed.Remark.ToUpper();
+            laptopBorrowed.CreatedBy = ucode;
+            laptopBorrowed.StatusID = "AC";  // Active
+
+            var allocQuantity = await _context.tbl_ictams_laptopinv.Where(a => a.laptoptinvCode == laptopBorrowed.UnitID).MaxAsync(a => a.AllocatedNo);
+            var newallocQuantity = allocQuantity + 1;
+            var inv_alloc = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(a => a.laptoptinvCode == laptopBorrowed.UnitID);
+            inv_alloc.AllocatedNo = newallocQuantity;
+
+            var inv_details = await _context.tbl_ictams_laptopinvdetails.FirstOrDefaultAsync(a => a.SerialCode == laptopBorrowed.SerialNumber);
+            inv_details.LTStatus = "AC";
+            inv_details.DeployedDate = DateTime.Now;
 
             _context.Add(laptopBorrowed);
-                await _context.SaveChangesAsync();
-            // ...
-            TempData["SuccessNotification"] = "Successfully borrow a laptop!";
-            // ...
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessNotification"] = "Successfully borrowed a laptop!";
             return RedirectToAction(nameof(Index));
-
-
         }
+
 
         // GET: LaptopBorroweds/Edit/5
         public async Task<IActionResult> Edit(string id)
@@ -272,26 +275,55 @@ namespace AssetManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            if (id == null)
+            {
+                TempData["AlertMessage"] = "Id not found!";
+                return RedirectToAction(nameof(Index));
+            }
+
             if (_context.tbl_ictams_ltborrowed == null)
             {
-                return Problem("Entity set 'AssetManagementContext.LaptopBorrowed'  is null.");
+                return Problem("Entity set 'AssetManagementContext.LaptopBorrowed' is null.");
             }
+
             var ucode = HttpContext.Session.GetString("UserName");
             var laptopBorrowed = await _context.tbl_ictams_ltborrowed.FindAsync(id);
-            if (laptopBorrowed != null)
+
+            if (laptopBorrowed == null)
             {
-                laptopBorrowed.DateUpdated = DateTime.Now;
-                laptopBorrowed.RTUpdated = ucode;
-                laptopBorrowed.StatusID = "RT";
-                _context.tbl_ictams_ltborrowed.Update(laptopBorrowed);
+                TempData["AlertMessage"] = "Laptop borrow record not found!";
+                return RedirectToAction(nameof(Index));
             }
-            
+
+            laptopBorrowed.DateUpdated = DateTime.Now;
+            laptopBorrowed.RTUpdated = ucode; 
+            laptopBorrowed.StatusID = "RT";  
+            _context.tbl_ictams_ltborrowed.Update(laptopBorrowed);
+
+            var inv_alloc = await _context.tbl_ictams_laptopinv
+                .FirstOrDefaultAsync(a => a.laptoptinvCode == laptopBorrowed.UnitID);
+
+            if (inv_alloc != null)
+            {
+                inv_alloc.AllocatedNo = inv_alloc.AllocatedNo - 1;  
+            }
+
+            var inv_details = await _context.tbl_ictams_laptopinvdetails
+                .FirstOrDefaultAsync(a => a.SerialCode == laptopBorrowed.SerialNumber);
+
+            if (inv_details != null)
+            {
+                inv_details.LTStatus = "AV";      
+                inv_details.DeployedDate = DateTime.Now; 
+            }
+
+            // Save changes to the database
             await _context.SaveChangesAsync();
-            // ...
-            TempData["SuccessNotification"] = "Successfully return a borrowed laptop!";
-            // ...
+
+            TempData["SuccessNotification"] = "Successfully returned the borrowed laptop!";
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool LaptopBorrowedExists(string id)
         {

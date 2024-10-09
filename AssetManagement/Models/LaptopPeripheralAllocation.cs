@@ -31,7 +31,7 @@ namespace AssetManagement.Models
 
         [Column("date_purchased")]
         [DisplayName("DATE PURCHASED")]
-        public DateTime DatePurchased { get; set; }
+        public DateTime? DatePurchased { get; set; }
 
         [Column("age_years" , TypeName = "DECIMAL(10, 2)")]
         [DisplayName("AGE YEARS")]

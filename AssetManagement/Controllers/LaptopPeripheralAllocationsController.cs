@@ -362,7 +362,7 @@ namespace AssetManagement.Controllers
                 inv_alloc.PeripheralAllocation = newallocQuantity;
 
 
-                TimeSpan ageDuration = DateTime.Now - laptopPeripheralAllocation.DatePurchased;
+                TimeSpan ageDuration = (TimeSpan)(DateTime.Now - laptopPeripheralAllocation.DatePurchased);
 
                 int totalMonths = (int)Math.Round(ageDuration.TotalDays / (365.25 / 12), 0);
 
