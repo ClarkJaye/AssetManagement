@@ -16,11 +16,11 @@ namespace AssetManagement.Utility
             _context = context;
         }
 
-        public override  void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var myData1 = HttpContext.Session.GetString("name");
             ViewBag.showprofile = myData1;
-              var myData2 = HttpContext.Session.GetString("profilename");
+            var myData2 = HttpContext.Session.GetString("profilename");
             ViewBag.showprofilename = myData2;
             int? userProfile = HttpContext.Session.GetInt32("UserProfile");
 
@@ -79,65 +79,65 @@ namespace AssetManagement.Utility
                     })
                     .ToList(), "Value", "Text");
             }
-			// CATEGORY LAPTOP
-			if (userProfile.HasValue)
-			{
-				ViewData["OpenAccessModulesC5"] = new SelectList(_context.tbl_ictams_profileaccess
-					.Include(pa => pa.Module)
-					.Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 5 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
-					.Select(pa => new SelectListItem
-					{
-						Value = pa.Module.ModuleId.ToString(),
-						Text = pa.Module.ModuleTitle
-					})
-					.ToList(), "Value", "Text");
-			}
-			// CATEGORY PERIPHERAL
-			if (userProfile.HasValue)
-			{
-				ViewData["OpenAccessModulesC6"] = new SelectList(_context.tbl_ictams_profileaccess
-					.Include(pa => pa.Module)
-					.Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 6 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
-					.Select(pa => new SelectListItem
-					{
-						Value = pa.Module.ModuleId.ToString(),
-						Text = pa.Module.ModuleTitle
-					})
-					.ToList(), "Value", "Text");
-			}
-			// CATEGORY DESKTOP
-			if (userProfile.HasValue)
-			{
-				ViewData["OpenAccessModulesC7"] = new SelectList(_context.tbl_ictams_profileaccess
-					.Include(pa => pa.Module)
-					.Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 7 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
-					.Select(pa => new SelectListItem
-					{
-						Value = pa.Module.ModuleId.ToString(),
-						Text = pa.Module.ModuleTitle
-					})
-					.ToList(), "Value", "Text");
-			}
-			// CATEGORY MONITOR
-			if (userProfile.HasValue)
-			{
-				ViewData["OpenAccessModulesC8"] = new SelectList(_context.tbl_ictams_profileaccess
-					.Include(pa => pa.Module)
-					.Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 8 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
-					.Select(pa => new SelectListItem
-					{
-						Value = pa.Module.ModuleId.ToString(),
-						Text = pa.Module.ModuleTitle
-					})
-					.ToList(), "Value", "Text");
-			}
+            // CATEGORY LAPTOP
+            if (userProfile.HasValue)
+            {
+                ViewData["OpenAccessModulesC5"] = new SelectList(_context.tbl_ictams_profileaccess
+                    .Include(pa => pa.Module)
+                    .Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 5 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
+                    .Select(pa => new SelectListItem
+                    {
+                        Value = pa.Module.ModuleId.ToString(),
+                        Text = pa.Module.ModuleTitle
+                    })
+                    .ToList(), "Value", "Text");
+            }
+            // CATEGORY PERIPHERAL
+            if (userProfile.HasValue)
+            {
+                ViewData["OpenAccessModulesC6"] = new SelectList(_context.tbl_ictams_profileaccess
+                    .Include(pa => pa.Module)
+                    .Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 6 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
+                    .Select(pa => new SelectListItem
+                    {
+                        Value = pa.Module.ModuleId.ToString(),
+                        Text = pa.Module.ModuleTitle
+                    })
+                    .ToList(), "Value", "Text");
+            }
+            // CATEGORY DESKTOP
+            if (userProfile.HasValue)
+            {
+                ViewData["OpenAccessModulesC7"] = new SelectList(_context.tbl_ictams_profileaccess
+                    .Include(pa => pa.Module)
+                    .Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 7 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
+                    .Select(pa => new SelectListItem
+                    {
+                        Value = pa.Module.ModuleId.ToString(),
+                        Text = pa.Module.ModuleTitle
+                    })
+                    .ToList(), "Value", "Text");
+            }
+            // CATEGORY MONITOR
+            if (userProfile.HasValue)
+            {
+                ViewData["OpenAccessModulesC8"] = new SelectList(_context.tbl_ictams_profileaccess
+                    .Include(pa => pa.Module)
+                    .Where(pa => pa.OpenAccess == "Y" && pa.Module.ModuleCategory == 8 && pa.ProfileId == userProfile.Value && pa.Module.ModuleStatus == "AC")
+                    .Select(pa => new SelectListItem
+                    {
+                        Value = pa.Module.ModuleId.ToString(),
+                        Text = pa.Module.ModuleTitle
+                    })
+                    .ToList(), "Value", "Text");
+            }
 
-			var ucode = HttpContext.Session.GetString("UserName");
+            var ucode = HttpContext.Session.GetString("UserName");
             if (ucode != null)
             {
                 ViewData["myStore"] = new SelectList(_context.tbl_user_stores
                     .Include(pa => pa.Store)
-                    .Where(pa => pa.UserCode == ucode )
+                    .Where(pa => pa.UserCode == ucode)
                     .Select(pa => new SelectListItem
                     {
                         Value = pa.Store.Store_code.ToString(),
@@ -318,7 +318,7 @@ namespace AssetManagement.Utility
         {
             var ucode = HttpContext.Session.GetString("UserName");
 
-            var findPass = await _context.tbl_ictams_users.Where(x=>x.UserCode == ucode).FirstOrDefaultAsync();
+            var findPass = await _context.tbl_ictams_users.Where(x => x.UserCode == ucode).FirstOrDefaultAsync();
 
             var PasswordIsCorrect = BCrypt.Net.BCrypt.Verify("1234", findPass.UserPassword);
             if (PasswordIsCorrect)

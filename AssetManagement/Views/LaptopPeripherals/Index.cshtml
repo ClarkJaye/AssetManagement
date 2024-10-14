@@ -36,16 +36,43 @@
     <!-- Total -->
     <div class="report-view d-flex flex-column justify-content-end">
         <div class="report-item">
-            <span class="report-label">Total:</span>
-            <span class="report-value">@ViewBag.TotalPeripherals</span>
+            <span class="report-label">Total Peripherals:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalPeripherals != null)
+                {
+                    <text>@ViewBag.TotalPeripherals</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
         <div class="report-item">
-            <span class="report-label">Total <span class="text-success">Available</span>:</span>
-            <span class="report-value">@ViewBag.TotalAvailablePer</span>
+            <span class="report-label">Total <span class="text-success">Available</span> Peripherals:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalAvailablePer != null)
+                {
+                    <text>@ViewBag.TotalAvailablePer</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
         <div class="report-item">
-            <span class="report-label">Total <span class="text-danger">Not Available</span>:</span>
-            <span class="report-value">@ViewBag.TotalAllocatedPer</span>
+            <span class="report-label">Total <span class="text-danger">Not Available</span> Peripherals:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalAllocatedPer != null)
+                {
+                    <text>@ViewBag.TotalAllocatedPer</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
     </div>
 </div>

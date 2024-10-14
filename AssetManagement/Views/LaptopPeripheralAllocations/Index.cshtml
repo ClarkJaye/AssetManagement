@@ -20,7 +20,7 @@
         <div class="d-flex align-items-center gap-2">
             <a class="btn btn-outline-red" asp-controller="LaptopPeripheralAllocations" asp-action="Create">
                 <i class="fas fa-pencil-alt"></i>
-                <span>Create New</span>
+                <span>Allocate New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-controller="LaptopPeripheralAllocations" asp-action="Inactive">
                 <span class="fas fa-trash-alt"></span> Show Temporary Deleted
@@ -30,14 +30,47 @@
     <!-- Total -->
     <div class="report-view d-flex flex-column justify-content-end">
         <div class="report-item">
-            <span class="report-label">Total <span class="text-success">Active</span> Peripherals :</span>
-            <span class="report-value">@ViewBag.TotalActiveLaptops</span>
+            <span class="report-label">Total Peripherals:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalPer != null)
+                {
+                    <text>@ViewBag.TotalPer</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
         <div class="report-item">
-            <span class="report-label">Total <span class="text-danger">Inactive</span> Peripherals:</span>
-            <span class="report-value">@ViewBag.TotalInactiveLaptops</span>
+            <span class="report-label">Total <span class="text-success">Allocated</span> Peripherals:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalAllocate != null)
+                {
+                    <text>@ViewBag.TotalAllocate</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
+        </div>
+        <div class="report-item">
+            <span class="report-label">Total <span class="text-danger">Not Allocated</span> Peripherals:</span>
+            <span class="report-value">
+                @if (ViewBag.TotalNotAllocate != null)
+                {
+                    <text>@ViewBag.TotalNotAllocate</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
     </div>
+
+
 </div>
 
 <hr />

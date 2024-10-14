@@ -19,11 +19,39 @@ namespace AssetManagement.Controllers
         }
 
 
-        public async Task<IActionResult> UserDepartmentView(string userCODE)
-        {   
-            var assetManagementContext = _context.tbl_ictams_userdept.Include(u => u.Department).Include(u => u.User).ToListAsync();
-            return View(assetManagementContext);
+        public async Task<JsonResult> GetDepartmentsDrop(string userCODE)
+        {
+            // Get the list of department codes the user is already assigned to
+            var userAssignedDepts = await _context.tbl_ictams_userdept
+                .Where(ud => ud.UserCode == userCODE)
+                .Select(ud => ud.DeptCode)
+                .ToListAsync();
+
+            // Get the list of departments the user is already assigned to
+            var availableDepts = await _context.tbl_ictams_department
+                .Where(dept => !userAssignedDepts.Contains(dept.Dept_code) && dept.Dept_status == "AC")
+                .Select(d => new { d.Dept_code, d.Dept_name})
+                .ToListAsync();
+
+            return Json(availableDepts); 
         }
+
+        public async Task<IActionResult> GetUserDepartment(string userCODE)
+        {
+            // Get the list of department codes the user is already assigned to
+            var userAssignedDepts = await _context.tbl_ictams_userdept
+                .Where(ud => ud.UserCode == userCODE)
+                .Select(ud => ud.DeptCode)
+                .ToListAsync();
+
+            // Get the list of departments the user is already assigned to
+            var availableDepts = await _context.tbl_ictams_department
+                .Where(dept => userAssignedDepts.Contains(dept.Dept_code) && dept.Dept_status == "AC")
+                .ToListAsync();
+
+            return PartialView("_UserDepartmentViewPartial", availableDepts);
+        }
+
 
 
         // GET: UserDepartments
@@ -114,7 +142,7 @@ namespace AssetManagement.Controllers
 
 
         // GET: UserDepartments/Create
-        public async Task<IActionResult> Create(string userCODE)
+        public IActionResult Create(string userCODE)
         {
 
             ViewData["DeptCode"] = new SelectList(_context.tbl_ictams_department.Where(x=>x.Dept_status == "AC"), "Dept_code", "Dept_name");

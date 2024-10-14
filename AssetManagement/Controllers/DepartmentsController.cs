@@ -214,7 +214,7 @@ namespace AssetManagement.Controllers
             var userrr = HttpContext.Session.GetString("UserName");
             if (_context.tbl_ictams_department == null)
             {
-                return Problem("Entity set 'AssetManagementContext.Vendor'  is null.");
+                return Problem("Entity set 'AssetManagementContext.Departments'  is null.");
             }
             var dept = await _context.tbl_ictams_department.FindAsync(id);
             if (dept != null)

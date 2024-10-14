@@ -1,5 +1,8 @@
-﻿@using AssetManagement.Models.View_Model;
-@model UserStoreViewModel
+﻿@* @using AssetManagement.Models.View_Model;
+@model UserStoreViewModel *@
+
+@model AssetManagement.Models.UserStore
+
 
 @{
     ViewData["Title"] = "Add User Store";
@@ -14,144 +17,177 @@
     <div class="alert alert-danger">@TempData["ErrorMessage1"]</div>
 }
 
-<style>
-    .table tbody tr {
-        cursor: pointer;
-    }
-
-        .table tbody tr:hover {
-            background: var(--bs-gray-400);
-        }
-
-    .highlighted-row {
-        background: var(--bs-gray-400);
-    }
-</style>
-
-
 <div class="m-4">
-    <h4>Add Store</h4>
+    <h4>Add User Store</h4>
     <hr />
     <div>
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-4" id="leveltable">
-                    <select hidden asp-for="UserStore.UserCode" class="form-control" asp-items="ViewBag.UserCode"></select>
-                    <label class="control-label">USER FULL NAME</label>
-                    <select id="userCode" name="userCODE" class="form-select" asp-items="ViewBag.UserCode">
-
+                    <label class="control-label">USER</label>
+                    <select asp-for="UserCode" class="form-select" asp-items="ViewBag.UserCode">
+                        <option selected disabled>Select User Below</option>
                     </select>
                 </div>
-                <div class="form-group col-md-4" id="partialstoretable">
-                    <label hidden asp-for="UserStore.StoreCode" class="control-label"></label>
-                    <input hidden asp-for="UserStore.StoreCode" class="form-select" />
-                    <label class="control-label"> STORE NAME</label>
-                    <input id="StoreName" class="form-control" />
+                <div class="form-group col-md-4">
+                    <label asp-for="StoreCode" class="control-label">Store Name</label>
+                    <select asp-for="StoreCode" class="form-select">
+                        <option disabled selected>Select Store Below</option>
+                    </select>
                 </div>
 
+              @*   <div class="form-group col-md-4" id="partialstoretable">
+                    <label hidden asp-for="StoreCode" class="control-label"></label>
+                    <input hidden asp-for="StoreCode" class="form-select" />
+                    <label class="control-label"> STORE NAME</label>
+                    <input id="StoreName" class="form-select" />
+                </div> *@
+
                 <div class="form-group mt-4 mb-2 col d-flex align-items-center gap-2">
-                    <input type="submit" value="Create" class="btn btn-outline-red" />
+                    <input type="submit" value="Create" class="btn btn-red" />
                     <a asp-action="Index" asp-controller="UserStores" class="btn btn-outline-secondary">Back to List</a>
                 </div>
             </div>
         </form>
     </div>
-</div>
 
+
+
+    <div class="displaytable mt-4"></div>
+</div>
+@* 
 <div class="m-4">
-    <div class="filterInputs mb-2" style="width: 300px;">
-        <input type="text" id="filterInput" placeholder="Search Store..." class="form-control">
+    <!-- Action Buttons -->
+    <div class="d-flex align-items-center justify-content-end mb-3">
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" id="filterInput" placeholder="Search Store..." class="form-control" style="width: 350px;">
+        </div>
     </div>
 
-    <div class="table-responsive scrollable-container table-container">
-
-        <table class="table custom-fontsize p-4">
+    <div class="table-responsive">
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().Store_code)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().StoreName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().Status)
-                    </th>
+                    <th>@Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().Store_code)</th>
+                    <th>@Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().StoreName)</th>
+                    <th>@Html.DisplayNameFor(model => model.StoreList.FirstOrDefault().Status)</th>
+                </tr>
             </thead>
-            <tbody style="cursor:pointer;">
+            <tbody>
                 @foreach (var item in Model.StoreList)
                 {
-                    <tr onclick="fillFormFields('@item.Store_code', '@item.StoreName') ">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Store_code)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StoreName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
+                    <tr onclick="fillFormFields('@item.Store_code', '@item.StoreName')">
+                        <td>@Html.DisplayFor(modelItem => item.Store_code)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StoreName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StoreStatus)</td> 
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-</div>
+</div> *@
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        function fillFormFields(Store_code, StoreName) {
-            document.getElementById("UserStore_StoreCode").value = Store_code;
-            document.getElementById("StoreName").value = StoreName;
-        }
+        // Set up event listener for UserCode select element
+        $("select[name='UserCode']").change(function () {
+            var userCode = $(this).val();
+            console.log(userCode)
+            $.ajax({
+                url: '@Url.Action("GetStoresDrop", "UserStores")',
+                type: 'GET',
+                data: { userCODE: userCode },
+                success: function (data) {
+                    console.log(data)
+                    $('#StoreCode').empty().append('<option selected disabled>select store</option>');
+                    $.each(data, function (i, item) {
+                        $('#StoreCode').append($('<option>', {
+                            value: item.store_code,
+                            text: item.storeName
+                        }));
+                    });
+                    $('#StoreCode').prop('disabled', false);
+                }
+            });
 
-        // FILTERING
-        $(document).ready(function () {
-            $('#filterInput').on('keyup', function () {
-                var value = $(this).val().toLowerCase();
-                $('tbody tr').filter(function () {
-                    var storeName = $(this).find('td:nth-child(2)').text().toLowerCase();
-                    $(this).toggle(storeName.indexOf(value) > -1);
-                });
+            $.ajax({
+                url: "@Url.Action("GetUserStores", "UserStores")",
+                type: "GET",
+                data: { userCODE: userCode },
+                traditional: true,
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
             });
         });
 
-        // 2 SELECT FUNCTIONALITY
-        $(document).ready(function () {
-            // Get the initial selected value
-            var initialSelectedValue = $("#userCode").val();
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            var rowCount = 0;
 
-            // Set the initial selected value of the hidden select
-            $("select[name='UserStore.UserCode']").val(initialSelectedValue);
+            // Filter table rows
+            $('tbody tr.data-row').each(function () {
+                var isVisible = $(this).text().toLowerCase().indexOf(value) > -1;
+                $(this).toggle(isVisible);
 
-            $("#userCode").change(function () {
-                var selectedValue = $(this).val();
-
-                // Set the selected value of the hidden select
-                $("select[name='UserStore.UserCode']").val(selectedValue);
+                if (isVisible) {
+                    rowCount++;
+                }
             });
+
+            // Show 'No results found' if no rows are visible
+            if (rowCount === 0) {
+                $('#noResultRow').show();
+            } else {
+                $('#noResultRow').hide();
+            }
         });
+        // $(document).on('click', 'tbody tr', function () {
+        //     var Store_code = $(this).find('td:nth-child(1)').text();
+        //     var StoreName = $(this).find('td:nth-child(2)').text();
+        //     fillFormFields(Store_code, StoreName);
+        // });
 
+        // // FILTERING
+        // $(document).ready(function () {
+        //     $('#filterInput').on('keyup', function () {
+        //         var value = $(this).val().toLowerCase();
+        //         $('tbody tr').filter(function () {
+        //             var storeName = $(this).find('td:nth-child(2)').text().toLowerCase();
+        //             $(this).toggle(storeName.indexOf(value) > -1);
+        //         });
+        //     });
+        // });
 
+        // // Handling UserCode dropdown selection and updating the hidden field
+        // $(document).ready(function () {
+        //     var initialSelectedValue = $("#userCode").val();
+        //     $("select[name='UserStore.UserCode']").val(initialSelectedValue);
 
-        //AJAX
-        $(document).ready(function () {
+        //     $("#userCode").change(function () {
+        //         var selectedValue = $(this).val();
+        //         $("select[name='UserStore.UserCode']").val(selectedValue);
+        //     });
+        // });
 
-            $("#userCode").change(function () {
-                var userCode = $(this).val();
+        // // AJAX to reload table data based on user selection
+        // $(document).ready(function () {
+        //     $("#userCode").change(function () {
+        //         var userCode = $(this).val();
 
-                $.ajax({
-                    url: "@Url.Action("UserStoreView","UserStores")",
-                    type: "GET",
-                    data: { userCODE: userCode },
-                    traditional: true,
-                    success: function (res) {
-                        $(".displaytable").html(res);
-                    }
-                });
-            });
-        });
+        //         $.ajax({
+        //             url: "@Url.Action("UserStoreView", "UserStores")",
+        //             type: "GET",
+        //             data: { userCODE: userCode },
+        //             traditional: true,
+        //             success: function (res) {
+        //                 $(".table-responsive").html(res); // Replace the table content with AJAX result
+        //             }
+        //         });
+        //     });
+        // });
     });
 </script>
   

@@ -40,10 +40,13 @@
                         ID
                     </th>
                     <th>
-                        OWNER
+                        SERIAL NUMBER
                     </th>
                     <th>
                         COMPUTER NAME
+                    </th>
+                    <th>
+                        OWNER
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.ReturnType)
@@ -78,10 +81,13 @@
                             @Html.DisplayFor(modelItem => item.LaptopAllocation.AllocId)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LaptopAllocation.OwnerCode)
+                            @Html.DisplayFor(modelItem => item.LaptopAllocation.SerialNumber)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.LaptopAllocation.ComputerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LaptopAllocation.OwnerCode)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ReturnType.Description)

@@ -32,8 +32,41 @@ namespace AssetManagement.Controllers
             }
             var assetManagementContext = await _context.tbl_user_stores.Include(u => u.Store).Include(u => u.User).ToListAsync();
             return View(assetManagementContext);
-            }
+        }
 
+
+        public async Task<JsonResult> GetStoresDrop(string userCODE)
+        {
+            // Get the list of stores that user assigned
+            var userAssigned = await _context.tbl_user_stores
+                .Where(ud => ud.UserCode == userCODE)
+                .Select(ud => ud.StoreCode)
+                .ToListAsync();
+
+            // Get the list of stores that the user is not assigned and order by StoreName A-Z
+            var available = await _context.tbl_ictams_stores
+                .Where(dept => !userAssigned.Contains(dept.Store_code) && dept.StoreStatus == "AC")
+                .Select(d => new { d.Store_code, d.StoreName })
+                .OrderBy(d => d.StoreName)  
+                .ToListAsync();
+
+
+            return Json(available);
+        }
+
+        public async Task<IActionResult> GetUserStores(string userCODE)
+        {
+            var userAssigned = await _context.tbl_user_stores
+                .Where(ud => ud.UserCode == userCODE)
+                .Select(ud => ud.StoreCode)
+                .ToListAsync();
+
+            var available = await _context.tbl_ictams_stores
+                .Where(dept => userAssigned.Contains(dept.Store_code) && dept.StoreStatus == "AC")
+                .ToListAsync();
+
+            return PartialView("_UserStoresViewPartial", available);
+        }
 
 
         // GET: UserStores
@@ -164,16 +197,19 @@ namespace AssetManagement.Controllers
         // USER STORE PARTIAL VIEW
 
         public async Task<IActionResult> PartialStoreView(string userCODE)
-        {   
-            ViewData["UserCode"] = new SelectList(_context.tbl_ictams_users.Where(x => x.UserStatus == "AC"), "UserCode", "UserFullName");
-            var userStore = _context.tbl_ictams_stores.Where(u => u.Status.status_code == "AC").Include(u => u.Status);
+        {
+            //ViewData["UserCode"] = new SelectList(_context.tbl_ictams_users.Where(x => x.UserStatus == "AC"), "UserCode", "UserFullName");
+            //var userStore = _context.tbl_ictams_stores.Where(u => u.Status.status_code == "AC").Include(u => u.Status);
 
-            UserStoreViewModel userStoreViewModel = new()
-            {
-                StoreList = await userStore.ToListAsync()
-            };
+            //UserStoreViewModel userStoreViewModel = new()
+            //{
+            //    StoreList = await userStore.ToListAsync()
+            //};
 
-            return View("PartialStoreView", userStoreViewModel);
+            ViewData["StoreCode"] = new SelectList(_context.tbl_ictams_stores, "Store_code", "Store_code");
+            ViewData["UserCode"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserFullName");
+
+            return View("PartialStoreView");
         }
 
         // GET: UserStores/Delete/5

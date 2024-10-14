@@ -90,7 +90,6 @@
                     }
             </tbody>
         </table>
-
 </div>
 
 
@@ -98,14 +97,11 @@
 
 <script>
     $(document).ready(function () {
-
-
         // Add click event listener to each row in the table
         $('table tbody tr').click(function () {
             // Get the id from the clicked row's data-id attribute
             var id = $(this).data('id');
             var ld = $(this).data('ld');
-
 
             // Remove the 'highlighted-row' class from any other row
             $("tr.highlighted-row").removeClass("highlighted-row");
@@ -114,17 +110,9 @@
             $(this).closest("tr").addClass("highlighted-row");
             $('#oid').val(id);
             $('#odes').val(ld);
-
-
         });
 
-    });
-
-
-
-    //FILTERING
-
-    $(document).ready(function () {
+        //FILTERING
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {

@@ -38,28 +38,25 @@
 
 
     <script>
-        // Initialize DataTables
-        $('.table-datatable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
+        $(document).ready(function () {
+            // Initialize DataTables
+            $('.table-datatable').DataTable({
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: false,
+                responsive: true,
+                columnDefs: [{ targets: [0, 0], orderable: false }],
+                language: {
+                    paginate: {
+                        previous: "Previous", 
+                        next: "Next" 
+                    }
                 }
-            }
+            });
         });
     </script>
 </body>
 </html>
-
-
-@*     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> *@

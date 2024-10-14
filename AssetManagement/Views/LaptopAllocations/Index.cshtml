@@ -4,31 +4,6 @@
     ViewData["Title"] = "Laptop Inventories";
 }
 
-<style>
-    .report-view {
-        text-align: right;
-    }
-
-    .report-item {
-        margin-bottom: 10px;
-    }
-
-    .report-label {
-        font-weight: bold;
-        margin-right: 10px;
-        color: #333;
-    }
-
-    .report-value {
-        font-size: 18px;
-        font-weight: bold;
-        background-color: #fff;
-        padding: 5px 10px;
-        border-radius: 5px;
-        color: green;
-    }
-</style>
-
 
 <div class="m-4 px-1">
     <h4>Laptop Allocation</h4>
@@ -66,7 +41,7 @@
         <div class="report-item">
             <span class="report-label">Total Laptops:</span>
             <span class="report-value">
-                @if (ViewBag.TotalNotAllocLaptops != null)
+                @if (ViewBag.TotalLaptops != null)
                 {
                     <text>@ViewBag.TotalLaptops</text>
                 }
@@ -79,7 +54,7 @@
         <div class="report-item">
             <span class="report-label">Total <span class="text-success">Allocated</span> Laptops:</span>
             <span class="report-value">
-                @if (ViewBag.totalAllocLaps != null)
+                @if (ViewBag.TotalAllocLaptops != null)
                 {
                     <text>@ViewBag.TotalAllocLaptops</text>
                 }

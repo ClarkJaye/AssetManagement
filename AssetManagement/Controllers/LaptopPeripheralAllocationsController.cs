@@ -67,11 +67,15 @@ namespace AssetManagement.Controllers
                 else
                 {
                     await FindStatusLTP();
-                    var totalActiveLaptops = await _context.tbl_ictams_ltperipheralalloc.CountAsync(x => x.PeripheralAllocStatus == "AC");
-                    var totalInactiveLaptops = await _context.tbl_ictams_ltperipheralalloc.CountAsync(x => x.PeripheralAllocStatus == "IN");
 
-                    ViewBag.TotalActiveLaptops = totalActiveLaptops;
-                    ViewBag.TotalInactiveLaptops = totalInactiveLaptops;
+                    var totalPeripherals = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralQty);
+                    var totalActive = await _context.tbl_ictams_ltperipheralalloc.CountAsync(x => x.PeripheralAllocStatus == "AC");
+                    var totalNotAlloc = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralQty - x.PeripheralAllocation);
+
+                    ViewBag.TotalPer = totalPeripherals;
+                    ViewBag.TotalAllocate = totalActive;
+                    ViewBag.TotalNotAllocate = totalNotAlloc;
+
                     var assetManagementContext = _context.tbl_ictams_ltperipheralalloc.Where(l => l.PeripheralAllocStatus == "AC").Include(l => l.CreatedBy).Include(l => l.LaptopPeripheral).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UpdatedBy);
                     return View(await assetManagementContext.ToListAsync());
                 }

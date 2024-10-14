@@ -1,7 +1,7 @@
 ﻿@model PagedList.IPagedList<AssetManagement.Models.UserDepartment>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "User Departments";
 }
 
 
@@ -30,8 +30,8 @@
 <hr />
 
 <div class="m-4">
-    <div class="table-responsive table-container">
-        <table id="userDeptTable" class="table">
+    <div class="table-responsive ">
+        <table class="table table-striped table-datatable">
             <thead>
                 <tr>
                     <th>
@@ -85,29 +85,4 @@
     </script>
 }
 
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Initialize DataTables
-        $('#userDeptTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous",
-                    next: "Next"
-                }
-            }
-        });
-
-    });
-
-
-</script>

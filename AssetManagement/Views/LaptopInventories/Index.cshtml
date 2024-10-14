@@ -5,31 +5,6 @@
 }
 
 
-<style>
-    .report-view {
-        text-align: right;
-    }
-
-    .report-item {
-        margin-bottom: 10px;
-    }
-
-    .report-label {
-        font-weight: bold;
-        margin-right: 10px;
-        color: #333;
-    }
-
-    .report-value {
-        font-size: 18px;
-        font-weight: bold;
-        background-color: #fff;
-        padding: 5px 10px;
-        border-radius: 5px;
-        color: green;
-    }
-</style>
-
 <div class="m-4 px-1">
     <h4>Laptop Inventories</h4>
     @if (TempData["Welcome"] != null)
@@ -55,15 +30,42 @@
     <div class="report-view d-flex flex-column justify-content-end">
         <div class="report-item">
             <span class="report-label">Total Laptops:</span>
-            <span class="report-value">@ViewBag.TotalLaptops</span>
+            <span class="report-value">
+                @if (ViewBag.TotalLaptops != null)
+                {
+                    <text>@ViewBag.TotalLaptops</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
         <div class="report-item">
             <span class="report-label">Total <span class="text-success">Available</span> Laptops:</span>
-            <span class="report-value">@ViewBag.TotalAvailableLaptops</span>
+            <span class="report-value">
+                @if (ViewBag.TotalAvailableLaptops != null)
+                {
+                    <text>@ViewBag.TotalAvailableLaptops</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
         <div class="report-item">
             <span class="report-label">Total <span class="text-danger">Not Available</span> Laptops:</span>
-            <span class="report-value">@ViewBag.TotalAllocatedLaptops</span>
+            <span class="report-value">
+                @if (ViewBag.TotalAllocatedLaptops != null)
+                {
+                    <text>@ViewBag.TotalAllocatedLaptops</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+            </span>
         </div>
     </div>
 </div>

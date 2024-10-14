@@ -1,0 +1,73 @@
+﻿@model IEnumerable<AssetManagement.Models.Store>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+<hr />
+<h4>User Stores Taken</h4>
+
+<!-- Action Buttons -->
+<div class="d-flex align-items-center justify-content-end mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Store Code</th>
+            <th>Store Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var dept in Model)
+            {
+                <tr class="data-row">
+                    <td>@dept.Store_code</td>
+                    <td>@dept.StoreName</td>
+                </tr>
+            }
+
+            <tr id="noResultRow" style="display:none;">
+                <td colspan="2" class="text-center">No results found</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td colspan="2" class="text-center">No data available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            var rowCount = 0;
+
+            // Filter table rows
+            $('tbody tr.data-row').each(function () {
+                var isVisible = $(this).text().toLowerCase().indexOf(value) > -1;
+                $(this).toggle(isVisible);
+
+                if (isVisible) {
+                    rowCount++;
+                }
+            });
+
+            // Show 'No results found' if no rows are visible
+            if (rowCount === 0) {
+                $('#noResultRow').show();
+            } else {
+                $('#noResultRow').hide();
+            }
+        });
+    });
+</script>

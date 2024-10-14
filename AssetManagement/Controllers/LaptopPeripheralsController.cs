@@ -101,16 +101,28 @@ namespace AssetManagement.Controllers
                 else
                 {
                     await FindStatusLTP();
+
                     // Count total laptops
-                    var totallPeripherals = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralQty);
-                    var countAvailPer = await _context.tbl_ictams_ltperipheral.Where(x => x.PeripheralQty > x.PeripheralAllocation && x.PeripheralStatus == "AV").SumAsync(x => x.PeripheralQty - x.PeripheralAllocation);
-                    var totalAllocatedPer = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralAllocation);
+                    var totalLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity);
+
+                    // Count available laptops (where Quantity > AllocatedNo and status is 'AV')
+                    var countAvailLT = await _context.tbl_ictams_laptopinv
+                        .Where(x => x.Quantity > x.AllocatedNo && x.LTStatus == "AV")
+                        .SumAsync(x => x.Quantity - x.AllocatedNo);
+
+                    // Count total allocated laptops
+                    var totalAllocatedLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.AllocatedNo);
+
+                    // Count total laptops
+                    var totalPeripherals = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralQty);
+                    var totalAvailPer = await _context.tbl_ictams_ltperipheral.Where(x => x.PeripheralQty > x.PeripheralAllocation && x.PeripheralStatus == "AV").SumAsync(x => x.PeripheralQty - x.PeripheralAllocation);
+                    var totalNotAvailPer = await _context.tbl_ictams_ltperipheral.SumAsync(x => x.PeripheralAllocation);
 
                     var assetManagementContext = await _context.tbl_ictams_ltperipheral.Where(LP => LP.PeripheralStatus == "AV" || LP.PeripheralStatus == "CO").Include(l => l.Brand).Include(l => l.CreatedBy).Include(l => l.DeviceType).Include(l => l.Status).Include(l => l.UpdatedBy).Include(l => l.Vendor).ToListAsync();
 
-                    ViewBag.TotalPeripherals = totallPeripherals;
-                    ViewBag.TotalAvailablePer = countAvailPer;
-                    ViewBag.TotalAllocatedPer = totalAllocatedPer;
+                    ViewBag.TotalPeripherals = totalPeripherals;
+                    ViewBag.TotalAvailablePer = totalAvailPer;
+                    ViewBag.TotalAllocatedPer = totalNotAvailPer;
                     return View(assetManagementContext);
                 }
             }

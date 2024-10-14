@@ -4,7 +4,6 @@
     ViewData["Title"] = "Create";
 }
 
-
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
@@ -13,16 +12,16 @@
 <div class="m-4">
     <h4>Add User Department</h4>
     <hr />
-        <form asp-action="Create">
+    <form asp-action="Create">
         <div class="row form-group">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-4">
+            <div class="form-group col-md-4">
                 <label asp-for="UserCode" class="control-label">USER FULL NAME</label>
-                <select  asp-for="UserCode" class="form-select" asp-items="ViewBag.UserCode">
+                <select asp-for="UserCode" class="form-select" asp-items="ViewBag.UserCode">
                     <option disabled selected>Select User</option>
                 </select>
             </div>
-            <div class="form-group col-4">
+            <div class="form-group col-md-4">
                 <label asp-for="DeptCode" class="control-label">DEPARTMENT NAME</label>
                 <select asp-for="DeptCode" class="form-select" asp-items="ViewBag.DeptCode">
                     <option disabled selected>Select Department</option>
@@ -30,42 +29,48 @@
             </div>
 
             <div class="form-group mt-4 mb-2 col d-flex align-items-center gap-2">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">Back</a>
+                <input type="submit" value="Create" class="btn btn-red" />
+                <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
             </div>
         </div>
-        </form>
-   
+    </form>
+
+    <div class="displaytable mt-4"></div>
 </div>
 
-<div class="displaytable"></div>
 
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    // 2 SELECT FUNCTIONALITY
     $(document).ready(function () {
-        // Get the initial selected value
-        var initialSelectedValue = $("#userCode").val();
-
-        // Set the initial selected value of the hidden select
-        $("select[name='UserStore.UserCode']").val(initialSelectedValue);
-
-        $("#userCode").change(function () {
-            var selectedValue = $(this).val();
-
-            // Set the selected value of the hidden select
-            $("select[name='UserStore.UserCode']").val(selectedValue);
-        });
-    });
-
-
-    //AJAX
-    $(document).ready(function () {
-
-        $("#userCode").change(function () {
+        // Set up event listener for UserCode select element
+        $("select[name='UserCode']").change(function () {
             var userCode = $(this).val();
 
             $.ajax({
-                url: "@Url.Action("UserDepartmentView","UserDepartments")",
+                url: '@Url.Action("GetDepartmentsDrop", "UserDepartments")',
+                type: 'GET',
+                data: { userCODE: userCode },
+                success: function (data) {
+                    $('#DeptCode').empty().append('<option selected disabled>select department</option>');
+                    $.each(data, function (i, item) {
+                        $('#DeptCode').append($('<option>', {
+                            value: item.dept_code,
+                            text: item.dept_name
+                        }));
+                    });
+                    $('#DeptCode').prop('disabled', false);
+                }
+            });
+
+            $.ajax({
+                url: "@Url.Action("GetUserDepartment", "UserDepartments")",
                 type: "GET",
                 data: { userCODE: userCode },
                 traditional: true,
@@ -74,9 +79,7 @@
                 }
             });
         });
-    });
-</script>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    });
+
+</script>
