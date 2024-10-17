@@ -3,271 +3,136 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-<h4>Desktop Inventory</h4>
-<hr />
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-    if (!string.IsNullOrEmpty(alertMessage))
-    {
-        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
-            @alertMessage
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+@if (@TempData["AlertMessage"] != null)
+{
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
-<script>
-    $(document).ready(function () {
-        // Close the alert after 6 seconds
-        setTimeout(function () {
-            $("#alert").alert("close");
-        }, 5000);
-    });
-</script>
-<div>
-    <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="desktopInvCode" class="control-label"></label>
-                <input asp-for="desktopInvCode" class="form-control" />
-                <span asp-validation-for="desktopInvCode" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="leveltable">
-                <label asp-for="DTLevel" class="control-label"></label>
-                <input asp-for="DTLevel" value="0" class="form-control" id="levelid" hidden />
-                <input class="form-control" id="leveldes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="brandtable">
-                <label asp-for="DTBrand" class="control-label"></label>
-                <input asp-for="DTBrand" value="0" class="form-control" id="brandid" hidden />
-                <input class="form-control" id="branddes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="modeltable">
-                <label asp-for="DTModel" class="control-label"></label>
-                <input asp-for="DTModel" value="0" class="form-control" id="modelid" hidden />
-                <input class="form-control" id="modeldes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="boardclick">
-                <label asp-for="DTMBoard" class="control-label"></label>
-                <input asp-for="DTMBoard" value="0" class="form-control" id="boardid" hidden />
-                <input class="form-control" id="boardes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="cputable">
-                <label asp-for="DTcpu" class="control-label"></label>
-                <input asp-for="DTcpu" value="0" class="form-control" id="cpuid" hidden />
-                <input class="form-control" id="cpudes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="graphicsclick">
-                <label asp-for="DTgraphics" class="control-label"></label>
-                <input asp-for="DTgraphics" value="0" class="form-control" id="graphicsid" hidden />
-                <input class="form-control" id="graphicsdes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="harddisktable">
-                <label asp-for="DTHardisk" class="control-label"></label>
-                <input asp-for="DTHardisk" value="0" class="form-control" id="hdid" hidden />
-                <input class="form-control" id="hddes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="memorytable">
-                <label asp-for="DTMemory" class="control-label"></label>
-                <input asp-for="DTMemory" value="0" class="form-control" id="mid" hidden />
-                <input class="form-control" id="mdes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="ostable">
-                <label asp-for="DTOS" class="control-label"></label>
-                <input asp-for="DTOS" value="0" class="form-control" id="osid" hidden />
-                <input class="form-control" id="osdes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="AllocatedNo" class="control-label"></label>
-                <input asp-for="AllocatedNo" value="0" class="form-control" />
-                <span asp-validation-for="AllocatedNo" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" style="margin-top: 23px;">
-                <input type="submit" value="Create" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index">BACK</a>
-            </div>
-        </div>
-    </form>
-</div>
+@if (@TempData["SuccessNotification"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessNotification"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
-<div class="displaytable">
+<div class="m-4">
+    <h4>Add New</h4>
+    <hr />
+    <div>
+        <form asp-action="Create">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Hidden field for desktopInvCode -->
+                <div class="form-group col-md-2 mb-3" hidden>
+                    <label asp-for="desktopInvCode" class="control-label"></label>
+                    <input asp-for="desktopInvCode" class="form-control" />
+                    <span asp-validation-for="desktopInvCode" class="text-danger"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" placeholder="Enter Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <!-- Level -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTLevel" class="control-label"></label>
+                    <select asp-for="DTLevel" class="form-select" asp-items="ViewBag.DTLevel">
+                        <option selected disabled>select level</option>
+                    </select>
+                    <span asp-validation-for="DTLevel" class="text-danger"></span>
+                </div>
+                <!-- Brand -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTBrand" class="control-label"></label>
+                    <select asp-for="DTBrand" class="form-select" asp-items="ViewBag.DTBrand">
+                        <option selected disabled>select brand</option>
+                    </select>
+                    <span asp-validation-for="DTBrand" class="text-danger"></span>
+                </div>
+                <!-- Model -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTModel" class="control-label"></label>
+                    <select asp-for="DTModel" class="form-select" asp-items="ViewBag.DTModel">
+                        <option selected disabled>select model</option>
+                    </select>
+                    <span asp-validation-for="DTModel" class="text-danger"></span>
+                </div>
+                <!-- MainBoard -->
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="DTMBoard" class="control-label"></label>
+                    <select asp-for="DTMBoard" class="form-select" asp-items="ViewBag.DTMBoard">
+                        <option selected disabled>select main board</option>
+                    </select>
+                    <span asp-validation-for="DTMBoard" class="text-danger"></span>
+                </div>
+                <!-- CPU -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTcpu" class="control-label"></label>
+                    <select asp-for="DTcpu" class="form-select" asp-items="ViewBag.DTcpu">
+                        <option selected disabled>select cpu</option>
+                    </select>
+                    <span asp-validation-for="DTcpu" class="text-danger"></span>
+                </div>
+                <!-- Graphics -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTgraphics" class="control-label"></label>
+                    <select asp-for="DTgraphics" class="form-select" asp-items="ViewBag.DTgraphics">
+                        <option selected disabled>select graphics</option>
+                    </select>
+                    <span asp-validation-for="DTgraphics" class="text-danger"></span>
+                </div>
+                <!-- Harddisk -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTHardisk" class="control-label"></label>
+                    <select asp-for="DTHardisk" class="form-select" asp-items="ViewBag.DTHardisk">
+                        <option selected disabled>select hard disk</option>
+                    </select>
+                    <span asp-validation-for="DTHardisk" class="text-danger"></span>
+                </div>
+                <!-- Memory -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTMemory" class="control-label"></label>
+                    <select asp-for="DTMemory" class="form-select" asp-items="ViewBag.DTMemory">
+                        <option selected disabled>select memory</option>
+                    </select>
+                    <span asp-validation-for="DTMemory" class="text-danger"></span>
+                </div>
+                <!-- OS -->
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTOS" class="control-label"></label>
+                    <select asp-for="DTOS" class="form-select" asp-items="ViewBag.DTOS">
+                        <option selected disabled>select os</option>
+                    </select>
+                    <span asp-validation-for="DTOS" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-3" hidden>
+                    <label asp-for="AllocatedNo" class="control-label"></label>
+                    <input asp-for="AllocatedNo" class="form-control" />
+                    <span asp-validation-for="AllocatedNo" class="text-danger"></span>
+                </div>
+                <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Create" class="btn btn-red createbtn" />
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="displaytable">
+    </div>
+
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
-
-<script>
-    $(document).ready(function () {
-
-        $("#leveltable").click(function () {
-
-            $('#levelid').val(null);
-
-            $('#leveldes').val(null);
-            $.ajax({
-                url: "@Url.Action("LevelPartialView","Levels")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //BRAND
-        $("#brandtable").click(function () {
-
-            $('#brandid').val(null);
-
-            $('#branddes').val(null);
-            $.ajax({
-                url: "@Url.Action("BrandPartialView","Brands")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //Model
-        $("#modeltable").click(function () {
-
-            $('#modelid').val(null);
-
-            $('#modeldes').val(null);
-            $.ajax({
-                url: "@Url.Action("ModelPartialView","Modelss")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //CPU
-        $("#cputable").click(function () {
-
-            $('#cpuid').val(null);
-
-            $('#cpudes').val(null);
-            $.ajax({
-                url: "@Url.Action("CPUPartialView","CPUs")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //Hardisk
-        $("#harddisktable").click(function () {
-
-            $('#hdid').val(null);
-
-            $('#hddes').val(null);
-            $.ajax({
-                url: "@Url.Action("HardDiskPartialView","HardDisks")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //Memory
-        $("#memorytable").click(function () {
-
-            $('#mid').val(null);
-
-            $('#mdes').val(null);
-            $.ajax({
-                url: "@Url.Action("MemoryPartialView","Memories")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //OS
-        $("#ostable").click(function () {
-
-            $('#osid').val(null);
-
-            $('#osdes').val(null);
-            $.ajax({
-                url: "@Url.Action("OSPartialView","OS")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //Graphics Cards
-        $("#graphicsclick").click(function () {
-
-            $('#graphicsid').val(null);
-
-            $('#graphicsdes').val(null);
-            $.ajax({
-                url: "@Url.Action("GraphicsPartialView","GraphicsCards")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //Graphics Cards
-        $("#boardclick").click(function () {
-
-            $('#boardid').val(null);
-
-            $('#boardes').val(null);
-            $.ajax({
-                url: "@Url.Action("MainBoardPartialView","MainBoards")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-    })
-
-</script>

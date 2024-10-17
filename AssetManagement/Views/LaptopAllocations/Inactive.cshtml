@@ -21,8 +21,8 @@
 
     <!-- Table -->
     <div class="mt-4">
-        <div class="table-container table-responsive">
-            <table id="inactiveLaptopAlloTable" class="table table-striped">
+        <div class="table-responsive">
+            <table class="table table-striped table-datatable">
                 <thead>
                     <tr>
                         <th>
@@ -127,7 +127,6 @@
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 
 @if (TempData["SuccessNotification"] != null)
@@ -145,18 +144,5 @@
     </script>
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize DataTables
-        $('#inactiveLaptopAlloTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-        });
-    });
-</script>

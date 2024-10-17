@@ -15,6 +15,10 @@ namespace AssetManagement.Models
         [DisplayName("INVENTORY")]
         public DesktopInventory DesktopInventory { get; set; }
 
+        [Column("computer_name", TypeName = "VARCHAR(30)")]
+        [DisplayName("COMPUTER NAME")]
+        public string? ComputerName { get; set; }
+        
         [Key]
         [Column("unit_tag", TypeName = "VARCHAR(15)")]
         [DisplayName("UNIT TAG")]

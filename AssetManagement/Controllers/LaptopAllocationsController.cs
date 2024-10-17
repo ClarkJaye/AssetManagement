@@ -795,6 +795,8 @@ namespace AssetManagement.Controllers
             ViewData["UserStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
             foreach (string id in selectedIds)
             {
+            var ucode = HttpContext.Session.GetString("UserName");
+
                 var allocationID = await _context.tbl_ictams_laptopalloc.FindAsync(id);
                 if (allocationID != null)
                 {
@@ -812,20 +814,23 @@ namespace AssetManagement.Controllers
                     {
                         laptopInv.AllocatedNo -= 1;
                     }
+                    var InvDetails = await _context.tbl_ictams_laptopinvdetails.FirstOrDefaultAsync(a => a.SerialCode == allocationID.SerialNumber);
+                    InvDetails.UpdatedDate = DateTime.Now;
+                    InvDetails.Updated = ucode;
+                    InvDetails.LTStatus = "AV";
 
                     // Update the profile
-                    var ucode = HttpContext.Session.GetString("UserName");
                     allocationID.AllocUpdated = ucode;
                     allocationID.AllocationStatus = "IN";
                     allocationID.DateUpdated = DateTime.Now;
 
-                    _context.Update(allocationID);
-                    await _context.SaveChangesAsync();
-                    // ...
-                    TempData["SuccessNotification"] = "Successfully deleted!";
-                    // ...
-                    return RedirectToAction(nameof(Index));
                 }
+
+                _context.Update(allocationID);
+                await _context.SaveChangesAsync();
+                // ...
+                TempData["SuccessNotification"] = "Successfully deleted!";
+                // ...
             }
             return RedirectToAction(nameof(Index));
         }

@@ -25,9 +25,19 @@ namespace AssetManagement.Models
         [DisplayName("UNIT TAG")]
         public DesktopInventoryDetail InventoryDetails { get; set; }
 
+        [Column("computer_name", TypeName = "VARCHAR(50)")]
+        [DisplayName("COMPUTER NAME")]
+        public string? ComputerName { get; set; }
+
         [Column("dtborrower_code")]
         [DisplayName("OWNER")]
         public string OwnerID { get; set; }
+
+        [Column("dept_code")]
+        [DisplayName("BORROWER DEPARTMENT")]
+        public int Deptment_Code { get; set; }
+        [ForeignKey("Deptment_Code")]
+        public virtual Department Department { get; set; }
 
         [Column("dtborrowed_status")]
         [DisplayName("STATUS")]
@@ -36,6 +46,15 @@ namespace AssetManagement.Models
         [Column("dtborrowed_date")]
         [DisplayName("DATE BORROWED")]
         public DateTime DateBorrow { get; set; }
+
+        [Column("return_date")]
+        [DisplayName("RETURN DATE")]
+        public DateTime? Return_date { get; set; }
+
+        [Column("expected_return_date")]
+        [DisplayName("EXPECTED RETURN DATE")]
+        public DateTime Expected_return { get; set; }
+
 
         [Column("dtborrowed_remarks")]
         [DisplayName("REMARKS")]

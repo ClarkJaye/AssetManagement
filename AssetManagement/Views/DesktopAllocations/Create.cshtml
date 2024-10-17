@@ -4,88 +4,69 @@
     ViewData["Title"] = "Create";
 }
 
-<style>
+<div class="m-4">
+    <h4>Desktop Allocation</h4>
+    <hr />
+    <div>
+        <form asp-action="Create">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
+                <div class="form-group col-md-2" hidden>
+                    <label asp-for="AllocId" class="control-label"></label>
+                    <input asp-for="AllocId" class="form-control" />
+                    <span asp-validation-for="AllocId" class="text-danger"></span>
+                </div>
 
-    .custom-fontsize {
-        font-size: 11px;
-    }
+                <div class="form-group col-md-2">
+                    <label asp-for="DesktopCode" class="control-label"></label>
+                    <select asp-for="DesktopCode" class="form-select" asp-items="ViewBag.DesktopCode" id="deskCode">
+                        <option selected disabled>Select desktop code</option>
+                    </select>
+                    <span asp-validation-for="DesktopCode" class="text-danger"></span>
+                </div>
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-</style>
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="UnitTag" class="control-label"></label>
+                    <select asp-for="UnitTag" class="form-select" id="unitTagId" disabled>
+                        <option selected disabled>Select unit tag</option>
+                    </select>
+                    <span asp-validation-for="UnitTag" class="text-danger"></span>
+                </div>
 
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-}
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="ComputerName" class="control-label"></label>
+                    <input asp-for="ComputerName" class="form-control" id="computerName" readonly placeholder="Select Code and Unit Tag First" />
+                    <span asp-validation-for="ComputerName" class="text-danger"></span>
+                </div>
 
-@if (!string.IsNullOrEmpty(alertMessage))
-{
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
+
+                <div class="form-group col-md-2 mb-3" id="ownertable">
+                    <label asp-for="OwnerCode" class="control-label"></label>
+                    <input asp-for="OwnerCode" class="form-control" id="oid" hidden required />
+                    <input class="form-select" id="odes" readonly required placeholder="select owner below" />
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="FixedassetTag" class="control-label"></label>
+                    <input asp-for="FixedassetTag" class="form-control" required />
+                    <span asp-validation-for="FixedassetTag" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label for="attform" class="control-label">Attached Form</label>
+                    <input id="attform" class="form-control" type="file" />
+                </div>
+
+                <div class="form-group col-md-2 d-flex align-items-center gap-2">
+                    <input type="submit" value="Create" class="btn btn-outline-red" />
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </form>
     </div>
-}
-
-<h4>Desktop Allocation</h4>
-<hr />
-<div>
-    <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="AllocId" class="control-label"></label>
-                <input asp-for="AllocId" class="form-control" />
-                <span asp-validation-for="AllocId" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="laptable">
-                <label asp-for="DesktopCode" class="control-label"></label>
-                <input asp-for="DesktopCode" class="form-control" id="lapid" hidden />
-                <input class="form-control" id="lapdes" readonly style="background-color: white;" required />
-            </div>
-            <div class="form-group col-2" id="ownertable">
-                <label asp-for="OwnerCode" class="control-label"></label>
-                <input asp-for="OwnerCode" class="form-control" id="oid" hidden required/>
-                <input class="form-control" id="odes" readonly style="background-color: white;" required />
-            </div>
-            <div class="form-group col-2" id="setable">
-                <label asp-for="UnitTag" class="control-label"></label>
-                <input asp-for="UnitTag" readonly class="form-control" id="seid" required style="background-color: white;" required />
-                <span asp-validation-for="UnitTag" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="FixedassetTag" class="control-label"></label>
-                <input asp-for="FixedassetTag" class="form-control" required />
-                <span asp-validation-for="FixedassetTag" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="ComputerName" class="control-label"></label>
-                <input asp-for="ComputerName" class="form-control" required />
-                <span asp-validation-for="ComputerName" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
-            </div>
-        </div>
-    </form>
+    <div class="displaytable"></div>
 </div>
-
-
-<div class="displaytable"></div>
 
 @section Scripts {
     @{
@@ -93,54 +74,96 @@
     }
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 
-        $("#laptable").click(function () {
+        // When the desktop code changes, reset unit tag and computer name fields
+        $("#deskCode").change(function () {
+            var code = $(this).val();
 
-            $('#lapid').val(null);
+            // Clear unit tag and computer name fields
+            $('#unitTagId').empty().append('<option selected disabled>Select unit tag</option>').prop('disabled', true);
+            $('#computerName').val('').prop('readonly', true);
 
-            $('#lapdes').val(null);
-            $.ajax({
-                url: "@Url.Action("DeskInvPartialView","DesktopInventories")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
+            if (code) {
+                // Fetch unit tags for the selected desktop code
+                $.ajax({
+                    url: '@Url.Action("GetUnitNumbers", "DesktopInventories")',
+                    type: 'GET',
+                    data: { deskCode: code },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $.each(data, function (i, item) {
+                                $('#unitTagId').append($('<option>', {
+                                    value: item.unitTag,
+                                    text: item.unitTag
+                                }));
+                            });
+                            $('#unitTagId').prop('disabled', false);
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching unit tags.');
+                    }
+                });
+            }
+        });
 
-        $("#setable").click(function () {
-            $('#seid').val(null);
+        // On unit tag change, update the computer name
+        $("#unitTagId").change(function () {
+            var code = $('#deskCode').val();
+            var utag = $(this).val();
 
-            var laptopCode = $('#lapid').val();
+            if (code && utag) {
+                $.ajax({
+                    url: '@Url.Action("GetComputerName", "DesktopInventories")',
+                    type: 'GET',
+                    data: { deskCode: code, unitTag: utag },
+                    success: function (data) {
+                        $('#computerName').val(data);
+                    },
+                    error: function () {
+                        alert('Error fetching computer name.');
+                    }
+                });
+            }
+        });
 
-            $.ajax({
-                url: "@Url.Action("SeeAllUnitTag", "DesktopInventories")",
-                type: "GET",
-                data: { id: laptopCode },
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-
-        //OWNER
-
+        // Owner partial view
         $("#ownertable").click(function () {
-
-            $('#oid').val(null);
-
-            $('#odes').val(null);
             $.ajax({
-                url: "@Url.Action("DesktopOwnerPartialView","Owners")",
+                url: "@Url.Action("DesktopOwnerPartialView", "Owners")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);
+                },
+                error: function () {
+                    alert('Error loading owner information.');
                 }
-            })
-        })
+            });
+        });
 
-    })
+
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty();  // Clear the content of the display table
+        }
+
+        // Hide the display table when clicking anywhere outside the input fields
+        $(document).click(function (event) {
+            // Check if the clicked element is not within the periptable or ownertable
+            if (!$(event.target).closest('#ownertable, .displaytable').length) {
+                hideTable();  // Hide the display table if clicked outside
+            }
+        });
+
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();  // Hide the table when the 'Esc' key is pressed
+            }
+        });
+
+    });
 </script>

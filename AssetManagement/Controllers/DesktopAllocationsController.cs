@@ -53,11 +53,16 @@ namespace AssetManagement.Controllers
                         return RedirectToAction("ChangePassword", "Users");
                     }
 
-                    var totalActiveLaptops = await _context.tbl_ictams_desktopalloc.CountAsync(x => x.AllocationStatus == "AC");
-                    var totalInactiveLaptops = await _context.tbl_ictams_desktopalloc.CountAsync(x => x.AllocationStatus == "IN");
+                    // Count total laptops
+                    var totalDesk = await _context.DesktopInventory.SumAsync(x => x.Quantity);
+                    var totalAllocLaps = await _context.tbl_ictams_desktopalloc.CountAsync(x => x.AllocationStatus == "AC");
+                    var totalNotAllocLaps = await _context.DesktopInventory.SumAsync(x => x.Quantity - x.AllocatedNo);
 
-                    ViewBag.TotalActiveLaptops = totalActiveLaptops;
-                    ViewBag.TotalInactiveLaptops = totalInactiveLaptops;
+                  
+
+                    ViewBag.TotalDekstop = totalDesk;
+                    ViewBag.TotalAllocatedDesktop = totalAllocLaps;
+                    ViewBag.TotalNotAllocatedDesktop= totalNotAllocLaps;
 
                     var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x=>x.AllocationStatus != "IN")
                         .Include(d => d.Createdby)
@@ -565,9 +570,14 @@ namespace AssetManagement.Controllers
                     {
                         desktopInv.AllocatedNo -= 1;
                     }
+                    var ucode = HttpContext.Session.GetString("UserName");
+
+                    var InvDetails = await _context.tbl_ictams_desktopinvdetails.FirstOrDefaultAsync(a => a.unitTag == allocationID.UnitTag);
+                    InvDetails.UpdatedDate = DateTime.Now;
+                    InvDetails.Updated = ucode;
+                    InvDetails.DTStatus = "AV";
 
                     // Update the profile
-                    var ucode = HttpContext.Session.GetString("UserName");
                     allocationID.AllocUpdated = ucode;
                     allocationID.AllocationStatus = "IN";
                     allocationID.DateUpdated = DateTime.Now;

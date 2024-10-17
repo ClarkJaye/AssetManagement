@@ -342,7 +342,6 @@ namespace AssetManagement.Controllers
         // GET: LaptopInventories/Create
         public IActionResult Create()
         {
-
             ViewData["LTBrand"] = new SelectList(_context.tbl_ictams_brand, "BrandId", "BrandId");
             ViewData["LTcpu"] = new SelectList(_context.tbl_ictams_cpu, "CPUId", "CPUId");
             ViewData["LTCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
@@ -421,7 +420,6 @@ namespace AssetManagement.Controllers
                 return RedirectToAction(nameof(Index));
 
             }
-            return RedirectToAction(nameof(Index));
         }
 
         // GET: LaptopInventories/Edit/5

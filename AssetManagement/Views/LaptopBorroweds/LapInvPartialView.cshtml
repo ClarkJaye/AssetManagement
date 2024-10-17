@@ -22,8 +22,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Description)
                     </th>
-                    <th hidden>
-                        @Html.DisplayNameFor(model => model.Quantity)
+                    <th>
+                      @*   @Html.DisplayNameFor(model => model.Quantity) *@
+                      Available QTY
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.DateCreated)
@@ -69,6 +70,8 @@
             <tbody>
                 @foreach (var item in Model)
                 {
+                    var availableQty = item.Quantity - item.AllocatedNo;
+
                     <tr data-id="@item.laptoptinvCode" data-ld="@item.Description">
                         <td>
                             @Html.DisplayFor(modelItem => item.laptoptinvCode)
@@ -76,8 +79,8 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.Quantity)
+                        <td>
+                            @availableQty
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.DateCreated)
@@ -115,9 +118,17 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
                         </td>
-                        <td>
-                            <a class="btn btn-sm btn-outline-secondary " asp-action="Create" asp-controller="LaptopBorroweds" asp-route-id="@item.laptoptinvCode">BORROW</a>
-                        </td>
+                        @if (availableQty == 0)
+                        {
+                            <td>
+                                <a class="btn btn-sm btn-outline-secondary disabled">BORROW</a>
+                            </td>
+                        }else{
+                            <td>
+                                <a class="btn btn-sm btn-outline-secondary " asp-action="Create" asp-controller="LaptopBorroweds" asp-route-id="@item.laptoptinvCode">BORROW</a>
+                            </td>
+                        }
+                      
                     </tr>
                 }
             </tbody>
@@ -127,10 +138,3 @@
 
 </div>
 
-<script>
-    $(document).ready(function () {
-        $(".btn-delt").click(function () {
-            $(this).closest("form").submit();
-        })
-    });
-</script>

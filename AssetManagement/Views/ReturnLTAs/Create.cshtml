@@ -53,10 +53,9 @@
 <script>
     $(document).ready(function () {
         $("#ownertable").click(function () {
-
             $('#oid').val(null);
-
             $('#odes').val(null);
+
             $.ajax({
                 url: "@Url.Action("ReturnPartialView", "ReturnTypes")",
                 type: "GET",

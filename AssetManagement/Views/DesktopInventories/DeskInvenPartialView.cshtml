@@ -1,0 +1,144 @@
+﻿@model IEnumerable<AssetManagement.Models.DesktopInventory>
+
+@{
+    Layout = null;
+}
+@{
+    ViewData["Title"] = "Index";
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+
+<input type="text" id="filterInput" placeholder="Search...">
+<div class="table-container">
+    <table class="table custom-fontsize p-4">
+        <thead>
+            <tr>
+                <th>
+                    CODE
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.AllocatedNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Level)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Brand)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Model)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MainBoard)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CPU)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GraphicsCard)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HardDisk)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Memory)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OS)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.desktopInvCode" data-ld="@item.Description">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.desktopInvCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.AllocatedNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Level.LevelDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand.BrandDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model.ModelDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MainBoard.BoardDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CPU.CPUDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GraphicsCard.GraphicsDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HardDisk.HDDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Memory.MemoryDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OS.OSDescription)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+            var ld = $(this).data('ld');
+
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#lapid').val(id);
+            $('#lapdes').val(ld);
+
+
+        });
+
+    });
+
+    //FILTERING
+
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+    });
+</script>

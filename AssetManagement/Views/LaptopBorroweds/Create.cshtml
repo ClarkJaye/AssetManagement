@@ -4,7 +4,17 @@
     ViewData["Title"] = "Create";
 }
 
+ 
 <div class="m-4">
+    @if (@TempData["AlertMessage"] != null)
+    {
+        <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["AlertMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+
     <h4>Borrow Laptop</h4>
     <hr />
 
@@ -41,14 +51,16 @@
                 </div>
 
                 <div class="form-group col-md-2 mb-3">
-                    <label asp-for="Department" class="control-label"></label>
-                    <input asp-for="Department" class="form-control" required placeholder="Enter Department"/>
-                    <span asp-validation-for="Department" class="text-danger"></span>
+                    <label asp-for="Deptment_Code" class="control-label"></label>
+                    <select asp-for="Deptment_Code" class="form-select" asp-items="ViewBag.LTDept">
+                        <option selected disabled>Select Department</option>
+                    </select>
+                    <span asp-validation-for="Deptment_Code" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-md-2 mb-3">
                     <label asp-for="Expected_return" class="control-label"></label>
-                    <input asp-for="Expected_return" class="form-control" type="date" required />
+                    <input asp-for="Expected_return" class="form-control" value="@DateTime.Now" required />
                     <span asp-validation-for="Expected_return" class="text-danger"></span>
                 </div>
 
@@ -83,7 +95,7 @@
     $(document).ready(function () { 
         $("#ownertable").click(function () {
             $.ajax({
-                url: "@Url.Action("OwnerPartialView", "Owners")",
+                url: "@Url.Action("OwnerPartialView", "LaptopBorroweds")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);

@@ -36,28 +36,68 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_desktopinvdetails.Where(x=>x.desktopInvCode == id).Include(d => d.Createdby).Include(d => d.Status).Include(d => d.Updatedby).Include(d => d.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
-        // GET: DesktopInventories
-        public async Task<IActionResult> DeskInvPartialView()
+
+
+        // GET: DesktopInventories/DeskInvPartialView
+        public async Task<IActionResult> DeskInvPartialView(string code)
         {
+            if (string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Invalid desktop inventory code.");
+            }
 
-            var assetManagementContext = _context.tbl_ictams_desktopinv
-                .Where(x => x.DTStatus == "AV")
-                .Include(l => l.Brand) 
-                .Include(l => l.CPU) 
-                .Include(l => l.Createdby)
-                .Include(l => l.HardDisk) 
-                .Include(l => l.Level)
-                .Include(l => l.Memory)
-                .Include(l => l.GraphicsCard)
-                .Include(l => l.Model) 
-                .Include(l => l.MainBoard) 
-                .Include(l => l.OS)
-                .Include(l => l.Status)
-                .Include(l => l.Updatedby);
+            var assetManagementContext = _context.tbl_ictams_desktopinvdetails
+                .Where(x => x.desktopInvCode == code && x.DTStatus == "AV")
+                .Include(l => l.Createdby);
 
-            return View(await assetManagementContext.ToListAsync());
-
+            // Return the partial view with the filtered data
+            return PartialView(await assetManagementContext.ToListAsync());
         }
+
+
+        // GET: DesktopInventories/DeskInvenPartialView
+        public async Task<IActionResult> DeskInvenPartialView(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Invalid desktop inventory code.");
+            }
+
+            var assetManagementContext = _context.tbl_ictams_desktopinvdetails
+                .Where(x => x.desktopInvCode == code && x.DTStatus == "AV")
+                .Include(l => l.Createdby);
+
+            // Return the partial view with the filtered data
+            return PartialView(await assetManagementContext.ToListAsync());
+        }
+
+
+
+        public JsonResult GetUnitNumbers(string deskCode)
+        {
+            // Get serial numbers from inventory details that are available and not already allocated
+            var unitTags = _context.tbl_ictams_desktopinvdetails
+                .Where(l => l.desktopInvCode == deskCode && l.DTStatus == "AV")
+                .Where(l => !_context.DesktopAllocation
+                    .Any(alloc => alloc.UnitTag == l.unitTag && alloc.DesktopCode == deskCode && alloc.AllocationStatus != "AC" && alloc.AllocationStatus != "IN"))
+                .Select(l => new { l.unitTag })
+                .ToList();
+
+            return Json(unitTags);
+        }
+
+        public JsonResult GetComputerName(string deskCode, string unitTag)
+        {
+            var computerName = _context.tbl_ictams_desktopinvdetails
+                .Where(l => l.desktopInvCode == deskCode && l.unitTag == unitTag)
+                .Select(l => l.ComputerName)
+                .FirstOrDefault();
+
+            return Json(computerName);
+        }
+
+
+
         // GET: DesktopInventories
         public async Task<IActionResult> seeDetails(string userCODE)
         {
@@ -113,13 +153,21 @@ namespace AssetManagement.Controllers
                     }
 
                     await FindStatus();
-                    var countAvailLT = await _context.tbl_ictams_desktopinv.Where(x => x.Quantity > x.AllocatedNo && x.DTStatus == "AV").SumAsync(x => x.Quantity - x.AllocatedNo);
-                    var totalAllocatedLaptops = await _context.tbl_ictams_desktopinv.SumAsync(x => x.AllocatedNo);
+                    // Count total laptops
+                    var totalDekstop = await _context.tbl_ictams_desktopinv.SumAsync(x => x.Quantity);
+                    // Count available laptops (where Quantity > AllocatedNo and status is 'AV')
+                    var countAvailDT = await _context.tbl_ictams_desktopinv
+                        .Where(x => x.Quantity > x.AllocatedNo && x.DTStatus == "AV")
+                        .SumAsync(x => x.Quantity - x.AllocatedNo);
+
+                    // Count total allocated laptops
+                    var totalAllocatedDT = await _context.tbl_ictams_desktopinv.SumAsync(x => x.AllocatedNo);
 
                     var assetManagementContext = _context.tbl_ictams_desktopinv.Where(x => x.Status.status_code != "IN").Include(d => d.Brand).Include(d => d.CPU).Include(d => d.Createdby).Include(d => d.GraphicsCard).Include(d => d.HardDisk).Include(d => d.Level).Include(d => d.MainBoard).Include(d => d.Memory).Include(d => d.Model).Include(d => d.OS).Include(d => d.Status).Include(d => d.Updatedby);
 
-                    ViewBag.TotalAvailableLaptops = countAvailLT;
-                    ViewBag.TotalAllocatedLaptops = totalAllocatedLaptops;
+                    ViewBag.TotalDekstop = totalDekstop;
+                    ViewBag.TotalAvailableDT = countAvailDT;
+                    ViewBag.TotalAllocatedDT= totalAllocatedDT;
 
                     return View(await assetManagementContext.ToListAsync());
                 }
@@ -248,99 +296,85 @@ namespace AssetManagement.Controllers
         // GET: DesktopInventories/Create
         public IActionResult Create()
         {
-            ViewData["DTBrand"] = new SelectList(_context.tbl_ictams_brand, "BrandId", "BrandId");
-            ViewData["DTcpu"] = new SelectList(_context.tbl_ictams_cpu, "CPUId", "CPUId");
-            ViewData["DTCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["DTHardisk"] = new SelectList(_context.tbl_ictams_hardisk, "HDId", "HDId");
-            ViewData["DTLevel"] = new SelectList(_context.tbl_ictams_level, "LevelId", "LevelId");
-            ViewData["DTMemory"] = new SelectList(_context.tbl_ictams_memory, "MemoryId", "MemoryId");
-            ViewData["DTgraphics"] = new SelectList(_context.tbl_ictams_graphicscard, "GraphicsID", "GraphicsID");
-            ViewData["DTMBoard"] = new SelectList(_context.tbl_ictams_mainboard, "BoardID", "BoardID");
-            ViewData["DTModel"] = new SelectList(_context.tbl_ictams_model, "ModelId", "ModelId");
-            ViewData["DTOS"] = new SelectList(_context.tbl_ictams_os, "OSId", "OSId");
-            ViewData["DTStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
-            ViewData["DTUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
+            PopulateDropDowns();
             return View();
     
-    }
-
-        // POST: DesktopInventories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("desktopinvCode,Description,DTLevel,DTBrand,DTModel,DTMBoard,DTcpu,DTgraphics,DTHardisk,DTMemory,DTOS,Quantity,AllocatedNo,DTStatus,DTCreated,DateCreated,DTUpdated,DateUpdated")] DesktopInventory desktopInventory)
+        public async Task<IActionResult> Create([Bind("desktopInvCode,Description,DTLevel,DTBrand,DTModel,DTMBoard,DTcpu,DTgraphics,DTHardisk,DTMemory,DTOS,Quantity,AllocatedNo,DTStatus,DTCreated,DateCreated,DTUpdated,DateUpdated")] DesktopInventory desktopInventory)
         {
-            if (desktopInventory.DTLevel.Equals(0))
+            // Manual validations for dropdown selections
+            if (desktopInventory.DTLevel == 0)
             {
                 TempData["AlertMessage"] = "Please select a level!";
-                return RedirectToAction("Create");
+                return View(desktopInventory);
             }
-            if (desktopInventory.DTBrand.Equals(0))
+            if (desktopInventory.DTBrand == 0)
             {
                 TempData["AlertMessage"] = "Please select a brand!";
-                return RedirectToAction("Create");
+                return View(desktopInventory);
             }
-            if (desktopInventory.DTcpu.Equals(0))
+            if (desktopInventory.DTcpu == 0)
             {
                 TempData["AlertMessage"] = "Please select a CPU!";
-                return RedirectToAction("Create");
+                return View(desktopInventory);
             }
-            if (desktopInventory.DTModel.Equals(0))
+            if (desktopInventory.DTModel == 0)
             {
                 TempData["AlertMessage"] = "Please select a model!";
-                return RedirectToAction("Create");
+                return View(desktopInventory);
             }
-            if (desktopInventory.DTMemory.Equals(0))
+            if (desktopInventory.DTMemory == 0)
             {
                 TempData["AlertMessage"] = "Please select a memory!";
-                return RedirectToAction("Create");
+                return View(desktopInventory);
             }
-            if (desktopInventory.DTOS.Equals(0))
+            if (desktopInventory.DTOS == 0)
             {
                 TempData["AlertMessage"] = "Please select an OS!";
-                return RedirectToAction("Create");
+                return View(desktopInventory);
             }
-            if (desktopInventory.DTHardisk.Equals(0))
+            if (desktopInventory.DTHardisk == 0)
             {
-                TempData["AlertMessage"] = "Please select a h." +
-                    "ard disk!";
-                return RedirectToAction("Create");
+                TempData["AlertMessage"] = "Please select a hard disk!";
+                return View(desktopInventory);
             }
-            else
-            {
-                var paramCode = await _context.tbl_ictams_parameters.Where(p => p.parm_code == "dt_id").MaxAsync(p => p.parm_value);
-                var newparamCode = paramCode + 1;
-                var param = await _context.tbl_ictams_parameters.FirstOrDefaultAsync(p => p.parm_code == "dt_id");
-                param.parm_value = newparamCode;
 
+            // Generate new desktopInvCode and set other properties
+            var paramCode = await _context.tbl_ictams_parameters.Where(p => p.parm_code == "dt_id").MaxAsync(p => p.parm_value);
+            var newparamCode = paramCode + 1;
+            var param = await _context.tbl_ictams_parameters.FirstOrDefaultAsync(p => p.parm_code == "dt_id");
+            param.parm_value = newparamCode;
 
-                var ucode = HttpContext.Session.GetString("UserName");
-                desktopInventory.desktopInvCode = "DT" + newparamCode.ToString().PadLeft(8, '0');
-                desktopInventory.Description = desktopInventory.Description.ToUpper();
-                desktopInventory.DTCreated = ucode;
-                desktopInventory.DateCreated = DateTime.Now;
-                desktopInventory.DTStatus = "AV";
-                desktopInventory.Quantity = 0;
-                _context.Add(desktopInventory);
-                await _context.SaveChangesAsync();
-                // ...
-                TempData["SuccessNotification"] = "Successfully added a new Desktop to inventory";
-                // ...
-                return RedirectToAction(nameof(Index));
+            var ucode = HttpContext.Session.GetString("UserName");
+            desktopInventory.desktopInvCode = "DT" + newparamCode.ToString().PadLeft(8, '0');
+            desktopInventory.Description = desktopInventory.Description.ToUpper();
+            desktopInventory.DTCreated = ucode;
+            desktopInventory.DateCreated = DateTime.Now;
+            desktopInventory.DTStatus = "AV";
+            desktopInventory.Quantity = 0;
+            desktopInventory.AllocatedNo = 0;
 
-            }
+            _context.Add(desktopInventory);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessNotification"] = "Successfully added a new Desktop to inventory";
             return RedirectToAction(nameof(Index));
- 
         }
+
 
         // GET: DesktopInventories/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.tbl_ictams_desktopinv == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
+
+            // Populate dropdown lists using a helper method
+            PopulateDropDowns();
+
             var desktopInventory = await _context.tbl_ictams_desktopinv
                 .Include(d => d.Brand)
                 .Include(d => d.CPU)
@@ -360,8 +394,10 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
+
             return View(desktopInventory);
         }
+
 
         // POST: DesktopInventories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -380,10 +416,11 @@ namespace AssetManagement.Controllers
                 return RedirectToAction("Edit");
             }
 
+            // Prevent editing if quantity is greater than or equal to 1
             if (desktopInventory1.Quantity >= 1)
             {
-                TempData["AlertMessage"] = "You can't Edit this!";
-                return RedirectToAction("Edit");
+                TempData["AlertMessage"] = "You can't Edit this! It is already allocated";
+                return View(desktopInventory);
             }
 
             try
@@ -422,7 +459,6 @@ namespace AssetManagement.Controllers
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
@@ -438,7 +474,7 @@ namespace AssetManagement.Controllers
                     var status = await _context.tbl_ictams_status.FindAsync(desktopInventoryCode.DTStatus);
                     if (status == null)
                     {
-                        ModelState.AddModelError("", $"Profile status '{desktopInventoryCode.desktopInvCode}' does not exist.");
+                        TempData["AlertMessage"] = $"Status for {desktopInventoryCode.desktopInvCode} does not exist or is invalid.";
                     }
                     if (ltinvExist != null)
                     {
@@ -456,9 +492,7 @@ namespace AssetManagement.Controllers
                         _context.Update(desktopInventoryCode);
                         await _context.SaveChangesAsync();
                         // ...
-                        TempData["SuccessNotification"] = "Successfully deleted!";
-                        // ...
-                        return RedirectToAction(nameof(Index));
+                        TempData["SuccessNotification"] = "Successfully Temporary Deleted!";
                     }
                 }
             }
@@ -474,13 +508,12 @@ namespace AssetManagement.Controllers
                 var desktopInventoryCode = await _context.tbl_ictams_desktopinv.FindAsync(id);
                 if (desktopInventoryCode != null)
                 {
-                    var status = await _context.tbl_ictams_status.FindAsync(desktopInventoryCode.desktopInvCode);
+                    var status = await _context.tbl_ictams_desktopinv.FindAsync(desktopInventoryCode.desktopInvCode);
                     if (status == null)
                     {
-                        ModelState.AddModelError("", $"Profile status '{desktopInventoryCode.desktopInvCode}' does not exist.");
+                        TempData["AlertMessage"] = $"Status for {desktopInventoryCode.desktopInvCode} does not exist or is invalid.";
                     }
-
-                    else
+                    else 
                     {
                         var ucode = HttpContext.Session.GetString("UserName");
                         desktopInventoryCode.DTUpdated = ucode;
@@ -489,14 +522,14 @@ namespace AssetManagement.Controllers
 
                         _context.Update(desktopInventoryCode);
                         await _context.SaveChangesAsync();
-                        // ...
-                        TempData["SuccessNotification"] = "Successfully retrieve data!";
-                        // ...
-                        return RedirectToAction(nameof(Index));
+                        TempData["SuccessNotification"] = $"Successfully retrieved data";
                     }
                 }
+                else
+                {
+                    TempData["AlertMessage"] = $"Desktop Inventory Code {id} not found.!";
+                }
             }
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -547,6 +580,25 @@ namespace AssetManagement.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+
+        // Helper method to populate dropdowns
+        private void PopulateDropDowns()
+        {
+            ViewData["DTLevel"] = new SelectList(_context.tbl_ictams_level, "LevelId", "LevelDescription");
+            ViewData["DTBrand"] = new SelectList(_context.tbl_ictams_brand, "BrandId", "BrandDescription");
+            ViewData["DTModel"] = new SelectList(_context.tbl_ictams_model, "ModelId", "ModelDescription");
+            ViewData["DTMBoard"] = new SelectList(_context.tbl_ictams_mainboard, "BoardID", "BoardDescription");
+            ViewData["DTcpu"] = new SelectList(_context.tbl_ictams_cpu, "CPUId", "CPUDescription");
+            ViewData["DTgraphics"] = new SelectList(_context.tbl_ictams_graphicscard, "GraphicsID", "GraphicsDescription");
+            ViewData["DTHardisk"] = new SelectList(_context.tbl_ictams_hardisk, "HDId", "HDDescription");
+            ViewData["DTMemory"] = new SelectList(_context.tbl_ictams_memory, "MemoryId", "MemoryDescription");
+            ViewData["DTOS"] = new SelectList(_context.tbl_ictams_os, "OSId", "OSDescription");
+
+            ViewData["DTCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
+            ViewData["DTUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
+            ViewData["DTStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
         }
 
         private bool DesktopInventoryExists(string id)

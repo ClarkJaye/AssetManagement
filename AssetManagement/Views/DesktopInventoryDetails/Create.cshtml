@@ -1,107 +1,120 @@
 ﻿@model AssetManagement.Models.DesktopInventoryDetail
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add Desktop Quantity";
+}
+
+@if (@TempData["AlertMessage"] != null)
+{
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="m-4">
+    <h4>Desktop Inventory Detail</h4>
+
+    <hr />
+    <div>
+        <form asp-action="Create">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                @if (ViewBag.Code != null)
+                {
+                    <div class="form-group col-md-2 mb-3">
+                        <label asp-for="desktopInvCode" class="control-label"></label>
+                        <input asp-for="desktopInvCode" value="@ViewBag.Code" readonly hidden />
+                        <input value="@ViewBag.Code" disabled class="form-select" />
+                        <span asp-validation-for="desktopInvCode" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <!-- Dropdown for Desktop Code -->
+                    <div class="form-group col-md-2 mb-3">
+                        <label asp-for="desktopInvCode" class="control-label"></label>
+                        <select asp-for="desktopInvCode" class="form-select" asp-items="ViewBag.DTInvCode" onchange="loadPartialView(this.value)">
+                            <option selected disabled>select desktop code</option>
+                        </select>
+                        <span asp-validation-for="desktopInvCode" class="text-danger"></span>
+                    </div>
+                }
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="unitTag" class="control-label"></label>
+                    <input asp-for="unitTag" class="form-control" placeholder="Enter Unit" required />
+                    <span asp-validation-for="unitTag" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="ComputerName" class="control-label"></label>
+                    <input asp-for="ComputerName" class="form-control" required placeholder="Enter Computer Name" />
+                    <span asp-validation-for="ComputerName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="PO" class="control-label"></label>
+                    <input asp-for="PO" class="form-control" placeholder="Enter PO" required />
+                    <span asp-validation-for="PO" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" placeholder="Enter Unit Price" required />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DTDVendor" class="control-label"></label>
+                    <select asp-for="DTDVendor" class="form-select" asp-items="ViewBag.DTVendor" required>
+                        <option selected disabled>select vendor</option>
+                    </select>
+                    <span asp-validation-for="DTDVendor" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="PurchaseDate" class="control-label">PURCHASE DATE</label>
+                    <input asp-for="PurchaseDate" class="form-control" required />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Create" class="btn btn-red" />
+                    <a class="btn btn-outline-secondary" asp-controller="DesktopInventories" asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="displaytable">
+        <!-- The partial view will be loaded here -->
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
 
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
-
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-
-<h4>Desktop Inventory Detail</h4>
-<hr />
-<div>
-    <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2">
-                <label asp-for="desktopInvCode" class="control-label"></label>
-                <input value="@ViewBag.Code" readonly style="background-color: white;" asp-for="desktopInvCode" class="form-control" />
-                <span asp-validation-for="desktopInvCode" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="unitTag" class="control-label"></label>
-                <input asp-for="unitTag" class="form-control" />
-                <span asp-validation-for="unitTag" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="PO" class="control-label"></label>
-                <input asp-for="PO" class="form-control" />
-                <span asp-validation-for="PO" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="vendortable">
-                <label asp-for="DTDVendor" class="control-label"></label>
-                <input asp-for="DTDVendor" value="0" class="form-control" id="vid" hidden />
-                <input class="form-control" id="vname" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="PurchaseDate" class="control-label"> PURCHASE DATE</label>
-                <input asp-for="PurchaseDate" class="form-control" />
-                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" style="margin-top: 23px;">
-                <input type="submit" value="Save" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-controller="DesktopInventories" asp-action="Index">BACK</a>
-            </div>
-        </div>
-    </form>
-</div>
-
-
-<div class="displaytable">
-</div>
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-
-        //VENDOR
-        $("#vendortable").click(function () {
-
-            $('#vid').val(null);
-
-            $('#vname').val(null);
+    function loadPartialView(desktopInvCode) {
+        if (desktopInvCode) {
             $.ajax({
-                url: "@Url.Action("VendorsPartialView","Vendors")",
+                url: '@Url.Action("DeskInvPartialView", "DesktopInventories")',
                 type: "GET",
+                data: { code: desktopInvCode },
                 success: function (res) {
                     $(".displaytable").html(res);
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
                 }
-            })
-        })
-
-
-    })
-
+            });
+        }
+    }
 </script>

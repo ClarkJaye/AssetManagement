@@ -43,19 +43,24 @@
                 <div class="form-group col-md-2" id="ownertable">
                     <label asp-for="OwnerCode" class="control-label"></label>
                     <input asp-for="OwnerCode" class="form-control" id="oid" hidden />
-                    <input class="form-select" id="odes" required readonly placeholder="Select Owner" />
+                    <input class="form-select" id="odes" readonly placeholder="Select Owner" />
                 </div>
                 <div class="form-group col-md-2">
                     <label asp-for="FixedassetTag" class="control-label"></label>
                     <input asp-for="FixedassetTag" class="form-control" required />
                     <span asp-validation-for="FixedassetTag" class="text-danger"></span>
                 </div>
-
                 <div class="form-group col-md-2" hidden>
                     <label asp-for="AllocationStatus" class="control-label"></label>
                     <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
                     <span asp-validation-for="AllocationStatus" class="text-danger"></span>
                 </div>
+
+                <div class="form-group col-md-2">
+                    <label for="attform" class="control-label">Attached Form</label>
+                    <input id="attform" class="form-control" type="file" />
+                </div>
+
                 <div class="form-group col-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
                     <input type="submit" value="Create" class="btn btn-outline-red" />
                     <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Index">Back to List</a>

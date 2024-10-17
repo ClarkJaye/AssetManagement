@@ -1,0 +1,60 @@
+﻿@using AssetManagement.Models.View_Model;
+@model OwnerViewModel
+
+@{
+    Layout = null;
+}
+
+
+
+<!-- Action Buttons -->
+<div class="d-flex align-items-center justify-content-end mt-5 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
+</div>
+
+<div class="table-responsive" style="cursor: pointer;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Owner ID</th>
+                <th>Owner Name</th>
+                <th>Location</th>
+                <th>Store</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var owner in Model.OwnerList)
+            {
+                <tr data-id="@owner.OwnerCode" data-ld="@owner.OwnerFullName">
+                    <td>@owner.OwnerCode</td>
+                    <td>@owner.OwnerFullName</td>
+                    <td>@owner.Location.Description</td>
+                    <td>@owner.OwnerOffice</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        // Add click event listener to each row in the table
+        $('table tbody tr').click(function () {
+            // Get the id from the clicked row's data-id attribute
+            var id = $(this).data('id');
+            var ld = $(this).data('ld');
+
+            // Remove the 'highlighted-row' class from any other row
+            $("tr.highlighted-row").removeClass("highlighted-row");
+
+            // Add the 'highlighted-row' class to the clicked row
+            $(this).closest("tr").addClass("highlighted-row");
+            $('#oid').val(id);
+            $('#odes').val(ld);
+        });
+    });
+</script>

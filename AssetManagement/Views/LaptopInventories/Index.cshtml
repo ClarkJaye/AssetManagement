@@ -99,7 +99,7 @@
             </div>
         </div>
         <div class="table-container table-responsive">
-            <table id="laptopInvtyTable" class="table table-striped">
+            <table class="table table-striped table-datatable">
                 <thead>
                     <tr>
                         <th>
@@ -295,24 +295,6 @@
             const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
             deleteButtonContainer.classList.toggle('disabled', !isAnyChecked);
         }
-
-        // Initialize DataTables
-        $('#laptopInvtyTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
 
         // Calculate available laptops and update the "Available" column
         $("tbody tr").each(function () {

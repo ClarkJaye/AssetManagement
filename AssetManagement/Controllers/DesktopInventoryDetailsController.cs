@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
 using AssetManagement.Models;
+using AssetManagement.Utility;
 
 namespace AssetManagement.Controllers
 {
-    public class DesktopInventoryDetailsController : Controller
+    public class DesktopInventoryDetailsController : BaseController
     {
         private readonly AssetManagementContext _context;
 
         public DesktopInventoryDetailsController(AssetManagementContext context)
+        : base(context)
         {
             _context = context;
         }
@@ -57,6 +59,8 @@ namespace AssetManagement.Controllers
         public IActionResult Create(string id)
         {
             ViewBag.Code = id;
+            ViewData["DTInvCode"] = new SelectList(_context.tbl_ictams_desktopinv, "desktopInvCode", "desktopInvCode");
+            ViewData["DTVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName");
             return View();
         }
 
@@ -65,21 +69,21 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("desktopInvCode,unitTag,PO,Price,DTDVendor,PurchaseDate,DeployedDate,DTStatus,Created,DateCreated,Updated,UpdatedDate")] DesktopInventoryDetail desktopInventoryDetail)
+        public async Task<IActionResult> Create([Bind("desktopInvCode,unitTag,ComputerName,PO,Price,DTDVendor,PurchaseDate,DeployedDate,DTStatus,Created,DateCreated,Updated,UpdatedDate")] DesktopInventoryDetail desktopInventoryDetail)
         {
             try
             {
-                var findunitTag = await _context.tbl_ictams_desktopinvdetails.Where(x => x.unitTag == desktopInventoryDetail.unitTag)
+                var findunitTag = await _context.tbl_ictams_desktopinvdetails.Where(x => x.desktopInvCode == desktopInventoryDetail.desktopInvCode && x.unitTag == desktopInventoryDetail.unitTag)
                     .FirstOrDefaultAsync();
                 if (findunitTag != null)
                 {
-                    TempData["ErrorNotification"] = "Serial Number already Exist!";
-                    return RedirectToAction("Index", "DesktopInventories");
+                    TempData["ErrorNotification"] = "Unit Tag already Exist!";
+                    return RedirectToAction(nameof(Index));
                 }
                 if (desktopInventoryDetail.DTDVendor.Equals(0))
                 {
                     TempData["ErrorNotification"] = "Vendor is missing,Please Select a Vendor!";
-                    return RedirectToAction("Index", "DesktopInventories");
+                    return RedirectToAction(nameof(Index));
                 }
 
                 var ucode = HttpContext.Session.GetString("UserName");
@@ -87,6 +91,7 @@ namespace AssetManagement.Controllers
                 desktopInventoryDetail.unitTag = desktopInventoryDetail.unitTag.ToUpper();
                 desktopInventoryDetail.PO = desktopInventoryDetail.PO.ToUpper();
                 desktopInventoryDetail.DTStatus = "AV";
+                desktopInventoryDetail.ComputerName = desktopInventoryDetail.ComputerName;
                 desktopInventoryDetail.DateCreated = DateTime.Now;
                 _context.Add(desktopInventoryDetail);
 

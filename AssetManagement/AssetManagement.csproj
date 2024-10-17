@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\DesktopInventories\DeskInvenPartialView.cshtml" />
     <Content Remove="Views\LaptopAllocations\GetSpecs.cshtml" />
   </ItemGroup>
 
@@ -49,6 +50,7 @@
     <None Include="Views\DesktopInventories\Create.cshtml" />
     <None Include="Views\DesktopInventories\Delete.cshtml" />
     <None Include="Views\DesktopInventories\DeletedHistory.cshtml" />
+    <None Include="Views\DesktopInventories\DeskInvenPartialView.cshtml" />
     <None Include="Views\DesktopInventories\DeskInvPartialView.cshtml" />
     <None Include="Views\DesktopInventories\Details.cshtml" />
     <None Include="Views\DesktopInventories\Edit.cshtml" />

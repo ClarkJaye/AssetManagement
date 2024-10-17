@@ -26,7 +26,7 @@
 
 
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>
@@ -166,10 +166,10 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <a class="btn btn-outline-primary btn-sm" asp-controller="InventoryDetails" asp-action="Edit">
+@*                                     <a class="btn btn-outline-primary btn-sm" asp-controller="InventoryDetails" asp-action="Edit" asp-route-id="@item.SerialCode">
                                         <span class="fas fa-pencil-alt"></span> Edit
                                     </a>
-                                    |
+                                    | *@
                                     <form method="post" asp-action="Delete" asp-controller="InventoryDetails" asp-route-id="@item.SerialCode">
                                         <!-- Modal -->
                                         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

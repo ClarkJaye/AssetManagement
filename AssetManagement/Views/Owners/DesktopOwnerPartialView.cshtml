@@ -4,31 +4,17 @@
 @{
     Layout = null;
 }
-@{
-    ViewData["Title"] = "Index";
-}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        height: 100vh;
-    }
-</style>
+<!-- Action Buttons -->
+<div class="d-flex align-items-center justify-content-end mb-4">
+    <div class="d-flex align-items-center gap-2">
+        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    </div>
+</div>
 
-<input type="text" id="filterInput" placeholder="Search...">
-<div class="table-responsive scrollable-container table-container" style="cursor: pointer;">
-    <table class="table">
+<div class="table-responsive" style="cursor: pointer;">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>
@@ -125,16 +111,12 @@
             $(this).closest("tr").addClass("highlighted-row");
             $('#oid').val(id);
             $('#odes').val(ld);
-
-
         });
-
     });
 
 
 
     //FILTERING
-
     $(document).ready(function () {
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();

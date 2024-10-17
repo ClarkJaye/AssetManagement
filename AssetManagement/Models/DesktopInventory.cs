@@ -15,10 +15,12 @@ namespace AssetManagement.Models
 
         [Column("dtinv_description", TypeName = "VARCHAR(150)")]
         [DisplayName("DESCRIPTION")]
+        [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
 
         [Column("dtinv_level")]
         [DisplayName("LEVEL")]
+        [Required(ErrorMessage = "Level is required.")]
         public int DTLevel { get; set; }
 
         [ForeignKey("DTLevel")]
@@ -27,6 +29,7 @@ namespace AssetManagement.Models
 
         [Column("dtinv_brand")]
         [DisplayName("BRAND")]
+        [Required(ErrorMessage = "Brand is required.")]
         public int DTBrand { get; set; }
 
 

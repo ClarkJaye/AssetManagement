@@ -37,9 +37,11 @@ namespace AssetManagement.Models
         [DisplayName("BORROWER NAME")]
         public string OwnerID { get; set; }
 
-        [Column("ltborrower_dept")]
+        [Column("dept_code")]
         [DisplayName("BORROWER DEPARTMENT")]
-        public string Department { get; set; }
+        public int Deptment_Code{ get; set; }
+        [ForeignKey("Deptment_Code")]
+        public virtual Department Department { get; set; }
 
         [Column("ltborrowed_status")]
         [DisplayName("STATUS")]
@@ -51,7 +53,7 @@ namespace AssetManagement.Models
 
         [Column("return_date")]
         [DisplayName("RETURN DATE")]
-        public DateTime Return_date { get; set; }
+        public DateTime? Return_date { get; set; }
 
         [Column("expected_return_date")]
         [DisplayName("EXPECTED RETURN DATE")]

@@ -28,7 +28,7 @@
         <div class="d-flex align-items-center gap-2">
             <a class="btn btn-outline-red" asp-controller="LaptopAllocations" asp-action="Create">
                 <i class="fas fa-pencil-alt"></i>
-                <span>Create New</span>
+                <span>Add New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Inactive">
                 <span class="fas fa-laptop"></span> Show Inactive Laptop
@@ -120,20 +120,19 @@
                                 <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
                             </div>
                         </th>
-                        <th>@Html.DisplayNameFor(model => model.AllocId)</th>
-                        <th>@Html.DisplayNameFor(model => model.Owner)</th>
-                        <th>@Html.DisplayNameFor(model => model.ComputerName)</th>
-                        <th>DESCRIPTION</th>
                         <th>LAPTOP CODE</th>
-                        <th>PO</th>
                         <th>@Html.DisplayNameFor(model => model.SerialNumber)</th>
+                        <th>DESCRIPTION</th>
                         <th>@Html.DisplayNameFor(model => model.FixedassetTag)</th>
+                        <th>@Html.DisplayNameFor(model => model.ComputerName)</th>
+                        <th>PO</th>
+                        <th>@Html.DisplayNameFor(model => model.Owner)</th>
                         <th>@Html.DisplayNameFor(model => model.DateDeployed)</th>
                         <th>@Html.DisplayNameFor(model => model.AllocationStatus)</th>
                         <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
-                        <th>@Html.DisplayNameFor(model => model.DateUpdated)</th>
                         <th>@Html.DisplayNameFor(model => model.Createdby)</th>
-                        <th>@Html.DisplayNameFor(model => model.Updatedby)</th>
+ @*                     <th>@Html.DisplayNameFor(model => model.DateUpdated)</th>
+                        <th>@Html.DisplayNameFor(model => model.Updatedby)</th> *@
                         <th></th>
 
                     </tr>
@@ -145,20 +144,19 @@
                             <td class="text-center">
                                 <input type="checkbox" name="selectedIds" value="@item.AllocId" class="item-checkbox custom-checkbox" />
                             </td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.AllocId)</td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Owner.OwnerCode)</td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.ComputerName)</td>
-                            <td class="editbtn"  id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopInventory.Description)</td>
                             <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopCode)</td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.InventoryDetails.PO)</td>
                             <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.SerialNumber)</td>
+                            <td class="editbtn"  id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopInventory.Description)</td>
                             <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.FixedassetTag)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.ComputerName)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.InventoryDetails.PO)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Owner.OwnerCode)</td>
                             <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateDeployed)</td>
                             <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Status.status_name)</td>
                             <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateCreated)</td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateUpdated)</td>
                             <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Createdby.UserFullName)</td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Updatedby.UserFullName)</td>
+                          @*   <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateUpdated)</td>
+                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Updatedby.UserFullName)</td> *@
                             <td>
                                 <div class="d-flex gap-2">
                                     <a class="btn btn-sm btn-outline-secondary" asp-action="Create" asp-controller="ReturnLTAs" asp-route-id="@item.AllocId">
