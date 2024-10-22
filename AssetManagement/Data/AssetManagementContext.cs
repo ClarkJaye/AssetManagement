@@ -214,6 +214,12 @@ namespace AssetManagement.Data
                 .HasOne(us => us.Department)
                 .WithMany()
                 .HasForeignKey(us => us.DeptCode);
+
+
+            modelBuilder.Entity<DesktopInventoryDetail>()
+                .HasKey(us => new { us.desktopInvCode, us.unitTag });
+
+
         }
     }
 }

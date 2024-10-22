@@ -7,22 +7,24 @@ namespace AssetManagement.Models
     [Table("tbl_ictams_desktopinvdetails")]
     public class DesktopInventoryDetail
     {
+        [Required]
         [Column("dtinv_code", TypeName = "VARCHAR(10)")]
         [DisplayName("DESKTOP CODE")]
-        public string desktopInvCode { get; set; }
+        public string? desktopInvCode { get; set; }
 
         [ForeignKey("desktopInvCode")]
-        [DisplayName("INVENTORY")]
-        public DesktopInventory DesktopInventory { get; set; }
+        //[DisplayName("INVENTORY")]
+        public DesktopInventory? DesktopInventory { get; set; }
+
+        [Required]
+        //[Key]
+        [Column("unit_tag", TypeName = "VARCHAR(15)")]
+        [DisplayName("UNIT TAG")]
+        public string unitTag { get; set; }
 
         [Column("computer_name", TypeName = "VARCHAR(30)")]
         [DisplayName("COMPUTER NAME")]
         public string? ComputerName { get; set; }
-        
-        [Key]
-        [Column("unit_tag", TypeName = "VARCHAR(15)")]
-        [DisplayName("UNIT TAG")]
-        public string unitTag { get; set; }
 
         [Column("po_number", TypeName = "VARCHAR(15)")]
         [DisplayName("PO")]

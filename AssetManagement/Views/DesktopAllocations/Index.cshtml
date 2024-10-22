@@ -141,6 +141,9 @@
                             </div>
                         </th>
                         <th>
+                            Alloc ID
+                        </th>
+                        <th>
                             DESKTOP CODE
                         </th>
                         <th>
@@ -185,6 +188,9 @@
                         <tr>
                             <td class="text-center">
                                 <input type="checkbox" name="selectedIds" value="@item.AllocId" class="item-checkbox custom-checkbox" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AllocId)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.DesktopInventory.desktopInvCode)
@@ -239,12 +245,6 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
                             </td>
-                           @*  <td>
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                            </td> *@
                             <td>
                                 <a class="btn btn-sm btn-outline-secondary" asp-action="Create" asp-controller="ReturnDTAs" asp-route-id="@item.AllocId">Return </a>
                             </td>

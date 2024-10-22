@@ -17,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.PO)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.unitTag)
+                    @Html.DisplayNameFor(model => model.unitTag)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
@@ -52,7 +52,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-             <tr data-id="@item.unitTag">
+                <tr data-id="@item.unitTag">
                 <td>
                     @Html.DisplayFor(modelItem => item.DesktopInventory.desktopInvCode)
                 </td>
@@ -60,7 +60,7 @@
                     @Html.DisplayFor(modelItem => item.PO)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.unitTag)
+                        @Html.DisplayFor(modelItem => item.unitTag)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)

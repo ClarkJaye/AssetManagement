@@ -77,6 +77,10 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Disable submit button after form submission
+        $('form').on('submit', function () {
+            $(this).find(':submit').attr('disabled', 'disabled');
+        });
 
         // When the desktop code changes, reset unit tag and computer name fields
         $("#deskCode").change(function () {

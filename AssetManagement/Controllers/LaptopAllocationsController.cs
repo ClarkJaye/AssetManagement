@@ -506,9 +506,10 @@ namespace AssetManagement.Controllers
 
                     // Count total laptops
                     var totalLaps = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity);
-                    var totalAllocLaps = await _context.tbl_ictams_laptopalloc.CountAsync(x => x.AllocationStatus == "AC");
+                    //var totalAllocLaps = await _context.tbl_ictams_laptopalloc.CountAsync(x => x.AllocationStatus == "AC");
+                    //var totalNotAllocLaps = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity - x.AllocatedNo);
+                    var totalAllocLaps = await _context.tbl_ictams_laptopinvdetails.CountAsync(x => x.LTStatus == "AC");
                     var totalNotAllocLaps = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity - x.AllocatedNo);
-                    //var totalNotAllocLaps = await _context.tbl_ictams_laptopalloc.CountAsync(x => x.AllocationStatus == "IN");
 
                     ViewBag.TotalLaptops = totalLaps;
                     ViewBag.TotalAllocLaptops = totalAllocLaps;
@@ -607,7 +608,7 @@ namespace AssetManagement.Controllers
             && x.AllocationStatus == "AC");
             if (descriptionExists)
             {
-                TempData["ErrorMessage"] = "This serial number already existss!";
+                TempData["ErrorMessage"] = "This serial number already exists!";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -688,7 +689,7 @@ namespace AssetManagement.Controllers
                 var newallocQuantity = allocQuantity + 1;
                 var inv_alloc = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(a => a.laptoptinvCode == laptopAllocation.LaptopCode);
                 inv_alloc.AllocatedNo = newallocQuantity;
-                var inv_details = await _context.tbl_ictams_laptopinvdetails.FirstOrDefaultAsync(a => a.SerialCode == laptopAllocation.SerialNumber);
+                var inv_details = await _context.tbl_ictams_laptopinvdetails.FirstOrDefaultAsync(a => a.laptoptinvCode == laptopAllocation.LaptopCode && a.SerialCode == laptopAllocation.SerialNumber);
                 inv_details.LTStatus = "AC";
                 inv_details.DeployedDate = DateTime.Now;
 

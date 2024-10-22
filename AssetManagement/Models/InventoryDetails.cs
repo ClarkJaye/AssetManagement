@@ -38,10 +38,6 @@ namespace AssetManagement.Models
 		[DisplayName("VENDOR")]
 		public int LTDVendor { get; set; }
 
-        //[Column("serviceYear")]
-        //[DisplayName("SERVICE YEARS")]
-        //public string? ServiceYear { get; set; }
-
         [ForeignKey("LTDVendor")]
 		[DisplayName("VENDOR")]
 		public Vendor Vendor { get; set; }

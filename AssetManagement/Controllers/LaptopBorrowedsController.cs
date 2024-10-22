@@ -118,7 +118,7 @@ namespace AssetManagement.Controllers
 
         public async Task<IActionResult> Inactive()
         {
-            var assetManagementContext = _context.tbl_ictams_ltborrowed.Where(x => x.StatusID == "RT").Include(l => l.LaptopInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+            var assetManagementContext = _context.tbl_ictams_ltborrowed.Where(x => x.StatusID == "RT").Include(l => l.LaptopInventory).Include(l => l.Department).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
             return View(await assetManagementContext.ToListAsync());
         }
 

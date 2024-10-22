@@ -1,16 +1,15 @@
 ﻿@model AssetManagement.Models.ReturnLTA
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Return Laptop";
 }
-
 
 <div class="m-4 px-1">
     <h4>Return Laptop Allocation</h4>
     <hr />
 
     <div>
-        <form asp-action="Create">
+        <form asp-action="Create" id="createForm">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-2">
@@ -23,16 +22,14 @@
                     <input asp-for="RTtype" class="form-control" id="oid" hidden />
                     <input class="form-select" id="odes" readonly required placeholder="Select Return Type Below" />
                     <span asp-validation-for="RTtype" class="text-red"></span>
-
                 </div>
                 <div class="form-group col-md-2" hidden>
                     <label asp-for="RTStatus" class="control-label"></label>
                     <select asp-for="RTStatus" class="form-control" asp-items="ViewBag.RTStatus"></select>
                     <span asp-validation-for="RTStatus" class="text-red"></span>
-
                 </div>
-                <div class="form-groupcol-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
-                    <input type="submit" value="Create" class="btn btn-red" />
+                <div class="form-group col-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
+                    <input type="submit" id="createBtn" value="Return" class="btn btn-red" />
                     <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="ReturnLTAs">Back to List</a>
                 </div>
             </div>
@@ -40,9 +37,7 @@
     </div>
 
     <div class="displaytable mt-4"></div>
-
 </div>
-
 
 @section Scripts {
     @{
@@ -52,6 +47,12 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Disable submit button after first click to prevent multiple submissions
+        $('#createForm').submit(function () {
+            $('#createBtn').prop('disabled', true);
+        });
+
+        // Show partial view on click
         $("#ownertable").click(function () {
             $('#oid').val(null);
             $('#odes').val(null);
@@ -63,9 +64,6 @@
                     $(".displaytable").html(res);
                 }
             })
-        })
-
-
-
-    })
+        });
+    });
 </script>

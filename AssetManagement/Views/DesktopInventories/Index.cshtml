@@ -29,19 +29,6 @@
     <!-- Total -->
     <div class="report-view d-flex flex-column justify-content-end">
         <div class="report-item">
-            <span class="report-label">Total Desktops:</span>
-            <span class="report-value">
-                @if (ViewBag.TotalDekstop != null)
-                {
-                    <text>@ViewBag.TotalDekstop</text>
-                }
-                else
-                {
-                    <text>0</text>
-                }
-            </span>
-        </div>
-        <div class="report-item">
             <span class="report-label">Total <span class="text-success">Available</span> Desktops:</span>
             <span class="report-value">
                 @if (ViewBag.TotalAvailableDT != null)
@@ -149,21 +136,19 @@
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.OS)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Createdby)
-                        </th>
+                        </th>           
                         <th>
                             @Html.DisplayNameFor(model => model.DateCreated)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Updatedby)
+                            @Html.DisplayNameFor(model => model.Createdby)
                         </th>
+                       
                         <th>
                             @Html.DisplayNameFor(model => model.DateUpdated)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Updatedby)
                         </th>
                         <th></th>
                         <th></th>
@@ -221,19 +206,16 @@
                                 @Html.DisplayFor(modelItem => item.OS.OSDescription)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
+                                @Html.DisplayFor(modelItem => item.DateCreated)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Createdby.UserCode)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DateCreated)
+                                @Html.DisplayFor(modelItem => item.DateUpdated)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-outline-red" asp-action="Create" asp-controller="DesktopInventoryDetails" asp-route-id="@item.desktopInvCode">Add</a>

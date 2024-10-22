@@ -20,7 +20,6 @@
     </div>
 }
 
-
 <!-- Action Buttons -->
 <div class="d-flex align-items-center gap-2 mb-2 mx-2 p-4">
     <div class="d-flex align-items-center gap-2">
@@ -33,7 +32,6 @@
         </a>
     </div>
 </div>
-
 
 <hr />
 
@@ -66,7 +64,7 @@
 
         <div class="table-responsive">
 
-            <table id="secOwnerTable" class="table table-striped">
+            <table class="table table-striped table-datatable">
                 <thead>
                     <tr>
                         <th>
@@ -217,27 +215,6 @@
             const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
             deleteButtonContainer.classList.toggle('disabled', !isAnyChecked);
         }
-
-
-
-        // Initialize DataTables
-        $('#secOwnerTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
-
 
         //MODAL
         $(document).on("click", ".editbtn", function () {

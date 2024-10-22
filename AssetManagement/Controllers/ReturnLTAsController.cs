@@ -107,35 +107,51 @@ namespace AssetManagement.Controllers
         {
             var ucode = HttpContext.Session.GetString("UserName");
 
-            var findFirstOwner = await _context.tbl_ictams_laptopalloc.Where(x => x.AllocId == returnLTA.AllocID && x.AllocationStatus == "AC").FirstOrDefaultAsync();
+            // Step 1: Check if the same return allocation has already been processed
+            var existingReturn = await _context.ReturnLTA
+                .FirstOrDefaultAsync(x => x.AllocID == returnLTA.AllocID && x.RTtype == returnLTA.RTtype && x.RTStatus == "AC");
+
+            if (existingReturn != null)
+            {
+                TempData["ErrorNotification"] = "This return has already been processed.";
+                return RedirectToAction(nameof(Index));  // Or return the same view if needed
+            }
+
+            // Step 2: Proceed with the normal logic if no duplicate is found
+            var findFirstOwner = await _context.tbl_ictams_laptopalloc
+                .Where(x => x.AllocId == returnLTA.AllocID && x.AllocationStatus == "AC")
+                .FirstOrDefaultAsync();
+
             if (findFirstOwner != null)
             {
                 findFirstOwner.AllocationStatus = "IN";
             }
 
-            var findRType = await _context.tbl_ictams_returntype.Where(x =>x.TypeID == returnLTA.RTtype).FirstOrDefaultAsync();
-           
+            var findRType = await _context.tbl_ictams_returntype
+                .Where(x => x.TypeID == returnLTA.RTtype)
+                .FirstOrDefaultAsync();
 
-            var allocationID = await _context.tbl_ictams_laptopalloc.FirstOrDefaultAsync(x => x.AllocId == returnLTA.AllocID);
-
+            var allocationID = await _context.tbl_ictams_laptopalloc
+                .FirstOrDefaultAsync(x => x.AllocId == returnLTA.AllocID);
 
             if (findRType != null && findRType.Return_Inv == "N")
-                {
-                    returnLTA.RTStatus = "DM";
-                    allocationID.AllocationStatus = "IN";
-                }
-            else 
             {
-                    
+                returnLTA.RTStatus = "DM";
+                allocationID.AllocationStatus = "IN";
+            }
+            else
+            {
                 if (allocationID != null)
                 {
                     var findLT = allocationID.LaptopCode;
                     var laptopInv = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(a => a.laptoptinvCode == findLT);
                     var InvDetails = await _context.tbl_ictams_laptopinvdetails.FirstOrDefaultAsync(a => a.SerialCode == allocationID.SerialNumber);
+
                     if (laptopInv != null)
                     {
                         laptopInv.AllocatedNo -= 1;
                     }
+
                     allocationID.AllocationStatus = "IN";
                     InvDetails.UpdatedDate = DateTime.Now;
                     InvDetails.Updated = ucode;
@@ -144,30 +160,29 @@ namespace AssetManagement.Controllers
                 }
             }
 
-
+            // Step 3: Update the parameter for unique Return ID
             var paramCode = await _context.tbl_ictams_parameters
-                   .Where(p => p.parm_code == "ltaret_id")
-                   .MaxAsync(p => p.parm_value);
+                .Where(p => p.parm_code == "ltaret_id")
+                .MaxAsync(p => p.parm_value);
             var newparamCode = paramCode + 1;
 
             var param = await _context.tbl_ictams_parameters
                 .FirstOrDefaultAsync(p => p.parm_code == "ltaret_id");
             param.parm_value = newparamCode;
 
-
             returnLTA.ReturnID = "LTAR" + newparamCode.ToString().PadLeft(11, '0');
             returnLTA.DateCreated = DateTime.Now;
             returnLTA.CreatedBy = ucode;
-            
 
+            // Step 4: Save the new return
             _context.Add(returnLTA);
-                await _context.SaveChangesAsync();
-            // ...
-            TempData["SuccessNotification"] = "Successfully return!";
-            // ...
-            return RedirectToAction(nameof(Index));
+            await _context.SaveChangesAsync();
 
+            // Step 5: Success notification and redirect
+            TempData["SuccessNotification"] = "Successfully returned!";
+            return RedirectToAction(nameof(Index));
         }
+
 
 
         public IActionResult CreateSecReturn(string id)
@@ -179,7 +194,7 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> CreateSecReturn([Bind("ReturnID,AllocID,RTtype,RTStatus,CreatedBy,DateCreated,RTUpdated,DateUpdated")] ReturnLTA returnLTA )
         {
             var ucode = HttpContext.Session.GetString("UserName");
-            var findFirstOwner = await _context.tbl_ictams_ltnewalloc   .Where(x => x.AllocId == returnLTA.AllocID && x.SecAllocationStatus == "AC").FirstOrDefaultAsync();
+            var findFirstOwner = await _context.tbl_ictams_ltnewalloc.Where(x => x.AllocId == returnLTA.AllocID && x.SecAllocationStatus == "AC").FirstOrDefaultAsync();
             if (findFirstOwner != null)
             {
                 findFirstOwner.SecAllocationStatus = "IN";
@@ -209,6 +224,7 @@ namespace AssetManagement.Controllers
                     InvDetails.Updated = ucode;
                     allocationID.AllocationStatus = "IN";
                     returnLTA.RTStatus = "AC";
+
                 }
             }
 

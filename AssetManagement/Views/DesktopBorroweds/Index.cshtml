@@ -61,6 +61,12 @@
                         DATE OF BORROWED
                     </th>
                     <th>
+                        EXPECTED RETURN DATE
+                    </th>
+                    <th>
+                        RETURN DATE
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Remark)
                     </th>
                     <th>
@@ -93,6 +99,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.DateBorrow)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Expected_return)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Remark)
@@ -128,11 +137,6 @@
                                 <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Return</a>
 
                             </form>
-                            @* <form asp-action="Delete" method="post" class="delete-form">
-                                <input type="hidden" name="id" value="@item.BorrowedID" />
-                                <a class="btn btn-sm  bg-danger text-white custom-fontsize btn-delt">Return</a>
-
-                            </form> *@
                         </td>
                     </tr>
                 }

@@ -41,7 +41,7 @@ namespace AssetManagement.Controllers
                 .Include(d => d.Status)
                 .Include(d => d.Updatedby)
                 .Include(d => d.Vendor)
-                .FirstOrDefaultAsync(m => m.unitTag == id);
+                .FirstOrDefaultAsync(m => m.UnitTag == id);
             if (desktopInventoryDetail == null)
             {
                 return NotFound();

@@ -54,13 +54,10 @@ namespace AssetManagement.Controllers
                     }
 
                     // Count total laptops
-                    var totalDesk = await _context.DesktopInventory.SumAsync(x => x.Quantity);
-                    var totalAllocLaps = await _context.tbl_ictams_desktopalloc.CountAsync(x => x.AllocationStatus == "AC");
+                    var totalAllocLaps = await _context.tbl_ictams_desktopinvdetails.CountAsync(x => x.DTStatus == "AC");
                     var totalNotAllocLaps = await _context.DesktopInventory.SumAsync(x => x.Quantity - x.AllocatedNo);
 
-                  
 
-                    ViewBag.TotalDekstop = totalDesk;
                     ViewBag.TotalAllocatedDesktop = totalAllocLaps;
                     ViewBag.TotalNotAllocatedDesktop= totalNotAllocLaps;
 
@@ -71,12 +68,12 @@ namespace AssetManagement.Controllers
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
                         .Include(d => d.Updatedby);
+
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
 
             return RedirectToAction("Logout", "Users");
-
         }
 
         public async Task<IActionResult> DisposeDesktop()
@@ -334,134 +331,88 @@ namespace AssetManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AllocId,DesktopCode,OwnerCode,UnitTag,FixedassetTag,ComputerName,DateDeployed,AllocationStatus,AllocCreated,DateCreated,AllocUpdated,DateUpdated")] DesktopAllocation desktopAllocation)
         {
+            // Strong uniqueness check
+            bool allocationExists = await _context.tbl_ictams_desktopalloc
+                .AnyAsync(x => x.UnitTag == desktopAllocation.UnitTag
+                            && x.DesktopCode == desktopAllocation.DesktopCode
+                            && x.AllocationStatus == "AC");
 
-            bool descriptionExists = await _context.tbl_ictams_desktopalloc.AnyAsync(x => x.UnitTag == desktopAllocation.UnitTag
-            && x.AllocationStatus == "AC");
-            if (descriptionExists)
+            if (allocationExists)
             {
-                TempData["ErrorMessage"] = "This serial number already existss!";
+                TempData["ErrorMessage"] = "This desktop allocation already exists!";
                 return RedirectToAction(nameof(Index));
             }
 
             var availableQuantity = await _context.tbl_ictams_desktopinv
-               .Where(x => x.desktopInvCode == desktopAllocation.DesktopCode && x.DTStatus == "AV")
-               .Select(x => x.Quantity)
-               .FirstOrDefaultAsync();
-
-            var allocatedQuantity = await _context.tbl_ictams_desktopalloc.Where(z => z.AllocationStatus == "AC")
-                .CountAsync(x => x.DesktopCode == desktopAllocation.DesktopCode);
-
-            var ownerCodeExist = await _context.tbl_ictams_desktopalloc.Where(x => x.OwnerCode == desktopAllocation.OwnerCode)
+                .Where(x => x.desktopInvCode == desktopAllocation.DesktopCode && x.DTStatus == "AV")
+                .Select(x => x.Quantity)
                 .FirstOrDefaultAsync();
 
+            var allocatedQuantity = await _context.tbl_ictams_desktopalloc
+                .Where(x => x.DesktopCode == desktopAllocation.DesktopCode && x.AllocationStatus == "AC")
+                .CountAsync();
 
-            var ownerExists = await _context.tbl_ictams_desktopalloc.AnyAsync(x => x.OwnerCode == desktopAllocation.OwnerCode && x.DateCreated >= DateTime.Now.AddYears(4));
-
-            var findOwnerInBorrowed = await _context.tbl_ictams_dtborrowed.Where(x => x.OwnerID == desktopAllocation.OwnerCode && x.StatusID == "AC").FirstOrDefaultAsync();
-            if (findOwnerInBorrowed != null)
+            if (availableQuantity >= 1)
             {
-                TempData["AlertMessage"] = "The owner borrowed a desktop. Kindly return it to reallocate!";
-                return RedirectToAction("Create");
-            }
-
-            if (desktopAllocation.DesktopCode != null)
-            {
-                var findLaptop = await _context.tbl_ictams_desktopinv
-                .Where(x => x.desktopInvCode == desktopAllocation.DesktopCode)
-                .FirstOrDefaultAsync();
-
-                var findQuantity = findLaptop.Quantity - findLaptop.AllocatedNo;
-
-                var FindQ = await _context.tbl_ictams_dtborrowed
-                   .Where(z => z.StatusID == "AC")
-                   .CountAsync(x => x.UnitID == desktopAllocation.DesktopCode);
-
-                if (FindQ == findQuantity)
-                {
-                    TempData["AlertMessage"] = "The available desktop has been borrowed!";
-                    return RedirectToAction("Create");
-                }
-            }
-            else
-            {
-                if (desktopAllocation.DesktopCode == null)
-                {
-                    TempData["AlertMessage"] = "The Desktop cannot be null!";
-                    return RedirectToAction("Create");
-                }
-            }
-
-            if (DesktopAllocationExistsComputerName(desktopAllocation.ComputerName))
-            {
-                TempData["AlertMessage"] = "Computer name cannot be duplicated!";
-                return RedirectToAction("Create");
-            }
-
-            if (DesktopAllocationExistsOwner(desktopAllocation.OwnerCode))
-            {
-                TempData["AlertMessage"] = "The Selected Owner is already allocated with a device or Inventory Desktop! Select another Owner to Allocate with! Need to wait after 4 years!";
-                return RedirectToAction("Create");
-            }
-
-            if (desktopAllocation.OwnerCode == null)
-            {
-                TempData["AlertMessage"] = "Owner code cannot be null or Empty!";
-                return RedirectToAction("Create");
-            }
-
-            if (allocatedQuantity < availableQuantity)
-            {
+                // Allocate new device
                 var paramCode = await _context.tbl_ictams_parameters
                     .Where(p => p.parm_code == "dta_id")
                     .MaxAsync(p => p.parm_value);
                 var newparamCode = paramCode + 1;
 
+                // Update parameter for new allocation ID
                 var param = await _context.tbl_ictams_parameters
                     .FirstOrDefaultAsync(p => p.parm_code == "dta_id");
                 param.parm_value = newparamCode;
 
-
-                var allocQuantity = await _context.tbl_ictams_desktopinv.Where(a => a.desktopInvCode == desktopAllocation.DesktopCode)
-                    .MaxAsync(a => a.AllocatedNo);
-                var newallocQuantity = allocQuantity + 1;
+                // Increment allocated number in desktop inventory
                 var inv_alloc = await _context.tbl_ictams_desktopinv.FirstOrDefaultAsync(a => a.desktopInvCode == desktopAllocation.DesktopCode);
-                inv_alloc.AllocatedNo = newallocQuantity;
-                var inv_details = await _context.tbl_ictams_desktopinvdetails
-                    .FirstOrDefaultAsync(a => a.unitTag == desktopAllocation.UnitTag);
-                inv_details.DTStatus = "AC";
-                inv_details.DeployedDate = DateTime.Now;
+                inv_alloc.AllocatedNo = (inv_alloc.AllocatedNo ?? 0) + 1;
 
+                var inv_details = await _context.tbl_ictams_desktopinvdetails.FirstOrDefaultAsync(x => x.desktopInvCode == desktopAllocation.DesktopCode && x.unitTag == desktopAllocation.UnitTag);
 
-                var ucode = HttpContext.Session.GetString("UserName");
-                desktopAllocation.AllocId = "DTA" + newparamCode.ToString().PadLeft(12, '0');
-                desktopAllocation.FixedassetTag = desktopAllocation.FixedassetTag.ToUpper();
-                desktopAllocation.ComputerName = desktopAllocation.ComputerName.ToUpper();
-                desktopAllocation.UnitTag = desktopAllocation.UnitTag.ToUpper();
-                desktopAllocation.AllocCreated = ucode;
-                desktopAllocation.DateCreated = DateTime.Now;
-                desktopAllocation.DateDeployed = DateTime.Now;
-                desktopAllocation.AllocationStatus = "AC";
+                try {
+                    if (inv_details != null)
+                    {
+                        inv_details.DTStatus = "AC";  // Update status only for the correct DesktopCode and UnitTag
+                        inv_details.DeployedDate = DateTime.Now;
+                    }
 
-                _context.Add(desktopAllocation);
-                await _context.SaveChangesAsync();
+                    _context.Update(inv_details);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex) {
+                    var e = ex.Message;
+                }
 
-                // ...
+                
+
+                // Assign allocation data
+                //var ucode = HttpContext.Session.GetString("UserName");
+                //desktopAllocation.AllocId = "DTA" + newparamCode.ToString().PadLeft(12, '0');
+                //desktopAllocation.FixedassetTag = desktopAllocation.FixedassetTag.ToUpper();
+                //desktopAllocation.ComputerName = desktopAllocation.ComputerName.ToUpper();
+                //desktopAllocation.UnitTag = desktopAllocation.UnitTag.ToUpper();
+                //desktopAllocation.AllocCreated = ucode;
+                //desktopAllocation.DateCreated = DateTime.Now;
+                //desktopAllocation.DateDeployed = DateTime.Now;
+                //desktopAllocation.AllocationStatus = "AC";
+
+              
+
+                //_context.Add(desktopAllocation);
+                //await _context.SaveChangesAsync();
+
                 TempData["SuccessNotification"] = "Successfully added a new allocation!";
-                // ...
                 return RedirectToAction(nameof(Index));
             }
-            else if (allocatedQuantity >= availableQuantity)
+            else
             {
                 TempData["AlertMessage"] = "The Desktop inventory you selected has been fully allocated!";
                 return RedirectToAction("Create");
             }
-            if (ownerCodeExist != null)
-            {
-                TempData["AlertMessage"] = "The Selected Owner already allocated a Desktop!";
-                return RedirectToAction("Create");
-            }
-            return RedirectToAction(nameof(Index));
         }
+
 
         // GET: DesktopAllocations/Edit/5
         public async Task<IActionResult> Edit(string id)
