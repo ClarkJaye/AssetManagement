@@ -52,16 +52,19 @@
                             <th>
                                 ID
                             </th>
-                            <th>PO</th>
                             <th>
-                                @Html.DisplayNameFor(model => model.FixedassetTag)
+                                DESKTOP CODE
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.DesktopInventoryDetail)
+                                UNIT TAG
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.ComputerName)
                             </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FixedassetTag)
+                            </th>
+                            <th>PO</th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Owner)
                             </th>
@@ -69,22 +72,13 @@
                                 @Html.DisplayNameFor(model => model.DateDeployed)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.DateCreated)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.DateUpdated)
-                            </th>
-                            <th>
                                 @Html.DisplayNameFor(model => model.Status)
                             </th>
                             <th>
-                                DESKTOP CODE
+                                @Html.DisplayNameFor(model => model.DateCreated)
                             </th>
                             <th>
                                 CREATED BY
-                            </th>
-                            <th>
-                                UPDATED BY
                             </th>
                         </tr>
                     </thead>
@@ -96,16 +90,19 @@
                                     @Html.DisplayFor(modelItem => item.AllocId)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.PO)
+                                    @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.unitTag)
+                                    @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ComputerName)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.FixedassetTag)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ComputerName)
+                                    @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
@@ -114,22 +111,13 @@
                                     @Html.DisplayFor(modelItem => item.DateDeployed)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DateCreated)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DateUpdated)
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.Status.status_name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DesktopInventory.desktopInvCode)
-                                </td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>                            
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
                                 </td>
                                 @*<td>
                                     <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnLTAs" asp-route-id="@item.AllocId">Return </a>

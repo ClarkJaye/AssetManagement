@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DesktopInventory)
+                @Html.DisplayNameFor(model => model.InventoryDetails)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Owner)
@@ -61,7 +61,7 @@
                         @Html.DisplayFor(modelItem => item.Status.status_code)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopInventory.desktopInvCode)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Owner.OwnerCode)

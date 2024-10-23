@@ -69,7 +69,7 @@
                             @Html.DisplayNameFor(model => model.DateCreated)
                         </th>
                         <th hidden>
-                            @Html.DisplayNameFor(model => model.LaptopInventory)
+                            @Html.DisplayNameFor(model => model.LaptopInventoryDetails.LaptopInventory)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Createdby)
@@ -99,7 +99,7 @@
                                     @Html.DisplayFor(modelItem => item.ComputerName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                                    @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.SerialNumber)
@@ -117,7 +117,7 @@
                                     @Html.DisplayFor(modelItem => item.DateCreated)
                                 </td>
                                 <td hidden>
-                                    @Html.DisplayFor(modelItem => item.LaptopInventory.laptoptinvCode)
+                                    @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.laptoptinvCode)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Createdby.UserCode)

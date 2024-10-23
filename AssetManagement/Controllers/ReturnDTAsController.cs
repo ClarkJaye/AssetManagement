@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
 using AssetManagement.Utility;
 using AssetManagement.Models;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 namespace AssetManagement.Controllers
 {
@@ -122,6 +123,18 @@ namespace AssetManagement.Controllers
             {
                 desktopReturn.RTStatus = "DM";
                 allocationID.AllocationStatus = "IN";
+
+                var findLT = allocationID.DesktopCode;
+                var laptopInv = await _context.tbl_ictams_desktopinv.FirstOrDefaultAsync(a => a.desktopInvCode == findLT);
+                var InvDetails = await _context.tbl_ictams_desktopinvdetails.FirstOrDefaultAsync(a => a.desktopInvCode == allocationID.DesktopCode && a.unitTag == allocationID.UnitTag);
+                if (laptopInv != null)
+                {
+                    laptopInv.Quantity -= 1;
+                    laptopInv.AllocatedNo -= 1;
+                }
+                InvDetails.UpdatedDate = DateTime.Now;
+                InvDetails.Updated = ucode;
+                InvDetails.DTStatus = "DM";
             }
             else
             {

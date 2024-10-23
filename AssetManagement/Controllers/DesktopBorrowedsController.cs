@@ -51,7 +51,7 @@ namespace AssetManagement.Controllers
                         return RedirectToAction("ChangePassword", "Users");
                     }
 
-                    var assetManagementContext = _context.DesktopBorrowed.Where(x => x.StatusID=="AC").Include(d => d.DesktopInventory).Include(d => d.InventoryDetails).Include(d => d.Owner).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
+                    var assetManagementContext = _context.DesktopBorrowed.Where(x => x.StatusID=="AC").Include(d => d.InventoryDetails).Include(d => d.Owner).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
@@ -62,7 +62,7 @@ namespace AssetManagement.Controllers
 
         public async Task<IActionResult> Inactive()
         {
-        var assetManagementContext = _context.DesktopBorrowed.Where(x => x.StatusID=="RT").Include(d => d.DesktopInventory).Include(d => d.InventoryDetails).Include(d => d.Owner).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
+        var assetManagementContext = _context.DesktopBorrowed.Where(x => x.StatusID=="RT").Include(d => d.InventoryDetails).Include(d => d.Owner).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
         return View(await assetManagementContext.ToListAsync());
  
 
@@ -99,7 +99,6 @@ namespace AssetManagement.Controllers
             }
 
             var desktopBorrowed = await _context.DesktopBorrowed
-                .Include(d => d.DesktopInventory)
                 .Include(d => d.InventoryDetails)
                 .Include(d => d.Owner)
                 .Include(d => d.Status)
@@ -114,17 +113,46 @@ namespace AssetManagement.Controllers
             return View(desktopBorrowed);
         }
 
-        // GET: DesktopBorroweds/Create
-        public IActionResult Create()
+        //// GET: DesktopBorroweds/Create
+        //public IActionResult Create()
+        //{
+        //    ViewData["UnitID"] = new SelectList(_context.tbl_ictams_desktopinv, "desktopInvCode", "desktopInvCode");
+        //    ViewData["UnitTag"] = new SelectList(_context.tbl_ictams_desktopinvdetails, "unitTag", "unitTag");
+        //    ViewData["OwnerID"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerCode");
+        //    ViewData["StatusID"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
+        //    ViewData["CreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
+        //    ViewData["RTUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
+        //    return View();
+        //}
+
+
+        // GET: LaptopBorroweds/Create
+        public async Task<IActionResult> Create(string id)
         {
-            ViewData["UnitID"] = new SelectList(_context.tbl_ictams_desktopinv, "desktopInvCode", "desktopInvCode");
-            ViewData["UnitTag"] = new SelectList(_context.tbl_ictams_desktopinvdetails, "unitTag", "unitTag");
-            ViewData["OwnerID"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerCode");
-            ViewData["StatusID"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
-            ViewData["CreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["RTUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            return View();
+            var activeDept = await _context.tbl_ictams_department
+                                            .Where(l => l.Dept_status != "IN")
+                                            .ToListAsync();
+
+            ViewData["LTDept"] = new SelectList(activeDept, "Dept_code", "Dept_name");
+
+            var Inventory = await _context.DesktopInventory.FirstOrDefaultAsync(l => l.desktopInvCode == id);
+
+            if (Inventory == null)
+            {
+                return NotFound();
+            }
+
+            var desktop = await _context.tbl_ictams_desktopinvdetails
+                                        .FirstOrDefaultAsync(ld => ld.desktopInvCode == Inventory.desktopInvCode);
+
+            var Borrowed = new DesktopBorrowed
+            {
+                UnitID = desktop?.desktopInvCode ?? string.Empty
+            };
+
+            return View(Borrowed);
         }
+
 
         // POST: DesktopBorroweds/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -242,7 +270,6 @@ namespace AssetManagement.Controllers
             }
 
             var desktopBorrowed = await _context.DesktopBorrowed
-                .Include(d => d.DesktopInventory)
                 .Include(d => d.InventoryDetails)
                 .Include(d => d.Owner)
                 .Include(d => d.Status)

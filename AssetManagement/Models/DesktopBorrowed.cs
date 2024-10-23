@@ -21,8 +21,8 @@ namespace AssetManagement.Models
         [DisplayName("UNIT TAG")]
         public string UnitTag { get; set; }
 
-        [ForeignKey("UnitTag")]
-        [DisplayName("UNIT TAG")]
+        [ForeignKey("UnitID, UnitTag")]   
+        [DisplayName("INVENTORY DETAILS")]
         public DesktopInventoryDetail InventoryDetails { get; set; }
 
         [Column("computer_name", TypeName = "VARCHAR(50)")]
@@ -79,11 +79,6 @@ namespace AssetManagement.Models
         [DisplayName("UPDATED AT")]
         public DateTime? DateUpdated { get; set; }
 
-
-
-        [ForeignKey("UnitID")]
-        [DisplayName("INVENTORY")]
-        public DesktopInventory DesktopInventory { get; set; }
 
         [ForeignKey("OwnerID")]
         [DisplayName("OWNER")]

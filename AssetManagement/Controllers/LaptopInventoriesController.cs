@@ -130,7 +130,7 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> DeletedHistory(string userCODE)
         {
 
-            var assetManagementContext = _context.tbl_ictams_laptopalloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventory).Where(x => x.AllocationStatus == "IN" && x.LaptopCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l=>l.InventoryDetails);
+            var assetManagementContext = _context.tbl_ictams_laptopalloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventoryDetails.LaptopInventory).Where(x => x.AllocationStatus == "IN" && x.LaptopCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l=>l.LaptopInventoryDetails);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -148,7 +148,7 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_ltborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE) ).Include(l => l.LaptopInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_ltborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE) ).Include(l => l.LaptopInventoryDetails.LaptopInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -162,7 +162,7 @@ namespace AssetManagement.Controllers
             ViewBag.Ids = ids;
             ViewBag.Id2 = id2;
 
-            var assetManagementContext = _context.tbl_ictams_laptopalloc.Where(x => x.AllocationStatus == "AC" && x.LaptopCode == id).Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.InventoryDetails);
+            var assetManagementContext = _context.tbl_ictams_laptopalloc.Where(x => x.AllocationStatus == "AC" && x.LaptopCode == id).Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventoryDetails.LaptopInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.LaptopInventoryDetails);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -192,7 +192,7 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = await _context.tbl_ictams_ltnewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecLaptopCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.LaptopAllocation).Include(s => s.LaptopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.InventoryDetails).ToListAsync();
+                var assetManagementContext = await _context.tbl_ictams_ltnewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecLaptopCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.LaptopAllocation).Include(s => s.LaptopInventoryDetails.LaptopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.LaptopInventoryDetails).ToListAsync();
 
                 return View( assetManagementContext);
             }

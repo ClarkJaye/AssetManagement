@@ -1,6 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel;
 
 namespace AssetManagement.Models
@@ -12,21 +10,19 @@ namespace AssetManagement.Models
 		[DisplayName("LAPTOP CODE")]
 		public string laptoptinvCode { get; set; }
 
-
 		[ForeignKey("laptoptinvCode")]
 		[DisplayName("INVENTORY")]
 		public LaptopInventory LaptopInventory { get; set; }
+
+		[Column("serial_number", TypeName = "VARCHAR(30)")]
+		[DisplayName("SERIAL")]
+		public string SerialCode { get; set; }
 
         [Column("computer_name", TypeName = "VARCHAR(30)")]
         [DisplayName("COMPUTER NAME")]
         public string? ComputerName { get; set; }
 
-        [Key]
-		[Column("serial_number", TypeName = "VARCHAR(30)")]
-		[DisplayName("SERIAL")]
-		public string SerialCode { get; set; }
-
-		[Column("po_number", TypeName = "VARCHAR(15)")]
+        [Column("po_number", TypeName = "VARCHAR(15)")]
 		[DisplayName("PO")]
 		public string? PO { get; set; }
 

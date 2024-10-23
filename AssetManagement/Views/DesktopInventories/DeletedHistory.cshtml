@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.FixedassetTag)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DesktopInventoryDetail)
+                @Html.DisplayNameFor(model => model.InventoryDetails)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ComputerName)
@@ -57,10 +57,10 @@
                         @Html.DisplayFor(modelItem => item.AllocId)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.PO)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.unitTag)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FixedassetTag)
@@ -84,7 +84,7 @@
                         @Html.DisplayFor(modelItem => item.Status.status_name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopInventory.desktopInvCode)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Createdby.UserCode)

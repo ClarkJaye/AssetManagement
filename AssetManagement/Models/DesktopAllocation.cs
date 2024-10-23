@@ -13,25 +13,31 @@ namespace AssetManagement.Models
         [DisplayName("ID")]
         public string AllocId { get; set; }
 
+
         [Column("dtinv_code", TypeName = "VARCHAR(10)")]
         [DisplayName("DESKTOP CODE")]
         public string DesktopCode { get; set; }
-
-        [Column("owner_code", TypeName = "VARCHAR(15)")]
-        [DisplayName("OWNER")]
-        public string OwnerCode { get; set; }
 
         [Column("unit_tag", TypeName = "VARCHAR(30)")]
         [DisplayName("UNIT TAG")]
         public string UnitTag { get; set; }
 
-        [Column("fixedasset_tag", TypeName = "VARCHAR(30)")]
-        [DisplayName("ASSET TAG")]
-        public string? FixedassetTag { get; set; }
+        [ForeignKey("DesktopCode, UnitTag")]
+        [DisplayName("INVENTORY DETAILS")]
+        public DesktopInventoryDetail InventoryDetails { get; set; }
 
         [Column("computer_name", TypeName = "VARCHAR(30)")]
         [DisplayName("COMPUTER NAME")]
         public string? ComputerName { get; set; }
+
+
+        [Column("owner_code", TypeName = "VARCHAR(15)")]
+        [DisplayName("OWNER")]
+        public string OwnerCode { get; set; }
+
+        [Column("fixedasset_tag", TypeName = "VARCHAR(30)")]
+        [DisplayName("ASSET TAG")]
+        public string? FixedassetTag { get; set; }
 
         [Column("date_deployed")]
         [DisplayName("DATE  DEPLOYED")]
@@ -57,19 +63,10 @@ namespace AssetManagement.Models
         [DisplayName("UPDATED AT")]
         public DateTime? DateUpdated { get; set; }
 
-
-
-        [ForeignKey("UnitTag")]
-        [DisplayName("UNIT TAG")]
-        public DesktopInventoryDetail DesktopInventoryDetail { get; set; }
-
         [ForeignKey("AllocationStatus")]
         [DisplayName("STATUS")]
         public Status Status { get; set; }
 
-        [ForeignKey("DesktopCode")]
-        [DisplayName("DTCODE")]
-        public DesktopInventory DesktopInventory { get; set; }
 
         [ForeignKey("OwnerCode")]
         [DisplayName("OWNER")]

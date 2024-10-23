@@ -215,11 +215,49 @@ namespace AssetManagement.Data
                 .WithMany()
                 .HasForeignKey(us => us.DeptCode);
 
-
             modelBuilder.Entity<DesktopInventoryDetail>()
-                .HasKey(us => new { us.desktopInvCode, us.unitTag });
+                .HasKey(c => new { c.desktopInvCode, c.unitTag });
+
+            modelBuilder.Entity<DesktopBorrowed>()
+                .HasOne(b => b.InventoryDetails)
+                .WithMany() 
+                .HasForeignKey(b => new { b.UnitID, b.UnitTag })
+                .HasPrincipalKey(d => new { d.desktopInvCode, d.unitTag });
+
+            modelBuilder.Entity<DesktopNewAlloc>()
+                .HasOne(b => b.InventoryDetails)
+                .WithMany()  
+                .HasForeignKey(b => new { b.SecOwnerCode, b.UnitTag })
+                .HasPrincipalKey(d => new { d.desktopInvCode, d.unitTag });
+
+            modelBuilder.Entity<DesktopAllocation>()
+                .HasOne(b => b.InventoryDetails)
+                .WithMany()  
+                .HasForeignKey(b => new { b.DesktopCode, b.UnitTag })
+                .HasPrincipalKey(d => new { d.desktopInvCode, d.unitTag });
 
 
+
+            modelBuilder.Entity<InventoryDetails>()
+              .HasKey(c => new { c.laptoptinvCode, c.SerialCode});
+
+            modelBuilder.Entity<LaptopAllocation>()
+               .HasOne(b => b.LaptopInventoryDetails)
+               .WithMany()
+               .HasForeignKey(b => new { b.LaptopCode, b.SerialNumber})
+               .HasPrincipalKey(d => new { d.laptoptinvCode, d.SerialCode});
+
+            modelBuilder.Entity<SecondOwnerAlloc>()
+              .HasOne(b => b.LaptopInventoryDetails)
+              .WithMany()
+              .HasForeignKey(b => new { b.SecOwnerCode, b.SerialNumber })
+              .HasPrincipalKey(d => new { d.laptoptinvCode, d.SerialCode });
+
+            modelBuilder.Entity<LaptopBorrowed>()
+                .HasOne(b => b.LaptopInventoryDetails)
+                .WithMany()
+                .HasForeignKey(b => new { b.UnitID, b.SerialNumber })
+                .HasPrincipalKey(d => new { d.laptoptinvCode, d.SerialCode });
         }
     }
 }

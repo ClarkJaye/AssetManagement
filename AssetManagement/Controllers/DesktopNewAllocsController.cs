@@ -63,7 +63,7 @@ namespace AssetManagement.Controllers
         {
             await FindStatus();
             //EXECUTE VIEWS
-            var assetManagementContext1 = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus == "IN").Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.DesktopInventory).Include(s => s.InventoryDetails).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
+            var assetManagementContext1 = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus == "IN").Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.InventoryDetails).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
             return View(assetManagementContext1);
         }
 
@@ -100,7 +100,7 @@ namespace AssetManagement.Controllers
                         return RedirectToAction("ChangePassword", "Users");
                     }
 
-                    var assetManagementContext = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus != "IN").Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.InventoryDetails).Include(s => s.DesktopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
+                    var assetManagementContext = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus != "IN").Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.InventoryDetails).Include(s => s.InventoryDetails.DesktopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
                     return View(assetManagementContext);
                 }
             }
@@ -119,7 +119,7 @@ namespace AssetManagement.Controllers
             var desktopNewAlloc = await _context.tbl_ictams_dtnewalloc
                 .Include(d => d.Createdby)
                 .Include(d => d.DesktopAllocation)
-                .Include(d => d.DesktopInventory)
+                .Include(d => d.InventoryDetails.DesktopInventory)
                 .Include(d => d.InventoryDetails)
                 .Include(d => d.Owner)
                 .Include(d => d.Status)

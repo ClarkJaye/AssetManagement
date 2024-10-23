@@ -19,10 +19,19 @@ namespace AssetManagement.Models
         [DisplayName("DESKTOP CODE")]
         public string SecDesktopCode { get; set; }
 
-
         [Column("unit_tag", TypeName = "VARCHAR(15)")]
         [DisplayName("UNIT TAG")]
         public string UnitTag { get; set; }
+
+
+        [ForeignKey("SecDesktopCode, UnitTag")]
+        [DisplayName("INVENTORY DETAILS")]
+        public DesktopInventoryDetail InventoryDetails { get; set; }
+
+
+        [ForeignKey("AllocId")]
+        public DesktopAllocation DesktopAllocation { get; set; }
+
 
         [Column("owner_code", TypeName = "VARCHAR(15)")]
         [DisplayName("OWNER")]
@@ -48,23 +57,11 @@ namespace AssetManagement.Models
         [DisplayName("UPDATED AT")]
         public DateTime? DateUpdated { get; set; }
 
-
-
-        [ForeignKey("UnitTag")]
-        //[DisplayName("UNIT TAG")]
-        public DesktopInventoryDetail InventoryDetails { get; set; }
-
-        [ForeignKey("AllocId")]
-        //[DisplayName("ID")]
-        public DesktopAllocation DesktopAllocation { get; set; }
-
         [ForeignKey("SecAllocationStatus")]
         [DisplayName("STATUS")]
         public Status Status { get; set; }
 
-        [ForeignKey("SecDesktopCode")]
-        [DisplayName("DESKTOP CODE")]
-        public DesktopInventory DesktopInventory { get; set; }
+
 
         [ForeignKey("SecOwnerCode")]
         [DisplayName("OWNER")]

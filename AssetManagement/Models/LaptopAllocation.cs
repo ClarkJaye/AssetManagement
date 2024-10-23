@@ -16,17 +16,17 @@ namespace AssetManagement.Models
         [DisplayName("LAPTOP CODE")]
         public string LaptopCode { get; set; }
 
-        [Column("owner_code", TypeName = "VARCHAR(15)")]
-        [DisplayName("OWNER")]
-        public string OwnerCode { get; set; }
-
         [Column("serial_number", TypeName = "VARCHAR(30)")]
         [DisplayName("SERIAL")]
         public string SerialNumber { get; set; }
 
-        [ForeignKey("SerialNumber")]
-        [DisplayName("SERIAL")]
-        public InventoryDetails InventoryDetails { get; set; }
+        [ForeignKey("LaptopCode, SerialNumber")]
+        [DisplayName("INVENTORY DETAILS")]
+        public InventoryDetails LaptopInventoryDetails { get; set; }
+
+        [Column("owner_code", TypeName = "VARCHAR(15)")]
+        [DisplayName("OWNER")]
+        public string OwnerCode { get; set; }
 
         [Column("computer_name", TypeName = "VARCHAR(30)")]
         [DisplayName("COMPUTER NAME")]
@@ -67,10 +67,6 @@ namespace AssetManagement.Models
         [ForeignKey("AllocationStatus")]
         [DisplayName("STATUS")]
         public Status Status { get; set; }
-
-        [ForeignKey("LaptopCode")]
-        [DisplayName("LTCODE")]
-        public LaptopInventory LaptopInventory { get; set; }
 
         [ForeignKey("OwnerCode")]
         [DisplayName("OWNER")]

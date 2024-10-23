@@ -25,7 +25,7 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.LaptopInventory)
+                    @Html.DisplayNameFor(model => model.LaptopInventoryDetails.LaptopInventory)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Owner)
@@ -58,7 +58,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)

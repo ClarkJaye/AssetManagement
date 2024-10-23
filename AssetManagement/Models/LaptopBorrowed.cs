@@ -24,10 +24,9 @@ namespace AssetManagement.Models
         [DisplayName("SERIAL NUMBER")]
         public string SerialNumber { get; set; }
 
-        [ForeignKey("SerialNumber")]
+        [ForeignKey("UnitID, SerialNumber")]
         [DisplayName("SERIAL NUMBER")]
-        public InventoryDetails InventoryDetails { get; set; }
-
+        public InventoryDetails LaptopInventoryDetails { get; set; }
 
         [Column("computer_name", TypeName = "VARCHAR(50)")]
         [DisplayName("COMPUTER NAME")]
@@ -81,12 +80,6 @@ namespace AssetManagement.Models
         [Column("ltborrowed_updateddt")]
         [DisplayName("UPDATED AT")]
         public DateTime? DateUpdated { get; set; }
-
-
-
-        [ForeignKey("UnitID")]
-        [DisplayName("INVENTORY")]
-        public virtual LaptopInventory LaptopInventory { get; set; }
 
         [ForeignKey("OwnerID")]
         [DisplayName("OWNER")]

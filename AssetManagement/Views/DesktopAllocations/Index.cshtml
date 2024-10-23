@@ -5,30 +5,6 @@
 }
 
 
-<style>
-    td {
-        cursor: pointer;
-    }
-
-    .red-text {
-        color: red;
-    }
-
-    .yellow-text {
-        color: yellow;
-    }
-
-    .orangered-text {
-        color: orangered;
-    }
-
-    .filter {
-        margin-top: 20px;
-    }
-
-</style>
-
-
 <div class="m-4 px-1">
     <h4>Desktop Allocation</h4>
     @if (TempData["Welcome"] != null)
@@ -54,7 +30,7 @@
                 <span>Add New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-controller="DesktopAllocations" asp-action="Inactive">
-                <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+                <span class="fas fa-trash-alt"></span> Show History
             </a>
         </div>
     </div>
@@ -147,7 +123,7 @@
                             DESKTOP CODE
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.DesktopInventoryDetail)
+                            UNIT TAG
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.FixedassetTag)
@@ -193,16 +169,16 @@
                                 @Html.DisplayFor(modelItem => item.AllocId)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DesktopInventory.desktopInvCode)
+                                @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
                             </td>                   
                             <td>
-                                @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.unitTag)
+                                @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.FixedassetTag)
                             </td>                           
                             <td>
-                                @Html.DisplayFor(modelItem => item.DesktopInventoryDetail.PO)
+                                @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
@@ -213,23 +189,20 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.DateDeployed)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
                             @{
-                                if (item.DesktopInventoryDetail.PurchaseDate <= DateTime.Now.AddMonths(-72))
+                                if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
                                 {
                                     <td style="color:red; font-weight:bold; font-size:12px;">
                                         @Html.DisplayFor(modelItem => item.Status.status_name)
                                     </td>
                                 }
-                                else if (item.DesktopInventoryDetail.PurchaseDate <= DateTime.Now.AddMonths(-24))
+                                else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
                                 {
                                     <td style="color:darkgreen; font-weight:bold; font-size:12px;">
                                         @Html.DisplayFor(modelItem => item.Status.status_name)
                                     </td>
                                 }
-                                else if (item.DesktopInventoryDetail.PurchaseDate <= DateTime.Now.AddMonths(-48))
+                                else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
                                 {
                                     <td style="color:orange; font-weight:bold; font-size:12px;">
                                         @Html.DisplayFor(modelItem => item.Status.status_name)
@@ -243,8 +216,17 @@
                                 }
                             }
                             <td>
+                                @Html.DisplayFor(modelItem => item.DateCreated)
+                            </td> 
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
                             </td>
+                          @*   <td>
+                                @Html.DisplayFor(modelItem => item.DateUpdated)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                            </td> *@
                             <td>
                                 <a class="btn btn-sm btn-outline-secondary" asp-action="Create" asp-controller="ReturnDTAs" asp-route-id="@item.AllocId">Return </a>
                             </td>

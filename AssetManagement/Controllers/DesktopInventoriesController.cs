@@ -221,14 +221,14 @@ namespace AssetManagement.Controllers
             ViewBag.Ids = ids;
             ViewBag.Id2 = id2;
 
-            var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x => x.AllocationStatus == "AC" && x.DesktopCode == id).Include(l => l.Status).Include(l => l.Createdby).Include(l => l.DesktopInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.DesktopInventoryDetail);
+            var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x => x.AllocationStatus == "AC" && x.DesktopCode == id).Include(l => l.Status).Include(l => l.Createdby).Include(l => l.InventoryDetails.DesktopInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.InventoryDetails);
             return View(await assetManagementContext.ToListAsync());
         }
  
         public async Task<IActionResult> DeletedHistory(string userCODE)
         {
 
-            var assetManagementContext = _context.tbl_ictams_desktopalloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.DesktopInventory).Where(x => x.AllocationStatus == "IN" && x.DesktopCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.DesktopInventoryDetail);
+            var assetManagementContext = _context.tbl_ictams_desktopalloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.InventoryDetails.DesktopInventory).Where(x => x.AllocationStatus == "IN" && x.DesktopCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.InventoryDetails);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> ReturnDetails(string userCODE)
@@ -244,7 +244,7 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_dtborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE)).Include(l => l.DesktopInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_dtborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE)).Include(l => l.InventoryDetails).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -253,7 +253,7 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecDesktopCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.DesktopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.InventoryDetails).ToListAsync();
+                var assetManagementContext = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecDesktopCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.InventoryDetails).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.InventoryDetails).ToListAsync();
 
                 return View(assetManagementContext);
             }
@@ -300,6 +300,7 @@ namespace AssetManagement.Controllers
             return View();
     
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("desktopInvCode,Description,DTLevel,DTBrand,DTModel,DTMBoard,DTcpu,DTgraphics,DTHardisk,DTMemory,DTOS,Quantity,AllocatedNo,DTStatus,DTCreated,DateCreated,DTUpdated,DateUpdated")] DesktopInventory desktopInventory)
@@ -406,9 +407,9 @@ namespace AssetManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("desktopinvCode,Description,DTLevel,DTBrand,DTModel,DTMBoard,DTcpu,DTgraphics,DTHardisk,DTMemory,DTOS,Quantity,AllocatedNo,DTStatus,DTCreated,DateCreated,DTUpdated,DateUpdated")] DesktopInventory desktopInventory)
         {
-
-
-            var desktopInventory1 = await _context.tbl_ictams_desktopinv.Where(v => v.desktopInvCode == id).FirstOrDefaultAsync();
+            var desktopInventory1 = await _context.tbl_ictams_desktopinv
+                .Where(v => v.desktopInvCode == id)
+                .FirstOrDefaultAsync();
 
             if (desktopInventory1 == null)
             {
@@ -417,35 +418,52 @@ namespace AssetManagement.Controllers
             }
 
             // Prevent editing if quantity is greater than or equal to 1
-            if (desktopInventory1.Quantity >= 1)
+            if (desktopInventory1.AllocatedNo >= 1)
             {
                 TempData["AlertMessage"] = "You can't Edit this! It is already allocated";
+                return View(desktopInventory);
+            }
+
+            // Check if any changes have been made
+            bool hasChanges =
+                desktopInventory1.Description != desktopInventory.Description ||
+                desktopInventory1.DTLevel != desktopInventory.DTLevel ||
+                desktopInventory1.DTBrand != desktopInventory.DTBrand ||
+                desktopInventory1.DTModel != desktopInventory.DTModel ||
+                desktopInventory1.DTMBoard != desktopInventory.DTMBoard ||
+                desktopInventory1.DTcpu != desktopInventory.DTcpu ||
+                desktopInventory1.DTgraphics != desktopInventory.DTgraphics ||
+                desktopInventory1.DTHardisk != desktopInventory.DTHardisk ||
+                desktopInventory1.DTMemory != desktopInventory.DTMemory ||
+                desktopInventory1.DTOS != desktopInventory.DTOS;
+
+            if (!hasChanges)
+            {
+                TempData["AlertMessage"] = "No changes detected!";
                 return View(desktopInventory);
             }
 
             try
             {
                 var ucode = HttpContext.Session.GetString("UserName");
+
+                // Update values
                 desktopInventory1.Description = desktopInventory.Description;
-                desktopInventory1.DTOS = desktopInventory.DTOS;
                 desktopInventory1.DTLevel = desktopInventory.DTLevel;
                 desktopInventory1.DTBrand = desktopInventory.DTBrand;
-                desktopInventory1.DTMBoard = desktopInventory.DTMBoard;
                 desktopInventory1.DTModel = desktopInventory.DTModel;
+                desktopInventory1.DTMBoard = desktopInventory.DTMBoard;
                 desktopInventory1.DTcpu = desktopInventory.DTcpu;
                 desktopInventory1.DTgraphics = desktopInventory.DTgraphics;
                 desktopInventory1.DTHardisk = desktopInventory.DTHardisk;
                 desktopInventory1.DTMemory = desktopInventory.DTMemory;
-                desktopInventory1.DTCreated = desktopInventory.DTCreated;
-                desktopInventory1.DateCreated = desktopInventory.DateCreated;
-                desktopInventory.DTUpdated = ucode;
-                desktopInventory.DateUpdated = DateTime.Now;
-                desktopInventory.DTStatus = "AV";
-                desktopInventory.Quantity = 0;
+                desktopInventory1.DTOS = desktopInventory.DTOS;
+                desktopInventory1.DTUpdated = ucode;
+                desktopInventory1.DateUpdated = DateTime.Now;
+
                 await _context.SaveChangesAsync();
-                // ...
+
                 TempData["SuccessNotification"] = "Successfully edited!";
-                // ...
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
@@ -460,6 +478,7 @@ namespace AssetManagement.Controllers
                 }
             }
         }
+
 
         public async Task<IActionResult> DeleteAsEdit(string[] selectedIds)
         {

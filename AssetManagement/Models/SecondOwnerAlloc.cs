@@ -25,6 +25,13 @@ namespace AssetManagement.Models
         [DisplayName("SERIAL NUMBER")]
         public string SerialNumber { get; set; }
 
+        [ForeignKey("SecLaptopCode, SerialNumber")]
+        [DisplayName("INVENTORY DETAILS")]
+        public InventoryDetails LaptopInventoryDetails { get; set; }
+
+        [ForeignKey("AllocId")]
+        public LaptopAllocation LaptopAllocation { get; set; }
+
         [Column("owner_code", TypeName = "VARCHAR(15)")]
         [DisplayName("OWNER")]
         public string SecOwnerCode { get; set; }
@@ -50,20 +57,9 @@ namespace AssetManagement.Models
         public DateTime? DateUpdated { get; set; }
 
 
-
-        [ForeignKey("SerialNumber")]
-        public InventoryDetails InventoryDetails { get; set; }
-
-        [ForeignKey("AllocId")]
-        public LaptopAllocation LaptopAllocation { get ; set; }
-
         [ForeignKey("SecAllocationStatus")]
         [DisplayName("STATUS")]
         public Status Status { get; set; }
-
-        [ForeignKey("SecLaptopCode")]
-        [DisplayName("LAPTOP CODE")]
-        public LaptopInventory LaptopInventory { get; set; }
 
         [ForeignKey("SecOwnerCode")]
         [DisplayName("OWNER")]

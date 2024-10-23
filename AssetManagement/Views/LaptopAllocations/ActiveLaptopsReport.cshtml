@@ -72,8 +72,9 @@
         font-weight: bold;
         color: #333;
     }
+
     .margin {
-        margin-top:30px;
+        margin-top: 30px;
     }
 </style>
 @if (TempData["Welcome"] != null)
@@ -90,8 +91,9 @@
     <a class="btn btn-sm bg-success h5 text-white text-decoration-none p-2 btn createbtn" id="userCode1">
         First Owner
     </a>
-    <a class="btn btn-sm bg-success h5 text-white text-decoration-none p-2 btn createbtn" id="userCode2"> 
-        Second Owner </a>
+    <a class="btn btn-sm bg-success h5 text-white text-decoration-none p-2 btn createbtn" id="userCode2">
+        Second Owner
+    </a>
 </div>
 <div class="report-view">
     <div class="report-item">
@@ -101,137 +103,137 @@
 </div>
 
 
-    <div class="table-container">
+<div class="table-container">
     <input type="text" id="filterInput" placeholder="Search...">
-        <table class="table">
-            <thead>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllocId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Owner)
+                </th>
+                @*  <th>
+                @Html.DisplayNameFor(model => model.ComputerName)
+                </th> *@
+                <th>
+                    DESCRIPTION
+                </th>
+                <th>
+                    CODE
+                </th>
+                <th>
+                    BRAND
+                </th>
+                <th>
+                    LEVEL
+                </th>
+                <th>
+                    OS
+                </th>
+                <th>
+                    MEMORY
+                </th>
+                <th>
+                    HARDDISK
+                </th>
+                <th>
+                    PO
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SerialNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FixedassetTag)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateDeployed)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllocationStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateUpdated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Createdby)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updatedby)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AllocId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Owner)
-                    </th>
-                   @*  <th>
-                        @Html.DisplayNameFor(model => model.ComputerName)
-                    </th> *@
-                    <th>
-                        DESCRIPTION
-                    </th>
-                    <th>
-                        CODE
-                    </th>
-                    <th>
-                        BRAND
-                    </th>
-                    <th>
-                        LEVEL
-                    </th>
-                    <th>
-                        OS
-                    </th>
-                    <th>
-                        MEMORY
-                    </th>
-                    <th>
-                        HARDDISK
-                    </th>
-                    <th>
-                        PO
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SerialNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FixedassetTag)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateDeployed)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AllocationStatus)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateCreated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateUpdated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Createdby)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Updatedby)
-                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AllocId)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                    </td>
+                    @*   <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
+                @Html.DisplayFor(modelItem => item.ComputerName)
+                </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.LaptopCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Brand.BrandDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Level.LevelDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.OS.OSDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Memory.Capacity.CapacityDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.HardDisk.Capacity.CapacityDescription)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.FixedassetTag)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.DateDeployed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                    </td>
+                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">
+                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AllocId)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                        </td>
-                      @*   <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.ComputerName)
-                        </td> *@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.LaptopCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.Brand.BrandDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.Level.LevelDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.OS.OSDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.Memory.Capacity.CapacityDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventory.HardDisk.Capacity.CapacityDescription)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.SerialNumber)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.FixedassetTag)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.DateDeployed)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                        </td>
-                        <td class="editbtn" id="@item.LaptopInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+        </tbody>
+    </table>
 
-    </div>
+</div>
 
 <div class="displaytable"> </div>
 
@@ -254,7 +256,7 @@
 
         $(document).on("click", "#userCode2", function () {
             $.ajax({
-                url: "@Url.Action("LTNewActiveReport","LaptopAllocations")",
+                url: "@Url.Action("LTNewActiveReport", "LaptopAllocations")",
                 type: "GET",
                 success: function (res) {
                     $(".table-container").html(res);

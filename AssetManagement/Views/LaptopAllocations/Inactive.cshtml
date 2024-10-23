@@ -39,7 +39,7 @@
                             LAPTOP CODE
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.LaptopInventory)
+                            @Html.DisplayNameFor(model => model.LaptopInventoryDetails)
                         </th>
                         <th>
                             PO
@@ -89,10 +89,10 @@
                                 @Html.DisplayFor(modelItem => item.LaptopCode)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
+                                @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                                @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.SerialNumber)

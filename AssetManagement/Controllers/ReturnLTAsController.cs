@@ -138,6 +138,18 @@ namespace AssetManagement.Controllers
             {
                 returnLTA.RTStatus = "DM";
                 allocationID.AllocationStatus = "IN";
+
+                var findLT = allocationID.LaptopCode;
+                var laptopInv = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(a => a.laptoptinvCode == findLT);
+                var InvDetails = await _context.tbl_ictams_laptopinvdetails.FirstOrDefaultAsync(a => a.laptoptinvCode == allocationID.LaptopCode && a.SerialCode == allocationID.SerialNumber);
+                if (laptopInv != null)
+                {
+                    laptopInv.Quantity -= 1;
+                    laptopInv.AllocatedNo -= 1;
+                }
+                InvDetails.UpdatedDate = DateTime.Now;
+                InvDetails.Updated = ucode;
+                InvDetails.LTStatus = "DM";
             }
             else
             {

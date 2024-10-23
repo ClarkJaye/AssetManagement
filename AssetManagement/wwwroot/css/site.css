@@ -224,6 +224,22 @@ h1, h2, h3, h4, h5, h6 {
     color: green;
 }
 
+.red-text {
+    color: red;
+}
+
+.yellow-text {
+    color: yellow;
+}
+
+.orangered-text {
+    color: orangered;
+}
+
+.filter {
+    margin-top: 20px;
+}
+
 /*Custom Datatable*/
 input#dt-search-0 {
     width: 400px;

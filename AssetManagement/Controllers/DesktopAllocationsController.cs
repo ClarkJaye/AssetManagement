@@ -63,13 +63,15 @@ namespace AssetManagement.Controllers
 
                     var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x=>x.AllocationStatus != "IN")
                         .Include(d => d.Createdby)
-                        .Include(d => d.DesktopInventory)
-                        .Include(d => d.DesktopInventoryDetail)
+                        .Include(d => d.InventoryDetails.DesktopInventory)
+                        .Include(d => d.InventoryDetails)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
                         .Include(d => d.Updatedby);
 
-                    return View(await assetManagementContext.ToListAsync());
+                    var desktopAllocations = await assetManagementContext.ToListAsync();
+
+                    return View(desktopAllocations);
                 }
             }
 
@@ -94,8 +96,8 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x => x.AllocationStatus != "IN"
             && x.AllocationStatus != "CO")
                         .Include(d => d.Createdby)
-                        .Include(d => d.DesktopInventory)
-                        .Include(d => d.DesktopInventoryDetail)
+                        .Include(d => d.InventoryDetails.DesktopInventory)
+                        .Include(d => d.InventoryDetails)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
                         .Include(d => d.Updatedby);
@@ -112,13 +114,13 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus != "IN"
             && x.SecAllocationStatus != "CO")
                         .Include(d => d.Createdby)
-                        .Include(d => d.DesktopInventory)
-                        .Include(d => d.DesktopAllocation)
-                        .Include(d => d.DesktopInventory.MainBoard)
-                        .Include(d => d.DesktopInventory.GraphicsCard)
-                        .Include(d => d.DesktopInventory.Level)
-                        .Include(d => d.DesktopInventory.Brand)
+                        .Include(d => d.InventoryDetails.DesktopInventory)
+                        .Include(d => d.InventoryDetails.DesktopInventory.MainBoard)
+                        .Include(d => d.InventoryDetails.DesktopInventory.GraphicsCard)
+                        .Include(d => d.InventoryDetails.DesktopInventory.Level)
+                        .Include(d => d.InventoryDetails.DesktopInventory.Brand)
                         .Include(d => d.InventoryDetails)
+                        .Include(d => d.DesktopAllocation)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
                         .Include(d => d.Updatedby);
@@ -151,12 +153,12 @@ namespace AssetManagement.Controllers
                         _context.tbl_ictams_owners.Any(a => a.OwnerCode == x.Owner.OwnerCode && a.Department.Dept_name == id) &&
                         _context.tbl_ictams_desktopinvdetails.Any(a => a.unitTag == x.UnitTag && a.PurchaseDate < DateTime.Now.AddMonths(-72)))
                     .Include(d => d.Createdby)
-                        .Include(d => d.DesktopInventory)
-                        .Include(d => d.DesktopInventory.MainBoard)
-                        .Include(d => d.DesktopInventory.GraphicsCard)
-                        .Include(d => d.DesktopInventory.Level)
-                        .Include(d => d.DesktopInventory.Brand)
-                        .Include(d => d.DesktopInventoryDetail)
+                        .Include(d => d.InventoryDetails.DesktopInventory)
+                        .Include(d => d.InventoryDetails.DesktopInventory.MainBoard)
+                        .Include(d => d.InventoryDetails.DesktopInventory.GraphicsCard)
+                        .Include(d => d.InventoryDetails.DesktopInventory.Level)
+                        .Include(d => d.InventoryDetails.DesktopInventory.Brand)
+                        .Include(d => d.InventoryDetails)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
                         .Include(d => d.Updatedby);
@@ -204,13 +206,13 @@ namespace AssetManagement.Controllers
                         _context.tbl_ictams_owners.Any(a => a.OwnerCode == x.Owner.OwnerCode && a.Department.Dept_name == id) &&
                         _context.tbl_ictams_desktopinvdetails.Any(a => a.unitTag == x.UnitTag && a.PurchaseDate < DateTime.Now.AddMonths(-72)))
                         .Include(d => d.Createdby)
-                        .Include(d => d.DesktopInventory)
-                        .Include(d => d.DesktopAllocation)
-                        .Include(d => d.DesktopInventory.MainBoard)
-                        .Include(d => d.DesktopInventory.GraphicsCard)
-                        .Include(d => d.DesktopInventory.Level)
-                        .Include(d => d.DesktopInventory.Brand)
+                        .Include(d => d.InventoryDetails.DesktopInventory)
+                        .Include(d => d.InventoryDetails.DesktopInventory.MainBoard)
+                        .Include(d => d.InventoryDetails.DesktopInventory.GraphicsCard)
+                        .Include(d => d.InventoryDetails.DesktopInventory.Level)
+                        .Include(d => d.InventoryDetails.DesktopInventory.Brand)
                         .Include(d => d.InventoryDetails)
+                        .Include(d => d.DesktopAllocation)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
                         .Include(d => d.Updatedby);
@@ -247,9 +249,9 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x => x.AllocationStatus == "AC")
                 .Include(l => l.Status)
                 .Include(l => l.Createdby)
-                .Include(l => l.DesktopInventory)
+                .Include(l => l.InventoryDetails.DesktopInventory)
                 .Include(l => l.Owner)
-                .Include(l => l.DesktopInventoryDetail)
+                .Include(l => l.InventoryDetails)
                 .Include(l => l.Updatedby);
 
             return View(await assetManagementContext.ToListAsync());
@@ -269,9 +271,9 @@ namespace AssetManagement.Controllers
                         var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x => x.AllocationStatus != "IN")
                 .Include(l => l.Status)
                 .Include(l => l.Createdby)
-                .Include(l => l.DesktopInventory)
+                .Include(l => l.InventoryDetails.DesktopInventory)
                 .Include(l => l.Owner)
-                .Include(l => l.DesktopInventoryDetail)
+                .Include(l => l.InventoryDetails)
                 .Include(l => l.Updatedby);
 
             return View(await assetManagementContext.ToListAsync());
@@ -284,7 +286,7 @@ namespace AssetManagement.Controllers
         {
             await FindStatus();
 
-            var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x=>x.AllocationStatus == "IN").Include(d => d.Createdby).Include(d => d.DesktopInventory).Include(d => d.DesktopInventoryDetail).Include(d => d.Owner).Include(d => d.Status).Include(d => d.Updatedby);
+            var assetManagementContext = _context.tbl_ictams_desktopalloc.Where(x=>x.AllocationStatus == "IN").Include(d => d.Createdby).Include(d => d.InventoryDetails.DesktopInventory).Include(d => d.InventoryDetails).Include(d => d.Owner).Include(d => d.Status).Include(d => d.Updatedby);
             return View(await assetManagementContext.ToListAsync());
 
         }
@@ -299,8 +301,8 @@ namespace AssetManagement.Controllers
 
             var desktopAllocation = await _context.tbl_ictams_desktopalloc
                 .Include(d => d.Createdby)
-                .Include(d => d.DesktopInventory)
-                .Include(d => d.DesktopInventoryDetail)
+                .Include(d => d.InventoryDetails.DesktopInventory)
+                .Include(d => d.InventoryDetails)
                 .Include(d => d.Owner)
                 .Include(d => d.Status)
                 .Include(d => d.Updatedby)
@@ -370,38 +372,27 @@ namespace AssetManagement.Controllers
                 inv_alloc.AllocatedNo = (inv_alloc.AllocatedNo ?? 0) + 1;
 
                 var inv_details = await _context.tbl_ictams_desktopinvdetails.FirstOrDefaultAsync(x => x.desktopInvCode == desktopAllocation.DesktopCode && x.unitTag == desktopAllocation.UnitTag);
-
-                try {
-                    if (inv_details != null)
-                    {
-                        inv_details.DTStatus = "AC";  // Update status only for the correct DesktopCode and UnitTag
-                        inv_details.DeployedDate = DateTime.Now;
-                    }
-
-                    _context.Update(inv_details);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception ex) {
-                    var e = ex.Message;
+                if (inv_details != null)
+                {
+                    inv_details.DTStatus = "AC";  
+                    inv_details.DeployedDate = DateTime.Now;
                 }
 
-                
 
                 // Assign allocation data
-                //var ucode = HttpContext.Session.GetString("UserName");
-                //desktopAllocation.AllocId = "DTA" + newparamCode.ToString().PadLeft(12, '0');
-                //desktopAllocation.FixedassetTag = desktopAllocation.FixedassetTag.ToUpper();
-                //desktopAllocation.ComputerName = desktopAllocation.ComputerName.ToUpper();
-                //desktopAllocation.UnitTag = desktopAllocation.UnitTag.ToUpper();
-                //desktopAllocation.AllocCreated = ucode;
-                //desktopAllocation.DateCreated = DateTime.Now;
-                //desktopAllocation.DateDeployed = DateTime.Now;
-                //desktopAllocation.AllocationStatus = "AC";
+                var ucode = HttpContext.Session.GetString("UserName");
+                desktopAllocation.AllocId = "DTA" + newparamCode.ToString().PadLeft(12, '0');
+                desktopAllocation.FixedassetTag = desktopAllocation.FixedassetTag.ToUpper();
+                desktopAllocation.ComputerName = desktopAllocation.ComputerName.ToUpper();
+                desktopAllocation.UnitTag = desktopAllocation.UnitTag.ToUpper();
+                desktopAllocation.AllocCreated = ucode;
+                desktopAllocation.DateCreated = DateTime.Now;
+                desktopAllocation.DateDeployed = DateTime.Now;
+                desktopAllocation.AllocationStatus = "AC";
 
-              
 
-                //_context.Add(desktopAllocation);
-                //await _context.SaveChangesAsync();
+                _context.Add(desktopAllocation);
+                await _context.SaveChangesAsync();
 
                 TempData["SuccessNotification"] = "Successfully added a new allocation!";
                 return RedirectToAction(nameof(Index));
@@ -485,8 +476,8 @@ namespace AssetManagement.Controllers
 
             var desktopAllocation = await _context.tbl_ictams_desktopalloc
                 .Include(d => d.Createdby)
-                .Include(d => d.DesktopInventory)
-                .Include(d => d.DesktopInventoryDetail)
+                .Include(d => d.InventoryDetails.DesktopInventory)
+                .Include(d => d.InventoryDetails)
                 .Include(d => d.Owner)
                 .Include(d => d.Status)
                 .Include(d => d.Updatedby)

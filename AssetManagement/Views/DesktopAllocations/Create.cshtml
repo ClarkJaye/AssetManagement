@@ -77,11 +77,6 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Disable submit button after form submission
-        $('form').on('submit', function () {
-            $(this).find(':submit').attr('disabled', 'disabled');
-        });
-
         // When the desktop code changes, reset unit tag and computer name fields
         $("#deskCode").change(function () {
             var code = $(this).val();
@@ -97,7 +92,7 @@
                     type: 'GET',
                     data: { deskCode: code },
                     success: function (data) {
-                        if (data.length > 0) {
+                        if (data && data.length > 0) {
                             $.each(data, function (i, item) {
                                 $('#unitTagId').append($('<option>', {
                                     value: item.unitTag,
@@ -105,6 +100,8 @@
                                 }));
                             });
                             $('#unitTagId').prop('disabled', false);
+                        } else {
+                            $('#unitTagId').empty().append('<option selected>No Unit Available</option>');
                         }
                     },
                     error: function () {
@@ -113,6 +110,8 @@
                 });
             }
         });
+
+
 
         // On unit tag change, update the computer name
         $("#unitTagId").change(function () {
