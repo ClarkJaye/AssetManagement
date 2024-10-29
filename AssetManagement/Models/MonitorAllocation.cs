@@ -17,13 +17,18 @@ namespace AssetManagement.Models
         [DisplayName("MONITOR CODE")]
         public string monitorCode { get; set; }
 
-        [Column("owner_code", TypeName = "VARCHAR(15)")]
-        [DisplayName("OWNER")]
-        public string OwnerCode { get; set; }
-
         [Column("monitor_serial", TypeName = "VARCHAR(30)")]
         [DisplayName("SERIAL")]
         public string SerialNumber { get; set; }
+
+        [ForeignKey("monitorCode, SerialNumber")]
+        [DisplayName("INVENTORY DETAILS")]
+        public MonitorDetail MonitorDetails { get; set; }
+
+
+        [Column("owner_code", TypeName = "VARCHAR(15)")]
+        [DisplayName("OWNER")]
+        public string OwnerCode { get; set; }
 
         [Column("fixedasset_tag", TypeName = "VARCHAR(30)")]
         [DisplayName("ASSET TAG")]
@@ -52,16 +57,6 @@ namespace AssetManagement.Models
         [Column("alloc_dtupdated")]
         [DisplayName("UPDATED AT")]
         public DateTime? DateUpdated { get; set; }
-
-
-
-        [ForeignKey("monitorCode")]
-        [DisplayName("MONITOR CODE")]
-        public MonitorInventory MonitorInventory { get; set; }
-
-        [ForeignKey("SerialNumber")]
-        [DisplayName("SERIAL")]
-        public MonitorDetail MonitorDetails { get; set; }
 
         [ForeignKey("OwnerCode")]
         [DisplayName("OWNER")]

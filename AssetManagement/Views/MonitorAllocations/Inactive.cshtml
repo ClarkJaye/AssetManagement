@@ -71,7 +71,7 @@
                     @Html.DisplayNameFor(model => model.DateUpdated)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.MonitorInventory)
+                    @Html.DisplayNameFor(model => model.MonitorDetails.MonitorInventory)
                 </th>
                 <th>
                     CREATED BY
@@ -117,7 +117,7 @@
                         @Html.DisplayFor(modelItem => item.DateUpdated)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MonitorInventory.Description)
+                        @Html.DisplayFor(modelItem => item.MonitorDetails.MonitorInventory.Description)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Createdby.UserCode)

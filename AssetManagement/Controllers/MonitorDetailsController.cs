@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
 using AssetManagement.Models;
+using AssetManagement.Utility;
 
 namespace AssetManagement.Controllers
 {
-    public class MonitorDetailsController : Controller
+    public class MonitorDetailsController : BaseController
     {
         private readonly AssetManagementContext _context;
 
-        public MonitorDetailsController(AssetManagementContext context)
+        public MonitorDetailsController(AssetManagementContext context) : base(context)
         {
             _context = context;
         }
@@ -27,9 +24,9 @@ namespace AssetManagement.Controllers
         }
 
         // GET: MonitorDetails/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string code, string serial)
         {
-            if (id == null || _context.tbl_ictams_monitordetails == null)
+            if (code == null || serial == null || _context.tbl_ictams_monitordetails == null)
             {
                 return NotFound();
             }
@@ -40,12 +37,11 @@ namespace AssetManagement.Controllers
                 .Include(i => i.Status)
                 .Include(i => i.Updatedby)
                 .Include(i => i.Vendor)
-                .FirstOrDefaultAsync(m => m.SerialNumber == id);
+                .FirstOrDefaultAsync(m => m.monitorCode == code && m.SerialNumber == serial);
             if (inventoryDetails == null)
             {
                 return NotFound();
             }
-
             return View(inventoryDetails);
         }
 
@@ -101,7 +97,6 @@ namespace AssetManagement.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-
                 // ...
                 TempData["SuccessNotification"] = "Successfully added a new monitor to inventory";
                 // ...
@@ -114,19 +109,21 @@ namespace AssetManagement.Controllers
         }
 
         // GET: MonitorDetails/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string code, string serial)
         {
-            if (id == null || _context.tbl_ictams_monitordetails == null)
+            if (code == null || serial == null || _context.tbl_ictams_monitordetails == null)
             {
                 return NotFound();
             }
 
-            var inventoryDetails = await _context.tbl_ictams_monitordetails.FindAsync(id);
+            var inventoryDetails = await _context.tbl_ictams_monitordetails.FirstOrDefaultAsync(m => m.monitorCode == code && m.SerialNumber == serial);
             if (inventoryDetails == null)
             {
                 return NotFound();
             }
 
+            ViewData["MonitorVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName", inventoryDetails.MonitorVendor);
+            ViewData["MonitorStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name", inventoryDetails.MonitorStatus);
             return View(inventoryDetails);
         }
 
@@ -135,46 +132,57 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("monitorCode,SerialNumber,PO,Price,MonitorVendor,PurchaseDate,DeployedDate,MonitorStatus,DetailCreated,DateCreated,DetailUpdated,DateUpdated")] MonitorDetail monitorDetail)
+        public async Task<IActionResult> Edit([Bind("monitorCode,SerialNumber,PO,Price,MonitorVendor,PurchaseDate,DeployedDate,MonitorStatus,DetailCreated,DateCreated,DetailUpdated,DateUpdated")] MonitorDetail monitorDetail)
         {
-            if (id != monitorDetail.SerialNumber)
+            try
             {
-                return NotFound();
-            }
+                // Retrieve the existing record to update
+                var existingDetail = await _context.tbl_ictams_monitordetails
+                    .FirstOrDefaultAsync(c => c.monitorCode == monitorDetail.monitorCode && c.SerialNumber == monitorDetail.SerialNumber);
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (existingDetail == null)
                 {
-                    _context.Update(monitorDetail);
-                    await _context.SaveChangesAsync();
+                    TempData["ErrorNotification"] = "Updated Failed";
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MonitorDetailExists(monitorDetail.SerialNumber))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                var ucode = HttpContext.Session.GetString("UserName");
+                // Update specific properties
+                existingDetail.PO = monitorDetail.PO;
+                existingDetail.Price = monitorDetail.Price;
+                existingDetail.MonitorVendor = monitorDetail.MonitorVendor;
+                existingDetail.PurchaseDate = monitorDetail.PurchaseDate;
+                existingDetail.DeployedDate = monitorDetail.DeployedDate;
+                existingDetail.MonitorStatus = monitorDetail.MonitorStatus;
+                existingDetail.DateUpdated = DateTime.Now;
+                existingDetail.DetailUpdated = ucode;
+
+                TempData["SuccessNotification"] = "Successfully Udpdated";
+
+                _context.Update(existingDetail);
+                await _context.SaveChangesAsync();
             }
-            ViewData["DetailCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", monitorDetail.DetailCreated);
-            ViewData["monitorCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "monitorCode", monitorDetail.monitorCode);
-            ViewData["MonitorStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code", monitorDetail.MonitorStatus);
-            ViewData["DetailUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", monitorDetail.DetailUpdated);
-            ViewData["MonitorVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorID", monitorDetail.MonitorVendor);
-            return View(monitorDetail);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MonitorDetailExists(monitorDetail.monitorCode, monitorDetail.SerialNumber))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            //ViewData["MonitorStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "VendorName", monitorDetail.MonitorStatus);
+            //ViewData["MonitorVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "status_name", monitorDetail.MonitorVendor);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string code, string serial)
         {
             var findSerial = await _context.tbl_ictams_monitordetails
-                                           .Where(x => x.SerialNumber == id)
+                                           .Where(x => x.monitorCode == code && x.SerialNumber == serial)
                                            .FirstOrDefaultAsync();
 
             if (findSerial != null)
@@ -191,7 +199,14 @@ namespace AssetManagement.Controllers
                 {
                     if (laptopToUpdate != null)
                     {
-                        laptopToUpdate.Quantity = Math.Max(0, laptopToUpdate.Quantity - 1);
+                        var ucode = HttpContext.Session.GetString("UserName");
+                        laptopToUpdate.Quantity = laptopToUpdate.Quantity - 1;
+                        //findSerial.MonitorStatus = "IN";
+                        //findSerial.DateUpdated = DateTime.Now;
+                        //findSerial.DetailUpdated = ucode;
+                        //_context.tbl_ictams_monitordetails.Update(findSerial);
+
+                        _context.tbl_ictams_monitorinv.Update(laptopToUpdate);
                         await _context.SaveChangesAsync();
                         // ...
                         TempData["SuccessNotification"] = "Successfully removed a monitor from inventory";
@@ -212,9 +227,9 @@ namespace AssetManagement.Controllers
             return RedirectToAction("Index", "MonitorInventories");
         }
 
-        private bool MonitorDetailExists(string id)
+        private bool MonitorDetailExists(string code, string serial)
         {
-          return (_context.tbl_ictams_monitordetails?.Any(e => e.SerialNumber == id)).GetValueOrDefault();
+          return (_context.tbl_ictams_monitordetails?.Any(e => e.monitorCode == code && e.SerialNumber == serial)).GetValueOrDefault();
         }
     }
 }

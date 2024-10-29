@@ -21,6 +21,14 @@ namespace AssetManagement.Models
         [DisplayName("SERIAL NUMBER")]
         public string SerialNumber { get; set; }
 
+        [ForeignKey("UnitID, SerialNumber")]
+        [DisplayName("SERIAL NUMBER")]
+        public MonitorDetail MonitorDetail { get; set; }
+
+        [Column("computer_name", TypeName = "VARCHAR(50)")]
+        [DisplayName("COMPUTER NAME")]
+        public string? ComputerName { get; set; }
+
         [Column("mborrower_code")]
         [DisplayName("OWNER")]
         public string OwnerID { get; set; }
@@ -53,16 +61,6 @@ namespace AssetManagement.Models
         [Column("mborrowed_updateddt")]
         [DisplayName("UPDATED AT")]
         public DateTime? DateUpdated { get; set; }
-
-
-        [ForeignKey("UnitID")]
-        [DisplayName("INVENTORY")]
-        public virtual MonitorInventory MonitorInventory { get; set; }
-
-        [ForeignKey("SerialNumber")]
-        [DisplayName("SERIAL NUMBER")]
-
-        public MonitorDetail MonitorDetail { get; set; }
 
         [ForeignKey("OwnerID")]
         [DisplayName("OWNER")]

@@ -23,7 +23,7 @@ namespace AssetManagement.Controllers
         {
             await FindStatus();
 
-            var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorInventory).Where(x => x.AllocationStatus == "IN").Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.MonitorDetails);
+            var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorDetails.MonitorInventory).Where(x => x.AllocationStatus == "IN").Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.MonitorDetails);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> AllocationViews()
@@ -31,7 +31,7 @@ namespace AssetManagement.Controllers
             await FindStatus();
 
 
-            var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorInventory).Where(x => x.AllocationStatus == "IN").Include(l => l.Owner).Include(l => l.Updatedby);
+            var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorDetails.MonitorInventory).Where(x => x.AllocationStatus == "IN").Include(l => l.Owner).Include(l => l.Updatedby);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -45,8 +45,8 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_monitoralloc.Where(x => x.AllocationStatus != "IN"
             && x.AllocationStatus != "CO")
                         .Include(d => d.Createdby)
-                        .Include(d => d.MonitorInventory)
-                        .Include(d => d.MonitorInventory.Model)
+                        .Include(d => d.MonitorDetails.MonitorInventory)
+                        .Include(d => d.MonitorDetails.MonitorInventory.Model)
                         .Include(d => d.MonitorDetails.Vendor)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
@@ -56,7 +56,7 @@ namespace AssetManagement.Controllers
 
         public async Task<IActionResult> DisposeMonitor()
         {
-            var assetManagementContext = _context.tbl_ictams_monitorreturn.Where(x => x.ReturnType.Description == "DISPOSE").Include(d => d.MonitorAllocation).Include(d => d.MonitorAllocation.MonitorInventory.Model).Include(d => d.ReturnType).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
+            var assetManagementContext = _context.tbl_ictams_monitorreturn.Where(x => x.ReturnType.Description == "DISPOSE").Include(d => d.MonitorAllocation).Include(d => d.MonitorAllocation.MonitorDetails.MonitorInventory.Model).Include(d => d.ReturnType).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -70,9 +70,9 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus != "IN"
             && x.SecAllocationStatus != "CO")
                         .Include(d => d.Createdby)
-                        .Include(d => d.MonitorInventory)
                         .Include(d => d.MonitorAllocation)
-                        .Include(d => d.MonitorInventory.Model)
+                        .Include(d => d.MonitorAllocation.MonitorDetails.MonitorInventory)
+                        .Include(d => d.MonitorAllocation.MonitorDetails.MonitorInventory.Model)
                         .Include(d => d.MonitorDetail.Vendor)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
@@ -106,8 +106,8 @@ namespace AssetManagement.Controllers
                         _context.tbl_ictams_owners.Any(a => a.OwnerCode == x.Owner.OwnerCode && a.Department.Dept_name == id) &&
                         _context.tbl_ictams_monitordetails.Any(a => a.SerialNumber == x.SerialNumber && a.PurchaseDate < DateTime.Now.AddMonths(-72)))
                     .Include(d => d.Createdby)
-                        .Include(d => d.MonitorInventory)
-                        .Include(d => d.MonitorInventory.Model)
+                        .Include(d => d.MonitorDetails.MonitorInventory)
+                        .Include(d => d.MonitorDetails.MonitorInventory.Model)
                         .Include(d => d.MonitorDetails.Vendor)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
@@ -156,10 +156,10 @@ namespace AssetManagement.Controllers
                         _context.tbl_ictams_owners.Any(a => a.OwnerCode == x.Owner.OwnerCode && a.Department.Dept_name == id) &&
                         _context.tbl_ictams_monitordetails.Any(a => a.SerialNumber == x.SerialNumber && a.PurchaseDate < DateTime.Now.AddMonths(-72)))
                     .Include(d => d.Createdby)
-                        .Include(d => d.MonitorInventory)
                         .Include(d => d.MonitorAllocation)
-                        .Include(d => d.MonitorInventory.Model)
-                        .Include(d => d.MonitorDetail.Vendor)
+                        .Include(d => d.MonitorAllocation.MonitorDetails.MonitorInventory)
+                        .Include(d => d.MonitorAllocation.MonitorDetails.MonitorInventory.Model)
+                        .Include(d => d.MonitorAllocation.MonitorDetails.Vendor)
                         .Include(d => d.Owner)
                         .Include(d => d.Status)
                         .Include(d => d.Updatedby);
@@ -222,7 +222,7 @@ namespace AssetManagement.Controllers
                     var assetManagementContext = _context.tbl_ictams_monitoralloc.Where(x => x.AllocationStatus != "IN")
                         .Include(l => l.Status)
                         .Include(l => l.Createdby)
-                        .Include(l => l.MonitorInventory)
+                        .Include(l => l.MonitorDetails.MonitorInventory)
                         .Include(l => l.Owner)
                         .Include(l => l.MonitorDetails)
                         .Include(l => l.Updatedby);
@@ -247,7 +247,7 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_monitoralloc.Where(x => x.AllocationStatus == "AC")
                 .Include(l => l.Status)
                 .Include(l => l.Createdby)
-                .Include(l => l.MonitorInventory)
+                .Include(l => l.MonitorDetails.MonitorInventory)
                 .Include(l => l.Owner)
                 .Include(l => l.MonitorDetails)
                 .Include(l => l.Updatedby);
@@ -271,7 +271,7 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_monitoralloc.Where(x => x.AllocationStatus == "AC")
                 .Include(l => l.Status)
                 .Include(l => l.Createdby)
-                .Include(l => l.MonitorInventory)
+                .Include(l => l.MonitorDetails.MonitorInventory)
                 .Include(l => l.Owner)
                 .Include(l => l.MonitorDetails)
                 .Include(l => l.Updatedby);
@@ -291,7 +291,7 @@ namespace AssetManagement.Controllers
             var monitorAllocation = await _context.tbl_ictams_monitoralloc
                 .Include(m => m.Createdby)
                 .Include(m => m.MonitorDetails)
-                .Include(m => m.MonitorInventory)
+                .Include(m => m.MonitorDetails.MonitorInventory)
                 .Include(m => m.Owner)
                 .Include(m => m.Status)
                 .Include(m => m.Updatedby)

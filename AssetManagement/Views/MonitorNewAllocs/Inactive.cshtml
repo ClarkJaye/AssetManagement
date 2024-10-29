@@ -78,7 +78,7 @@
                         @Html.DisplayNameFor(model => model.Owner)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.MonitorInventory)
+                        @Html.DisplayNameFor(model => model.MonitorAllocation.MonitorDetails.MonitorInventory)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.DateCreated)
@@ -111,7 +111,7 @@
                             @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorInventory.Description)
+                            @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.MonitorInventory.Description)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.DateCreated)

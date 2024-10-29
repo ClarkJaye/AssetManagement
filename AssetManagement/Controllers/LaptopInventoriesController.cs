@@ -469,9 +469,9 @@ namespace AssetManagement.Controllers
             }
 
             // Check if the laptop has allocated quantity
-            if (laptop.Quantity > 0)
+            if (laptop.AllocatedNo > 0)
             {
-                TempData["AlertMessage"] = "You can't edit this, because it has a quantity!";
+                TempData["AlertMessage"] = "You can't edit this, It is already allocated!";
                 return RedirectToAction("Edit", new { id = laptopInventory.laptoptinvCode });
             }
 

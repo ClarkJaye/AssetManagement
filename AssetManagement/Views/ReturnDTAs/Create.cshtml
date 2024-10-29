@@ -9,33 +9,35 @@
     <h4>Return Desktop Allocation</h4>
     <hr />
 
-<div>
-    <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div>
+        <form asp-action="Create">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group col-md-2">
-                <label asp-for="AllocID" class="control-label"></label>
-                <input asp-for="AllocID" readonly value="@ViewBag.Id" class="form-control" />
-            </div>
-            <div class="form-group col-md-2" id="ownertable">
-                <label asp-for="RTtype" class="control-label"></label>
-                <input asp-for="RTtype" class="form-control" id="oid" hidden />
-                <input class="form-select" id="odes" readonly placeholder="select return type below" required/>
-            </div>
+                    <label asp-for="AllocID" class="control-label"></label>
+                    <input asp-for="AllocID" readonly value="@ViewBag.Id" class="form-control" />
+                </div>
+                <div class="form-group col-md-2" id="ownertable">
+                    <label asp-for="RTtype" class="control-label"></label>
+                    <input asp-for="RTtype" class="form-control" id="oid" hidden />
+                    <input class="form-select" id="odes" readonly placeholder="select return type below" required />
+                </div>
                 <div class="form-group col-md-2" hidden>
-                <label asp-for="RTStatus" class="control-label"></label>
-                <select asp-for="RTStatus" class="form-control" asp-items="ViewBag.RTStatus"></select>
-            </div>
+                    <label asp-for="RTStatus" class="control-label"></label>
+                    <select asp-for="RTStatus" class="form-control" asp-items="ViewBag.RTStatus"></select>
+                </div>
                 <div class="form-groupcol-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
                     <input type="submit" value="Create" class="btn btn-red" />
                     <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="DesktopAllocations">Back to List</a>
                 </div>
-        </div>
-    </form>
+            </div>
+        </form>
+    </div>
+
+    <div class="displaytable"></div>
 </div>
 
-<div class="displaytable"></div>
-</div>
+
 
 @section Scripts {
     @{

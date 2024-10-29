@@ -221,7 +221,6 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
                             </td>
-                                                    
                             <td>
                                 <a class="btn btn-sm btn-outline-red" asp-action="Create" asp-controller="InventoryDetails" asp-route-id="@item.laptoptinvCode">Add</a>
                             </td>
@@ -233,7 +232,6 @@
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-outline-secondary" asp-action="InventoryDetails" asp-route-id="@item.laptoptinvCode" asp-route-ids="@item.Description">Tracking</a>
-
                             </td>
                         </tr>
                     }

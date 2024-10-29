@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
@@ -37,7 +33,7 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> DeletedHistory(string userCODE)
         {
 
-            var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorInventory).Where(x => x.AllocationStatus == "IN" && x.monitorCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.MonitorDetails);
+            var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorDetails.MonitorInventory).Where(x => x.AllocationStatus == "IN" && x.monitorCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.MonitorDetails);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> ReturnDetails(string userCODE)
@@ -53,7 +49,7 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE)).Include(l => l.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE)).Include(l => l.MonitorDetail.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -65,7 +61,7 @@ namespace AssetManagement.Controllers
             ViewBag.Ids = ids;
             ViewBag.Id2 = id2;
 
-            var assetManagementContext = _context.tbl_ictams_monitoralloc.Where(x => x.AllocationStatus == "AC" && x.monitorCode == id).Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.MonitorDetails);
+            var assetManagementContext = _context.tbl_ictams_monitoralloc.Where(x => x.AllocationStatus == "AC" && x.monitorCode == id).Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorDetails.MonitorInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.MonitorDetails);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> seeDetails(string userCODE)
@@ -87,7 +83,7 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = await _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecMonitorCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.MonitorAllocation).Include(s => s.MonitorInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.MonitorDetail).ToListAsync();
+                var assetManagementContext = await _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecMonitorCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.MonitorAllocation).Include(s => s.MonitorAllocation.MonitorDetails.MonitorInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.MonitorDetail).ToListAsync();
 
                 return View(assetManagementContext);
             }
@@ -246,6 +242,8 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["Mmodel"] = new SelectList(_context.tbl_ictams_model, "ModelId", "ModelDescription", monitorInventory.Model);
             return View(monitorInventory);
         }
 
@@ -257,8 +255,8 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> Edit(string id, [Bind("monitorCode,Description,MonitorModel,Quantity,AllocatedNo,MonitorStatus,MonitorCreatedBy,DateCreated,MonitorUpdatedBy,DateUpdated")] MonitorInventory monitorInventory)
         {
 
-            var monitorInventory1 = await _context.tbl_ictams_monitorinv.Where(x => x.monitorCode == monitorInventory.monitorCode).FirstOrDefaultAsync();
-            if (monitorInventory1.Quantity >= 1)
+            var record = await _context.tbl_ictams_monitorinv.Where(x => x.monitorCode == monitorInventory.monitorCode).FirstOrDefaultAsync();
+            if (record.Quantity >= 1)
             {
                 TempData["AlertMessage"] = "You can't edit this!";
                 return RedirectToAction("Edit");
@@ -266,11 +264,11 @@ namespace AssetManagement.Controllers
             try
             {
                 var ucode = HttpContext.Session.GetString("UserName");
-                monitorInventory.MonitorUpdatedBy = ucode;
-                monitorInventory.DateUpdated = DateTime.Now;
-                monitorInventory.MonitorStatus = "AV";
-                monitorInventory1.MonitorModel = monitorInventory.MonitorModel;
-                monitorInventory1.Description = monitorInventory.Description;
+                record.MonitorUpdatedBy = ucode;
+                record.DateUpdated = DateTime.Now;
+                record.MonitorStatus = "AV";
+                record.MonitorModel = monitorInventory.MonitorModel;
+                record.Description = monitorInventory.Description;
                 await _context.SaveChangesAsync();
                 // ...
                 TempData["SuccessNotification"] = "Successfully edited!";

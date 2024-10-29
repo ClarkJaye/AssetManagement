@@ -258,6 +258,28 @@ namespace AssetManagement.Data
                 .WithMany()
                 .HasForeignKey(b => new { b.UnitID, b.SerialNumber })
                 .HasPrincipalKey(d => new { d.laptoptinvCode, d.SerialCode });
+
+
+            modelBuilder.Entity<MonitorDetail>()
+            .HasKey(c => new { c.monitorCode, c.SerialNumber});
+
+            modelBuilder.Entity<MonitorAllocation>()
+              .HasOne(b => b.MonitorDetails)
+              .WithMany()
+              .HasForeignKey(b => new { b.monitorCode, b.SerialNumber })
+              .HasPrincipalKey(d => new { d.monitorCode, d.SerialNumber});
+
+            modelBuilder.Entity<MonitorBorrowed>()
+            .HasOne(b => b.MonitorDetail)
+            .WithMany()
+            .HasForeignKey(b => new { b.UnitID, b.SerialNumber })
+            .HasPrincipalKey(d => new { d.monitorCode, d.SerialNumber});
+
+            modelBuilder.Entity<MonitorNewAlloc>()
+             .HasOne(b => b.MonitorDetail)
+             .WithMany()
+             .HasForeignKey(b => new { b.SecOwnerCode, b.SerialNumber })
+             .HasPrincipalKey(d => new { d.monitorCode, d.SerialNumber});
         }
     }
 }

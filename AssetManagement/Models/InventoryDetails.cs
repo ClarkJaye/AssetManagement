@@ -18,7 +18,7 @@ namespace AssetManagement.Models
 		[DisplayName("SERIAL")]
 		public string SerialCode { get; set; }
 
-        [Column("computer_name", TypeName = "VARCHAR(30)")]
+        [Column("computer_name", TypeName = "VARCHAR(50)")]
         [DisplayName("COMPUTER NAME")]
         public string? ComputerName { get; set; }
 

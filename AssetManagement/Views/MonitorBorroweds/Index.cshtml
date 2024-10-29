@@ -65,7 +65,7 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.MonitorInventory)
+                    CODE
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.MonitorDetail)
@@ -105,7 +105,7 @@
 @foreach (var item in Model) {
         <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
+                        @Html.DisplayFor(modelItem => item.MonitorDetail.MonitorInventory.monitorCode)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.MonitorDetail.SerialNumber)

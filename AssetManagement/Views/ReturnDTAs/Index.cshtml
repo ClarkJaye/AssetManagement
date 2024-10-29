@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AssetManagement.Models.ReturnDTA>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Return Desktop Allocation";
 }
 
 
@@ -38,28 +38,31 @@
                         @Html.DisplayNameFor(model => model.ReturnID)
                     </th>
                     <th>
-                        ID
+                        CODE
                     </th>
                     <th>
-                        OWNER
+                        UNIT TAG
                     </th>
                     <th>
                         COMPUTER NAME
                     </th>
                     <th>
+                      OWNER
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.ReturnType)
                     </th>
                     <th hidden>
-                        @Html.DisplayNameFor(model => model.Status)
+                        @Html.DisplayNameFor(model => model.RTStatus)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.DateCreated)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DateUpdated)
+                        @Html.DisplayNameFor(model => model.UserCreated)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.UserCreated)
+                        @Html.DisplayNameFor(model => model.DateUpdated)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.UserUpdated)
@@ -75,13 +78,16 @@
                             @Html.DisplayFor(modelItem => item.ReturnID)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DesktopAllocation.AllocId)
+                            @Html.DisplayFor(modelItem => item.DesktopAllocation.DesktopCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DesktopAllocation.OwnerCode)
+                            @Html.DisplayFor(modelItem => item.DesktopAllocation.UnitTag)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.DesktopAllocation.ComputerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DesktopAllocation.OwnerCode)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ReturnType.Description)
@@ -93,10 +99,10 @@
                             @Html.DisplayFor(modelItem => item.DateCreated)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
+                            @Html.DisplayFor(modelItem => item.UserCreated.UserFullName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.UserCreated.UserFullName)
+                            @Html.DisplayFor(modelItem => item.DateUpdated)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.UserUpdated.UserFullName)

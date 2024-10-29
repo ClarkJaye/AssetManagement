@@ -138,7 +138,7 @@
                         @Html.DisplayNameFor(model => model.AllocId)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.MonitorInventory)
+                        @Html.DisplayNameFor(model => model.MonitorDetails.MonitorInventory)
                     </th>
                     <th>
                         DESCRIPTION
@@ -194,10 +194,10 @@
                             @Html.DisplayFor(modelItem => item.AllocId)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
+                            @Html.DisplayFor(modelItem => item.MonitorDetails.MonitorInventory.monitorCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorInventory.Description)
+                            @Html.DisplayFor(modelItem => item.MonitorDetails.MonitorInventory.Description)
                         </td>
 
                         <td>

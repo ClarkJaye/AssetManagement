@@ -77,25 +77,22 @@
                             @Html.DisplayNameFor(model => model.SecAllocId)
                         </th>
                         <th>
-                            ID
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Owner)
-                        </th>
-                        <th>
-                            COMPUTER NAME
+                            LAPTOP INVENTORY NAME
                         </th>
                         <th>
                             CODE
                         </th>
                         <th>
-                            PO
-                        </th>
-                        <th>
                             SERIAL
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.LaptopInventoryDetails.LaptopInventory)
+                            COMPUTER NAME
+                        </th>
+                        <th>
+                            PO
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Owner)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.DateCreated)
@@ -127,40 +124,37 @@
                             <td hidden>
                                 @Html.DisplayFor(modelItem => item.SecAllocId)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopAllocation.AllocId)
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                                @Html.DisplayFor(modelItem => item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopAllocation.ComputerName)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.LaptopAllocation.LaptopCode)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.LaptopAllocation.SerialNumber)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                                @Html.DisplayFor(modelItem => item.LaptopAllocation.ComputerName)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                                @Html.DisplayFor(modelItem => item.LaptopAllocation.LaptopInventoryDetails.PO)
+                            </td>
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                                @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                            </td>
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DateCreated)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DateUpdated)
                             </td>
                             <td hidden>
                                 @Html.DisplayFor(modelItem => item.Status.status_code)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
                             </td>
-                            <td class=" editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
+                            <td class=" editbtn" id="@item.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Description" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
                             </td>
                             <td>

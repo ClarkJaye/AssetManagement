@@ -24,7 +24,7 @@
             <a class="btn btn-sm btn-outline-secondary" id="secOwnerBtn" name="userCODE">Show Second Owner</a>
             <a class="btn btn-sm btn-outline-secondary" id="returnBtn" name="userCODE">Return </a>
             <a class="btn btn-sm btn-outline-secondary" id="borrowedBtn" name="userCODE">Borrowed </a>
-            <a class="btn btn-sm btn-outline-secondary" id="recentBtn" name="userCODE">Deleted Items </a>
+            <a class="btn btn-sm btn-outline-secondary" id="recentBtn" name="userCODE">Recent </a>
         </div>
 
         <!-- Action Buttons -->
@@ -144,120 +144,117 @@
 <div class="displaytable"> </div>
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $(document).ready(function () {
-            $(".galloon").on("click", "#ltUsedBtn", function () {
-                location.reload();
-            });
-
-            $(".galloon").on("click", "#secOwnerBtn", function () {
-                var userCode = "@ViewBag.Id";
-
-                $.ajax({
-                    url: "@Url.Action("InventorySecOwnerDetails", "DesktopInventories")",
-                    type: "GET",
-                    data: { userCODE: userCode },
-                    success: function (res) {
-                        $(".table-render").html(res);
-                    }
-                });
-
-                // Change button class when the "Return" button is clicked
-                $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
-
-                // Optionally, reset other buttons to their default class if needed
-                $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
-            });
-
-
-            $(".galloon").on("click", "#detailsBtn", function () {
-                var userCode = "@ViewBag.Id";
-
-                $.ajax({
-                    url: "@Url.Action("seeDetails", "DesktopInventories")",
-                    type: "GET",
-                    data: { userCODE: userCode },
-                    success: function (res) {
-                        $(".displaytable").html(res);
-                    }
-                });
-
-                // Change button class when the "Return" button is clicked
-                $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
-
-                // Optionally, reset other buttons to their default class if needed
-                $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
-            });
-
-
-            $(".galloon").on("click", "#returnBtn", function () {
-                var userCode = "@ViewBag.Id";
-
-                $.ajax({
-                    url: "@Url.Action("ReturnDetails", "DesktopInventories")",
-                    type: "GET",
-                    data: { userCODE: userCode },
-                    success: function (res) {
-                        $(".table-render").html(res);
-                    }
-                });
-
-                // Change button class when the "Return" button is clicked
-                $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
-
-                // Optionally, reset other buttons to their default class if needed
-                $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
-            });
-
-            $(".galloon").on("click", "#borrowedBtn", function () {
-                var userCode = "@ViewBag.Id";
-
-                $.ajax({
-                    url: "@Url.Action("Borrowed", "DesktopInventories")",
-                    type: "GET",
-                    data: { userCODE: userCode },
-                    success: function (res) {
-                        $(".table-render").html(res);
-                    }
-                });
-
-                // Change button class when the "Return" button is clicked
-                $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
-
-                // Optionally, reset other buttons to their default class if needed
-                $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
-            });
-
-            $(".galloon").on("click", "#recentBtn", function () {
-                var userCode = "@ViewBag.Id";
-
-                $.ajax({
-                    url: "@Url.Action("DeletedHistory", "DesktopInventories")",
-                    type: "GET",
-                    data: { userCODE: userCode },
-                    success: function (res) {
-                        $(".table-render").html(res);
-                    }
-                });
-
-                // Change button class when the "Return" button is clicked
-                $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
-
-                // Optionally, reset other buttons to their default class if needed
-                $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
-            });
-
-
-
-            $('#filterInput').on('keyup', function () {
-                var value = $(this).val().toLowerCase();
-                $('tbody tr').filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-
+    document.addEventListener("DOMContentLoaded", function () {
+        $(".galloon").on("click", "#ltUsedBtn", function () {
+            location.reload();
         });
+
+        $(".galloon").on("click", "#secOwnerBtn", function () {
+            var userCode = "@ViewBag.Id";
+
+            $.ajax({
+                url: "@Url.Action("InventorySecOwnerDetails", "DesktopInventories")",
+                type: "GET",
+                data: { userCODE: userCode },
+                success: function (res) {
+                    $(".table-render").html(res);
+                }
+            });
+
+            // Change button class when the "Return" button is clicked
+            $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
+
+            // Optionally, reset other buttons to their default class if needed
+            $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
+        });
+
+
+        $(".galloon").on("click", "#detailsBtn", function () {
+            var userCode = "@ViewBag.Id";
+
+            $.ajax({
+                url: "@Url.Action("seeDetails", "DesktopInventories")",
+                type: "GET",
+                data: { userCODE: userCode },
+                success: function (res) {
+                    $(".displaytable").html(res);
+                }
+            });
+
+            // Change button class when the "Return" button is clicked
+            $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
+
+            // Optionally, reset other buttons to their default class if needed
+            $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
+        });
+
+
+        $(".galloon").on("click", "#returnBtn", function () {
+            var userCode = "@ViewBag.Id";
+
+            $.ajax({
+                url: "@Url.Action("ReturnDetails", "DesktopInventories")",
+                type: "GET",
+                data: { userCODE: userCode },
+                success: function (res) {
+                    $(".table-render").html(res);
+                }
+            });
+
+            // Change button class when the "Return" button is clicked
+            $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
+
+            // Optionally, reset other buttons to their default class if needed
+            $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
+        });
+
+        $(".galloon").on("click", "#borrowedBtn", function () {
+            var userCode = "@ViewBag.Id";
+
+            $.ajax({
+                url: "@Url.Action("Borrowed", "DesktopInventories")",
+                type: "GET",
+                data: { userCODE: userCode },
+                success: function (res) {
+                    $(".table-render").html(res);
+                }
+            });
+
+            // Change button class when the "Return" button is clicked
+            $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
+
+            // Optionally, reset other buttons to their default class if needed
+            $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
+        });
+
+        $(".galloon").on("click", "#recentBtn", function () {
+            var userCode = "@ViewBag.Id";
+
+            $.ajax({
+                url: "@Url.Action("DeletedHistory", "DesktopInventories")",
+                type: "GET",
+                data: { userCODE: userCode },
+                success: function (res) {
+                    $(".table-render").html(res);
+                }
+            });
+
+            // Change button class when the "Return" button is clicked
+            $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
+
+            // Optionally, reset other buttons to their default class if needed
+            $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
+        });
+
+
+
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
     });
 </script>

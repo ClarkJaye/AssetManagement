@@ -24,6 +24,13 @@ namespace AssetManagement.Models
         [DisplayName("SERIAL NUMBER")]
         public string SerialNumber { get; set; }
 
+        [ForeignKey("AllocId")]
+        public MonitorAllocation MonitorAllocation { get; set; }
+        [ForeignKey("SecMonitorCode, SerialNumber")]
+        [DisplayName("INVENTORY DETAILS")]
+        public MonitorDetail MonitorDetail { get; set; }
+
+
         [Column("owner_code", TypeName = "VARCHAR(15)")]
         [DisplayName("OWNER")]
         public string SecOwnerCode { get; set; }
@@ -48,21 +55,10 @@ namespace AssetManagement.Models
         [DisplayName("UPDATED AT")]
         public DateTime? DateUpdated { get; set; }
 
-        [ForeignKey("SerialNumber")]
-        //[DisplayName("UNIT TAG")]
-        public MonitorDetail MonitorDetail { get; set; }
-
-        [ForeignKey("AllocId")]
-        //[DisplayName("ID")]
-        public MonitorAllocation MonitorAllocation { get; set; }
-
+ 
         [ForeignKey("SecAllocationStatus")]
         [DisplayName("STATUS")]
         public Status Status { get; set; }
-
-        [ForeignKey("SecMonitorCode")]
-        [DisplayName("MONITOR CODE")]
-        public MonitorInventory MonitorInventory { get; set; }
 
         [ForeignKey("SecOwnerCode")]
         [DisplayName("OWNER")]

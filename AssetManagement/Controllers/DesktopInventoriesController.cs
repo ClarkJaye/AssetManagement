@@ -33,7 +33,7 @@ namespace AssetManagement.Controllers
             ViewBag.Id = id;
             ViewBag.Ids = ids;
             ViewBag.Id2 = id2;
-            var assetManagementContext = _context.tbl_ictams_desktopinvdetails.Where(x=>x.desktopInvCode == id).Include(d => d.Createdby).Include(d => d.Status).Include(d => d.Updatedby).Include(d => d.Vendor);
+            var assetManagementContext = _context.tbl_ictams_desktopinvdetails.Where(x=>x.desktopInvCode == id && x.DTStatus != "IN").Include(d => d.Createdby).Include(d => d.Status).Include(d => d.Updatedby).Include(d => d.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -405,11 +405,14 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("desktopinvCode,Description,DTLevel,DTBrand,DTModel,DTMBoard,DTcpu,DTgraphics,DTHardisk,DTMemory,DTOS,Quantity,AllocatedNo,DTStatus,DTCreated,DateCreated,DTUpdated,DateUpdated")] DesktopInventory desktopInventory)
+        public async Task<IActionResult> Edit(string id, [Bind("desktopInvCode,Description,DTLevel,DTBrand,DTModel,DTMBoard,DTcpu,DTgraphics,DTHardisk,DTMemory,DTOS,Quantity,AllocatedNo,DTStatus,DTCreated,DateCreated,DTUpdated,DateUpdated")] DesktopInventory desktopInventory)
         {
-            var desktopInventory1 = await _context.tbl_ictams_desktopinv
-                .Where(v => v.desktopInvCode == id)
-                .FirstOrDefaultAsync();
+            if (id != desktopInventory.desktopInvCode)
+            {
+                return NotFound();
+            }
+
+            var desktopInventory1 = await _context.tbl_ictams_desktopinv.FirstOrDefaultAsync(v => v.desktopInvCode == desktopInventory.desktopInvCode);
 
             if (desktopInventory1 == null)
             {
@@ -420,27 +423,8 @@ namespace AssetManagement.Controllers
             // Prevent editing if quantity is greater than or equal to 1
             if (desktopInventory1.AllocatedNo >= 1)
             {
-                TempData["AlertMessage"] = "You can't Edit this! It is already allocated";
-                return View(desktopInventory);
-            }
-
-            // Check if any changes have been made
-            bool hasChanges =
-                desktopInventory1.Description != desktopInventory.Description ||
-                desktopInventory1.DTLevel != desktopInventory.DTLevel ||
-                desktopInventory1.DTBrand != desktopInventory.DTBrand ||
-                desktopInventory1.DTModel != desktopInventory.DTModel ||
-                desktopInventory1.DTMBoard != desktopInventory.DTMBoard ||
-                desktopInventory1.DTcpu != desktopInventory.DTcpu ||
-                desktopInventory1.DTgraphics != desktopInventory.DTgraphics ||
-                desktopInventory1.DTHardisk != desktopInventory.DTHardisk ||
-                desktopInventory1.DTMemory != desktopInventory.DTMemory ||
-                desktopInventory1.DTOS != desktopInventory.DTOS;
-
-            if (!hasChanges)
-            {
-                TempData["AlertMessage"] = "No changes detected!";
-                return View(desktopInventory);
+                TempData["AlertMessage"] = "You can't edit this, It is already allocated!";
+                return RedirectToAction("Edit", new { id = desktopInventory.desktopInvCode });
             }
 
             try

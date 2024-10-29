@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
@@ -370,10 +366,10 @@ namespace AssetManagement.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string code, string serial)
         {
             var findSerial = await _context.tbl_ictams_laptopinvdetails
-                                           .Where(x => x.SerialCode == id)
+                                           .Where(x => x.laptoptinvCode == code && x.SerialCode == serial)
                                            .FirstOrDefaultAsync();
 
             if (findSerial != null)
@@ -390,7 +386,7 @@ namespace AssetManagement.Controllers
                 {
                     if (laptopToUpdate != null)
                     {
-                        laptopToUpdate.Quantity = Math.Max(0, laptopToUpdate.Quantity - 1);
+                        laptopToUpdate.Quantity = laptopToUpdate.Quantity - 1;
                         await _context.SaveChangesAsync();
                         // ...
                         TempData["SuccessNotification"] = "Successfully removed a laptop from inventory";

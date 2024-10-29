@@ -1,123 +1,79 @@
 ﻿@model AssetManagement.Models.MonitorInventory
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Monitor";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
 
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-
-
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-<h4>Monitor Inventory</h4>
-<hr />
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-    if (!string.IsNullOrEmpty(alertMessage))
+<div class="m-4">
+    <h4>Edit Monitor Inventory</h4>
+    @if (TempData["Welcome"] != null)
     {
-        <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #BF1E25; color: white;">
-            @alertMessage
+        <p>@TempData["Welcome"]</p>
+    }
+
+    @if (@TempData["AlertMessage"] != null)
+    {
+        <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["AlertMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-}
-<script>
-    $(document).ready(function () {
-        // Close the alert after 6 seconds
-        setTimeout(function () {
-            $("#alert").alert("close");
-        }, 5000);
-    });
-</script>
-<div>
-    <form asp-action="Edit">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-4" >
-                <label asp-for="monitorCode" class="control-label"></label>
-                <input readonly style="background-color: white;" asp-for="monitorCode" class="form-control" />
-                <span asp-validation-for="monitorCode" class="text-danger"></span>
+
+    <hr />
+    <div>
+        <form asp-action="Edit">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-3 mb-4">
+                    <label asp-for="monitorCode" class="control-label"></label>
+                    <input asp-for="monitorCode" class="form-control" readonly />
+                    <span asp-validation-for="monitorCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-4">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="MonitorModel" class="control-label"></label>
+                    <select asp-for="MonitorModel" class="form-select" asp-items="ViewBag.Mmodel"></select>
+                    <span asp-validation-for="MonitorModel" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-3 mb-4" hidden>
+                    <label asp-for="AllocatedNo" class="control-label"></label>
+                    <input asp-for="AllocatedNo" class="form-control" />
+                    <span asp-validation-for="AllocatedNo" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-4" hidden>
+                    <label asp-for="MonitorCreatedBy" class="control-label"></label>
+                    <input asp-for="MonitorCreatedBy" class="form-control" />
+                    <span asp-validation-for="MonitorCreatedBy" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-4" hidden>
+                    <label asp-for="DateCreated" class="control-label"></label>
+                    <input asp-for="DateCreated" class="form-control" />
+                    <span asp-validation-for="DateCreated" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-4" hidden>
+                    <label asp-for="MonitorStatus" class="control-label"></label>
+                    <select asp-for="MonitorStatus" class="form-control" asp-items="ViewBag.MonitorStatus"></select>
+                </div>
+                <div class="d-flex align-items-end gap-3 mt-2">
+                    <input type="submit" value="Save" class="btn btn-red" />
+                    <a class="btn btn-outline-secondary " asp-action="Index">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-4">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group col-4" id="modeltable">
-                <label asp-for="MonitorModel" class="control-label"></label>
-                <input asp-for="MonitorModel" value="0" class="form-control" id="modelid" hidden />
-                <input class="form-control" id="modeldes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-4" hidden>
-                <label asp-for="AllocatedNo" class="control-label"></label>
-                <input asp-for="AllocatedNo"  class="form-control" />
-                <span asp-validation-for="AllocatedNo" class="text-danger"></span>
-            </div>
-            <div class="form-group col-4" hidden>
-                <label asp-for="MonitorCreatedBy" class="control-label"></label>
-                <input asp-for="MonitorCreatedBy" class="form-control" />
-                <span asp-validation-for="MonitorCreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group col-4" hidden>
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
-            <div hidden class="form-group col-2">
-                <label asp-for="MonitorStatus" class="control-label"></label>
-                <select asp-for="MonitorStatus" class="form-control" asp-items="ViewBag.MonitorStatus"></select>
-            </div>
-            <div class="form-group col-2" style="margin-top: 23px;">
-                <input type="submit" value="Save" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index">BACK</a>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
+    <div class="displaytable">
+    </div>
 </div>
-<div class="displaytable">
-</div>
+
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-<script>
-    $(document).ready(function () {
-
-        $("#modeltable").click(function () {
-
-            $('#modelid').val(null);
-
-            $('#modeldes').val(null);
-            $.ajax({
-                url: "@Url.Action("ModelPartialView","Modelss")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-    })
-</script>

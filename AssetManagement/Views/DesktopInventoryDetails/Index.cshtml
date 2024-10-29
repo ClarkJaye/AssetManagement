@@ -19,6 +19,8 @@
                 <i class="fas fa-pencil-alt"></i>
                 <span>Add New</span>
             </a>
+
+            <a class="btn btn-outline-secondary" asp-controller="DesktopInventories" asp-action="Index">Back to Inventory</a>
         </div>
     </div>
 
@@ -42,7 +44,7 @@
                         @Html.DisplayNameFor(model => model.Vendor)
                     </th>
                     <th>
-                        Service Years
+                        SERVICES YEARS
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.PurchaseDate)
@@ -129,10 +131,10 @@
                             }
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.PurchaseDate)                            
+                            @item.PurchaseDate?.ToString("MMM dd yy hh:mm tt")
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DeployedDate)
+                            @item.DeployedDate?.ToString("MMM dd yy hh:mm tt")
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status.status_code)
@@ -141,19 +143,51 @@
                             @Html.DisplayFor(modelItem => item.Createdby.UserCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
+                            @item.DateCreated.ToString("MMM dd yy hh:mm tt")
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedDate)
+                            @item.UpdatedDate?.ToString("MMM dd yy hh:mm tt")
                         </td>
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@item.unitTag">Details</a> |
-                                <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.unitTag">Edit</a> |
-                                <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.unitTag">Delete</a>
+                                <a class="btn btn-sm btn-outline-secondary"
+                                   asp-action="Details"
+                                   asp-route-code="@item.desktopInvCode"
+                                   asp-route-unitTag="@item.unitTag">
+                                    Details
+                                </a>
+                                |
+                                <a class="btn btn-sm btn-outline-primary"
+                                   asp-action="Edit"
+                                   asp-route-code="@item.desktopInvCode"
+                                   asp-route-unitTag="@item.unitTag">
+                                    Edit
+                                </a>
+                                |                               
+                                <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                                <form method="post" asp-action="Delete" asp-controller="DesktopInventoryDetails" asp-route-code="@item.desktopInvCode" asp-route-unitTag="@item.unitTag">
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete the selected item(s)?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -162,3 +196,33 @@
         </table>
     </div>
 </div>
+
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+@if (TempData["ErrorNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Error',
+                text: '@TempData["ErrorNotification"]',
+                icon: 'error',
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}

@@ -103,7 +103,16 @@ namespace AssetManagement.Controllers
                 {
                     await FindStatus();
 
-                    var assetManagementContext = await _context.tbl_ictams_ltnewalloc.Where(x => x.SecAllocationStatus == "AC").Include(s => s.Createdby).Include(s => s.LaptopAllocation).Include(s => s.LaptopInventoryDetails).Include(s => s.LaptopInventoryDetails.LaptopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
+                    var assetManagementContext = await _context.tbl_ictams_ltnewalloc
+                        .Where(x => x.SecAllocationStatus == "AC")
+                        .Include(s => s.LaptopAllocation)
+                        .Include(s => s.LaptopAllocation.LaptopInventoryDetails)
+                        .Include(s => s.LaptopAllocation.LaptopInventoryDetails.LaptopInventory)
+                        .Include(s => s.Owner)
+                        .Include(s => s.Status)
+                        .Include(s => s.Createdby)
+                        .Include(s => s.Updatedby).ToListAsync();
+
                     return View(assetManagementContext);
                 }
             }
@@ -121,13 +130,15 @@ namespace AssetManagement.Controllers
             }
 
             var secondOwnerAlloc = await _context.tbl_ictams_ltnewalloc
-                .Include(s => s.Createdby)
-                .Include(s => s.LaptopInventoryDetails.LaptopInventory)
+                .Include(s => s.LaptopAllocation)
+                .Include(s => s.LaptopAllocation.LaptopInventoryDetails)
+                .Include(s => s.LaptopAllocation.LaptopInventoryDetails.LaptopInventory)
                 .Include(s => s.Owner)
                 .Include(s => s.Status)
-                .Include(s => s.LaptopInventoryDetails)
+                .Include(s => s.Createdby)
                 .Include(s => s.Updatedby)
                 .FirstOrDefaultAsync(m => m.SecAllocId == id);
+
             if (secondOwnerAlloc == null)
             {
                 return NotFound();

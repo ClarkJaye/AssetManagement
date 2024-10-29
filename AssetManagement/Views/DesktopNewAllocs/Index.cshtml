@@ -116,47 +116,47 @@
                             <td hidden>
                                 @Html.DisplayFor(modelItem => item.SecAllocId)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DesktopAllocation.AllocId)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DesktopAllocation.ComputerName)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DesktopAllocation.DesktopCode)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DesktopAllocation.UnitTag)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.Description)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DateCreated)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.DateUpdated)
                             </td>
                             @{
-                                if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
+                                if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
                                 {
                                     <td style="color:red; font-weight:bold; font-size:12px;">
                                         @Html.DisplayFor(modelItem => item.Status.status_name)
                                     </td>
                                 }
-                                else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
+                                else if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
                                 {
                                     <td style="color:darkgreen; font-weight:bold; font-size:12px;">
                                         @Html.DisplayFor(modelItem => item.Status.status_name)
                                     </td>
                                 }
-                                else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
+                                else if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
                                 {
                                     <td style="color:orange; font-weight:bold; font-size:12px;">
                                         @Html.DisplayFor(modelItem => item.Status.status_name)
@@ -169,10 +169,10 @@
                                     </td>
                                 }
                             }
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
                             </td>
-                            <td class=" editbtn" id="@item.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
                                 @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
                             </td>
                             <td>

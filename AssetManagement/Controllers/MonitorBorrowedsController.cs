@@ -65,7 +65,7 @@ namespace AssetManagement.Controllers
                 }
                 else
                 {
-                    var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "AC").Include(l => l.MonitorInventory).Include(l => l.MonitorDetail).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+                    var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "AC").Include(l => l.MonitorDetail.MonitorInventory).Include(l => l.MonitorDetail).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
@@ -75,12 +75,12 @@ namespace AssetManagement.Controllers
 
         public async Task<IActionResult> Inactive()
         {
-            var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "RT").Include(l => l.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+            var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "RT").Include(l => l.MonitorDetail.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> BorrowedViews()
         {
-            var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "RT").Include(l => l.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+            var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "RT").Include(l => l.MonitorDetail.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -94,7 +94,7 @@ namespace AssetManagement.Controllers
 
             var monitorBorrowed = await _context.tbl_ictams_monitorborrowed
                 .Include(m => m.MonitorDetail)
-                .Include(m => m.MonitorInventory)
+                .Include(m => m.MonitorDetail.MonitorInventory)
                 .Include(m => m.Owner)
                 .Include(m => m.Status)
                 .Include(m => m.UserCreated)
@@ -238,7 +238,7 @@ namespace AssetManagement.Controllers
 
             var monitorBorrowed = await _context.tbl_ictams_monitorborrowed
                 .Include(m => m.MonitorDetail)
-                .Include(m => m.MonitorInventory)
+                .Include(m => m.MonitorDetail.MonitorInventory)
                 .Include(m => m.Owner)
                 .Include(m => m.Status)
                 .Include(m => m.UserCreated)

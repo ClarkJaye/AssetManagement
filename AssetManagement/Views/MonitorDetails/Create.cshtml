@@ -3,82 +3,63 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .custom-fontsize {
-        font-size: 11px;
-    }
-
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
 
 
 
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-</style>
-<h4>Monitor Details</h4>
-<hr />
-<div>
+<div class="mx-4">
+    <h4>Add Monitor Details</h4>
+    <hr />
+    <div>
         <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2">
-                <label asp-for="monitorCode" class="control-label"></label>
-                <input value="@ViewBag.Code" readonly style="background-color: white;" asp-for="monitorCode" class="form-control" />
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="monitorCode" class="control-label"></label>
+                    <input value="@ViewBag.Code" readonly asp-for="monitorCode" class="form-control" />
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="SerialNumber" class="control-label"></label>
+                    <input asp-for="SerialNumber" class="form-control" placeholder="Enter Serial No" required />
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="PO" class="control-label"></label>
+                    <input asp-for="PO" class="form-control" placeholder="Enter PO" required />
+                    <span asp-validation-for="PO" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input type="number" asp-for="Price" class="form-control" placeholder="Enter Price" required />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2" id="vendortable">
+                    <label asp-for="MonitorVendor" class="control-label"></label>
+                    <input asp-for="MonitorVendor" value="0" class="form-control" id="vid" hidden />
+                    <input class="form-control" id="vname" readonly style="background-color: white;" placeholder="Select vendor below" />
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="PurchaseDate" class="control-label"></label>
+                    <input asp-for="PurchaseDate" class="form-control" />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="DeployedDate" class="control-label"></label>
+                    <input asp-for="DeployedDate" class="form-control" required />
+                    <span asp-validation-for="DeployedDate" class="text-danger"></span>
+                </div>
+                <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Create" class="btn btn-red " />
+                    <a class="btn btn-outline-secondary" asp-controller="MonitorInventories" asp-action="Index">Back to List</a>
+                </div>
             </div>
-            <div class="form-group col-2">
-                <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" class="form-control" required />
-                <span asp-validation-for="SerialNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="PO" class="control-label"></label>
-                <input asp-for="PO" class="form-control" required />
-                <span asp-validation-for="PO" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="Price" class="control-label"></label>
-                <input type="number" asp-for="Price" class="form-control" required />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="vendortable">
-                <label asp-for="MonitorVendor" class="control-label"></label>
-                <input asp-for="MonitorVendor" value="0" class="form-control" id="vid" hidden />
-                <input class="form-control" id="vname" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="PurchaseDate" class="control-label"></label>
-                <input asp-for="PurchaseDate" class="form-control" />
-                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" style="margin-top: 23px;">
-                <input type="submit" value="Create" class="bg-success h5 text-white text-decoration-none p-2 btn createbtn" />
-                <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-controller="MonitorInventories" asp-action="Index">BACK</a>
-            </div>
-        </div>
         </form>
     </div>
-<div class="displaytable">
-</div>
-<script>
-    $(document).ready(function () {
 
+<div class="displaytable"></div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         //VENDOR
         $("#vendortable").click(function () {
 
@@ -86,7 +67,7 @@
 
             $('#vname').val(null);
             $.ajax({
-                url: "@Url.Action("VendorsPartialView","Vendors")",
+                url: "@Url.Action("VendorsPartialView", "Vendors")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);
@@ -95,6 +76,23 @@
         })
 
 
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty(); 
+        }
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#vendortable, .displaytable').length) {
+                hideTable();  
+            }
+        });
+
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();  
+            }
+        });
     })
 
 </script>

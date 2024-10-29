@@ -29,9 +29,9 @@ namespace AssetManagement.Controllers
         }
 
         // GET: DesktopInventoryDetails/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string code, string unitTag)
         {
-            if (id == null || _context.tbl_ictams_desktopinvdetails == null)
+            if (code == null || unitTag == null || _context.tbl_ictams_desktopinvdetails == null)
             {
                 return NotFound();
             }
@@ -41,7 +41,7 @@ namespace AssetManagement.Controllers
                 .Include(d => d.Status)
                 .Include(d => d.Updatedby)
                 .Include(d => d.Vendor)
-                .FirstOrDefaultAsync(m => m.unitTag == id);
+                .FirstOrDefaultAsync(m => m.desktopInvCode == code && m.unitTag == unitTag);
             if (desktopInventoryDetail == null)
             {
                 return NotFound();
@@ -121,22 +121,22 @@ namespace AssetManagement.Controllers
         }
 
         // GET: DesktopInventoryDetails/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string code, string unitTag)
         {
-            if (id == null || _context.tbl_ictams_desktopinvdetails == null)
+            if (code == null || unitTag == null || _context.tbl_ictams_desktopinvdetails == null)
             {
                 return NotFound();
             }
 
-            var desktopInventoryDetail = await _context.tbl_ictams_desktopinvdetails.FindAsync(id);
+            var desktopInventoryDetail = await _context.tbl_ictams_desktopinvdetails.Where(c=> c.desktopInvCode == code && c.unitTag == unitTag).FirstOrDefaultAsync();
             if (desktopInventoryDetail == null)
             {
                 return NotFound();
             }
             ViewData["Created"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", desktopInventoryDetail.Created);
-            ViewData["DTStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code", desktopInventoryDetail.DTStatus);
+            ViewData["DTStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name", desktopInventoryDetail.DTStatus);
             ViewData["Updated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", desktopInventoryDetail.Updated);
-            ViewData["DTDVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorID", desktopInventoryDetail.DTDVendor);
+            ViewData["DTDVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName", desktopInventoryDetail.DTDVendor);
             return View(desktopInventoryDetail);
         }
 
@@ -145,47 +145,58 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("desktopInvCode,unitTag,PO,Price,DTDVendor,PurchaseDate,DeployedDate,DTStatus,Created,DateCreated,Updated,UpdatedDate")] DesktopInventoryDetail desktopInventoryDetail)
+        public async Task<IActionResult> Edit([Bind("desktopInvCode,unitTag,PO,Price,DTDVendor,PurchaseDate,DeployedDate,DTStatus,Created,DateCreated,Updated,UpdatedDate")] DesktopInventoryDetail desktopInventoryDetail)
         {
-            if (id != desktopInventoryDetail.unitTag)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                // Retrieve the existing record to update
+                var existingDetail = await _context.tbl_ictams_desktopinvdetails
+                    .FirstOrDefaultAsync(c => c.desktopInvCode == desktopInventoryDetail.desktopInvCode && c.unitTag == desktopInventoryDetail.unitTag);
+
+                if (existingDetail == null)
                 {
-                    _context.Update(desktopInventoryDetail);
-                    await _context.SaveChangesAsync();
+                    TempData["ErrorNotification"] = "Updated Failed";
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DesktopInventoryDetailExists(desktopInventoryDetail.unitTag))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var ucode = HttpContext.Session.GetString("UserName");
+                // Update specific properties
+                existingDetail.PO = desktopInventoryDetail.PO;
+                existingDetail.Price = desktopInventoryDetail.Price;
+                existingDetail.DTDVendor = desktopInventoryDetail.DTDVendor;
+                existingDetail.PurchaseDate = desktopInventoryDetail.PurchaseDate;
+                existingDetail.DeployedDate = desktopInventoryDetail.DeployedDate;
+                existingDetail.DTStatus = desktopInventoryDetail.DTStatus;
+                existingDetail.Updated = ucode;
+                existingDetail.UpdatedDate = DateTime.Now;
+
+                TempData["SuccessNotification"] = "Successfully Udpdated";
+                // Save changes
+                await _context.SaveChangesAsync();
             }
-            return View(desktopInventoryDetail);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DesktopInventoryDetailExists(desktopInventoryDetail.desktopInvCode, desktopInventoryDetail.unitTag))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string code, string unitTag)
         {
             var findSerial = await _context.tbl_ictams_desktopinvdetails
-                                           .Where(x => x.unitTag == id)
+                                           .Where(x => x.desktopInvCode == code && x.unitTag == unitTag)
                                            .FirstOrDefaultAsync();
 
             if (findSerial != null)
             {
-                _context.tbl_ictams_desktopinvdetails.Remove(findSerial);
-
                 var maxQuantityLaptop = await _context.tbl_ictams_desktopinv
                                                      .Where(x => x.desktopInvCode == findSerial.desktopInvCode)
                                                      .MaxAsync(x => x.Quantity);
@@ -196,7 +207,11 @@ namespace AssetManagement.Controllers
                 {
                     if (laptopToUpdate != null)
                     {
-                        laptopToUpdate.Quantity = Math.Max(0, laptopToUpdate.Quantity - 1);
+                        var ucode = HttpContext.Session.GetString("UserName");
+                        laptopToUpdate.Quantity = laptopToUpdate.Quantity - 1;
+                        findSerial.DTStatus = "IN";
+                        findSerial.UpdatedDate = DateTime.Now;
+                        findSerial.Updated = ucode;
                         await _context.SaveChangesAsync();
                         // ...
                         TempData["SuccessNotification"] = "Successfully removed a laptop from inventory";
@@ -221,9 +236,9 @@ namespace AssetManagement.Controllers
             return RedirectToAction("Index", "DesktopInventories");
         }
 
-        private bool DesktopInventoryDetailExists(string id)
+        private bool DesktopInventoryDetailExists(string code, string unitTag)
         {
-          return (_context.tbl_ictams_desktopinvdetails?.Any(e => e.unitTag == id)).GetValueOrDefault();
+          return (_context.tbl_ictams_desktopinvdetails?.Any(e => e.desktopInvCode == code && e.unitTag == unitTag)).GetValueOrDefault();
         }
     }
 }

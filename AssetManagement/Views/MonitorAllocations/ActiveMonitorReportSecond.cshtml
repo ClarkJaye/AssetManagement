@@ -148,20 +148,20 @@
                             @Html.DisplayFor(modelItem => item.AllocId)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
+                            @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.MonitorInventory.monitorCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorInventory.Description)
+                            @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.MonitorInventory.Description)
                         </td>
 
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorDetail.SerialNumber)
+                            @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.SerialNumber)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorDetail.PO)
+                            @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.PO)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MonitorInventory.Model.ModelDescription)
+                            @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.MonitorInventory.Model.ModelDescription)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.MonitorAllocation.FixedassetTag)
@@ -179,19 +179,19 @@
                             @Html.DisplayFor(modelItem => item.DateUpdated)
                         </td>
                         @{
-                            if (item.MonitorDetail.PurchaseDate <= DateTime.Now.AddMonths(-72))
+                            if (item.MonitorAllocation.MonitorDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
                             {
                                 <td style="color:red; font-weight:bold; font-size:12px;">
                                     @Html.DisplayFor(modelItem => item.Status.status_name)
                                 </td>
                             }
-                            else if (item.MonitorDetail.PurchaseDate <= DateTime.Now.AddMonths(-24))
+                            else if (item.MonitorAllocation.MonitorDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
                             {
                                 <td style="color:darkgreen; font-weight:bold; font-size:12px;">
                                     @Html.DisplayFor(modelItem => item.Status.status_name)
                                 </td>
                             }
-                            else if (item.MonitorDetail.PurchaseDate <= DateTime.Now.AddMonths(-48))
+                            else if (item.MonitorAllocation.MonitorDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
                             {
                                 <td style="color:orange; font-weight:bold; font-size:12px;">
                                     @Html.DisplayFor(modelItem => item.Status.status_name)

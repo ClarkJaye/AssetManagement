@@ -45,7 +45,7 @@ namespace AssetManagement.Controllers
             var assetManagementContext1 = await _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus == "IN")
                 .Include(s => s.Createdby)
                 .Include(s => s.MonitorAllocation)
-                .ThenInclude(s => s.MonitorInventory)
+                .ThenInclude(s => s.MonitorDetails.MonitorInventory)
                 .Include(s => s.Updatedby)
                 .Include(s => s.MonitorDetail)
                 .Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
@@ -55,7 +55,7 @@ namespace AssetManagement.Controllers
         {
             await FindStatus();
             //EXECUTE VIEWS
-            var assetManagementContext1 = await _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus == "IN").Include(s => s.Createdby).Include(s => s.MonitorAllocation).Include(s => s.MonitorInventory).Include(s => s.MonitorDetail).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
+            var assetManagementContext1 = await _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus == "IN").Include(s => s.Createdby).Include(s => s.MonitorAllocation).Include(s => s.MonitorAllocation.MonitorDetails.MonitorInventory).Include(s => s.MonitorDetail).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
             return View(assetManagementContext1);
         }
 
@@ -91,7 +91,7 @@ namespace AssetManagement.Controllers
                 {
                     await FindStatus();
 
-                    var assetManagementContext = await _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus == "AC").Include(s => s.Createdby).Include(s => s.MonitorAllocation).Include(s => s.MonitorDetail).Include(s => s.MonitorInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
+                    var assetManagementContext = await _context.tbl_ictams_monitornewalloc.Where(x => x.SecAllocationStatus == "AC").Include(s => s.Createdby).Include(s => s.MonitorAllocation).Include(s => s.MonitorDetail).Include(s => s.MonitorAllocation.MonitorDetails.MonitorInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
                     return View(assetManagementContext);
                 }
             }
@@ -109,7 +109,7 @@ namespace AssetManagement.Controllers
 
             var secondOwnerAlloc = await _context.tbl_ictams_monitornewalloc
                 .Include(s => s.Createdby)
-                .Include(s => s.MonitorInventory)
+                .Include(s => s.MonitorAllocation.MonitorDetails.MonitorInventory)
                 .Include(s => s.Owner)
                 .Include(s => s.Status)
                 .Include(s => s.MonitorDetail)

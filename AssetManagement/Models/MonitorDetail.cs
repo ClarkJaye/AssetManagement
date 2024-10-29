@@ -11,7 +11,6 @@ namespace AssetManagement.Models
         [DisplayName("MONITOR CODE")]
         public string monitorCode { get; set; }
 
-        [Key]
         [Column("monitor_serial", TypeName = "VARCHAR(30)")]
         [DisplayName("SERIAL")]
         public string SerialNumber { get; set; }

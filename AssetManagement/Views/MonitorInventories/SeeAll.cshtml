@@ -3,154 +3,148 @@
 @{
     ViewData["Title"] = "View All";
 }
-<style>
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-        overflow: hidden;
-    }
+<div class="m-4">
+    <div class="allocation-details">
+        <h4 class="allocation-title">Laptop Allocation Details for ID: @ViewBag.Id</h4>
+        <h5 class="allocation-description">Description: @ViewBag.Ids</h5>
+    </div>
 
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
+    <!-- Action Buttons -->
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <a class="btn btn-outline-secondary" asp-controller="MonitorInventories" asp-action="Index">
+                Back to List
+            </a>
+            <a class="btn btn-outline-secondary" asp-controller="MonitorDetails" asp-action="Index">
+                See All Details
+            </a>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+        </div>
+    </div>
 
-    .allocation-details {
-        margin-bottom: 20px;
-        background-color: #f2f2f2;
-        padding: 20px;
-        border-radius: 5px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
 
-    .allocation-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .allocation-description {
-        font-size: 18px;
-        color: #666;
-        margin-top: 10px;
-    }
-</style>
-
-<div class="allocation-details">
-    <h4 class="allocation-title">Monitor Allocation Details for ID: @ViewBag.Id</h4>
-    <h5 class="allocation-description">Description: @ViewBag.Ids</h5>
-</div>
-<a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-controller="MonitorInventories" asp-action="Index">Back</a>
-<input type="text" id="filterInput" placeholder="Search...">
-<div>
-    <table class="table custom-fontsize  ">
-        <thead>
-            <tr>
-                <th>
-                    CODE
-                </th>
-                <th>
-                    PO
-                </th>
-                <th>
-                    SERIAL
-                </th>
-                <th>
-                    PRICE
-                </th>
-                <th>
-                    VENDOR
-                </th>
-                <th>
-                    PURCHASE DATE
-                </th>
-                <th>
-                    DEPLOYED DATE
-                </th>
-                <th>
-                    STATUS
-                </th>
-                <th>
-                    CREATED BY
-                </th>
-                <th>
-                    CREATED AT
-                </th>
-                <th>
-                    UPDATED BY
-                </th>
-                <th>
-                    UPDATE AT
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PO)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SerialNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Vendor.VendorName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PurchaseDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DeployedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status.status_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                    </td>
-                    <td>
-                        <form method="post" asp-action="Delete" asp-controller="MonitorDetails" asp-route-id="@item.SerialNumber">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
+                    <th>
+                        CODE
+                    </th>
+                    <th>
+                        PO
+                    </th>
+                    <th>
+                        SERIAL
+                    </th>
+                    <th>
+                        PRICE
+                    </th>
+                    <th>
+                        VENDOR
+                    </th>
+                    <th>
+                        PURCHASE DATE
+                    </th>
+                    <th>
+                        DEPLOYED DATE
+                    </th>
+                    <th>
+                        STATUS
+                    </th>
+                    <th>
+                        CREATED BY
+                    </th>
+                    <th>
+                        CREATED AT
+                    </th>
+                    <th>
+                        UPDATED BY
+                    </th>
+                    <th>
+                        UPDATE AT
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SerialNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PurchaseDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DeployedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateUpdated)
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <form method="post" asp-action="Delete" asp-controller="MonitorDetails" asp-route-code="@item.monitorCode" asp-route-serial="@item.SerialNumber">
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete the selected item(s)?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="multi-delete-button btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                        <span class="fas fa-trash-alt"></span> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 <script>
-
-
-    //FILTERING
-
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {

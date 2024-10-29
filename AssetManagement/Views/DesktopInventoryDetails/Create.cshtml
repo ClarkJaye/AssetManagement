@@ -32,7 +32,6 @@
                 }
                 else
                 {
-                    <!-- Dropdown for Desktop Code -->
                     <div class="form-group col-md-2 mb-3">
                         <label asp-for="desktopInvCode" class="control-label"></label>
                         <select asp-for="desktopInvCode" class="form-select" asp-items="ViewBag.DTInvCode" onchange="loadPartialView(this.value)">
@@ -44,7 +43,7 @@
 
                 <div class="form-group col-md-2 mb-3">
                     <label asp-for="unitTag" class="control-label"></label>
-                    <input asp-for="unitTag" class="form-control" placeholder="Enter Unit" required />
+                    <input asp-for="unitTag" class="form-control" placeholder="Enter Unit" required id="tagTable"/>
                     <span asp-validation-for="unitTag" class="text-danger"></span>
                 </div>
 
@@ -82,14 +81,14 @@
 
                 <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
                     <input type="submit" value="Create" class="btn btn-red" />
-                    <a class="btn btn-outline-secondary" asp-controller="DesktopInventories" asp-action="Index">Back to List</a>
+                    <a class="btn btn-outline-secondary" asp-controller="DesktopInventories" asp-action="Index">Back to Inventory</a>
+                    <a class="btn btn-outline-secondary" asp-controller="DesktopInventoryDetails" asp-action="Index">Back to List of details</a>
                 </div>
             </div>
         </form>
     </div>
 
     <div class="displaytable">
-        <!-- The partial view will be loaded here -->
     </div>
 </div>
 
@@ -117,4 +116,20 @@
             });
         }
     }
+
+
+    // Owner partial view
+    $("#tagTable").click(function () {
+        $.ajax({
+            url: "@Url.Action("DeskInvPartialView", "DesktopInventories")",
+            type: "GET",
+            success: function (res) {
+                $(".displaytable").html(res);
+            },
+            error: function () {
+                alert('Error loading owner information.');
+            }
+        });
+    });
+
 </script>

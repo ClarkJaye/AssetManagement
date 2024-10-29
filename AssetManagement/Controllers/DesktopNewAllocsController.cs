@@ -100,7 +100,16 @@ namespace AssetManagement.Controllers
                         return RedirectToAction("ChangePassword", "Users");
                     }
 
-                    var assetManagementContext = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus != "IN").Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.InventoryDetails).Include(s => s.InventoryDetails.DesktopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
+                    var assetManagementContext = await _context.tbl_ictams_dtnewalloc
+                      .Where(x => x.SecAllocationStatus != "IN")
+                      .Include(s => s.DesktopAllocation)
+                      .Include(s => s.DesktopAllocation.InventoryDetails)
+                      .Include(s => s.DesktopAllocation.InventoryDetails.DesktopInventory)
+                      .Include(s => s.Owner)
+                      .Include(s => s.Status)
+                      .Include(s => s.Createdby)
+                      .Include(s => s.Updatedby).ToListAsync();
+
                     return View(assetManagementContext);
                 }
             }
@@ -336,7 +345,7 @@ namespace AssetManagement.Controllers
 
         private bool DesktopNewAllocExists(string id)
         {
-          return (_context.tbl_ictams_dtnewalloc?.Any(e => e.SecAllocId == id)).GetValueOrDefault();
+            return (_context.tbl_ictams_dtnewalloc?.Any(e => e.SecAllocId == id)).GetValueOrDefault();
         }
     }
 }
