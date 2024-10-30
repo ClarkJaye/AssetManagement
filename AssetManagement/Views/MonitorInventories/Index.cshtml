@@ -207,13 +207,13 @@
     </script>
 }
 
-@if (TempData["ErrorNotification"] != null)
+@if (TempData["AlertMessage"] != null)
 {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
                 title: 'Error',
-                text: '@TempData["ErrorNotification"]',
+                text: '@TempData["AlertMessage"]',
                 icon: 'error',
                 timer: 3000, // Automatically close the notification after 3 seconds
                 showConfirmButton: false

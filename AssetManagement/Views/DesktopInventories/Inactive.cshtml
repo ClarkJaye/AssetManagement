@@ -186,35 +186,6 @@
 
 </div>
 
-@if (TempData["SuccessNotification"] != null)
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            Swal.fire({
-                title: 'Success',
-                text: '@TempData["SuccessNotification"]',
-                icon: 'success',
-                timer: 3000, // Automatically close the notification after 3 seconds
-                showConfirmButton: false
-            });
-        });
-    </script>
-}
-
-@if (TempData["ErrorNotification"] != null)
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            Swal.fire({
-                title: 'Error',
-                text: '@TempData["ErrorNotification"]',
-                icon: 'error',
-                timer: 3000, // Automatically close the notification after 3 seconds
-                showConfirmButton: false
-            });
-        });
-    </script>
-}
 
 
 <script>

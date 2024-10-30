@@ -49,7 +49,7 @@
 
                 <div class="form-group col-md-2 mb-3">
                     <label asp-for="FixedassetTag" class="control-label"></label>
-                    <input asp-for="FixedassetTag" class="form-control" required />
+                    <input asp-for="FixedassetTag" class="form-control" placeholder="Enter asset tag" required />
                     <span asp-validation-for="FixedassetTag" class="text-danger"></span>
                 </div>
 
@@ -72,101 +72,102 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // When the desktop code changes, reset unit tag and computer name fields
-        $("#deskCode").change(function () {
-            var code = $(this).val();
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // When the desktop code changes, reset unit tag and computer name fields
+            $("#deskCode").change(function () {
+                var code = $(this).val();
 
-            // Clear unit tag and computer name fields
-            $('#unitTagId').empty().append('<option selected disabled>Select unit tag</option>').prop('disabled', true);
-            $('#computerName').val('').prop('readonly', true);
+                // Clear unit tag and computer name fields
+                $('#unitTagId').empty().append('<option selected disabled>Select unit tag</option>').prop('disabled', true);
+                $('#computerName').val('').prop('readonly', true);
 
-            if (code) {
-                // Fetch unit tags for the selected desktop code
-                $.ajax({
-                    url: '@Url.Action("GetUnitNumbers", "DesktopInventories")',
-                    type: 'GET',
-                    data: { deskCode: code },
-                    success: function (data) {
-                        if (data && data.length > 0) {
-                            $.each(data, function (i, item) {
-                                $('#unitTagId').append($('<option>', {
-                                    value: item.unitTag,
-                                    text: item.unitTag
-                                }));
-                            });
-                            $('#unitTagId').prop('disabled', false);
-                        } else {
-                            $('#unitTagId').empty().append('<option selected>No Unit Available</option>');
+                if (code) {
+                    // Fetch unit tags for the selected desktop code
+                    $.ajax({
+                        url: '@Url.Action("GetUnitNumbers", "DesktopInventories")',
+                        type: 'GET',
+                        data: { deskCode: code },
+                        success: function (data) {
+                            if (data && data.length > 0) {
+                                $.each(data, function (i, item) {
+                                    $('#unitTagId').append($('<option>', {
+                                        value: item.unitTag,
+                                        text: item.unitTag
+                                    }));
+                                });
+                                $('#unitTagId').prop('disabled', false);
+                            } else {
+                                $('#unitTagId').empty().append('<option selected>No Unit Available</option>');
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching unit tags.');
                         }
-                    },
-                    error: function () {
-                        alert('Error fetching unit tags.');
-                    }
-                });
-            }
-        });
-
-
-
-        // On unit tag change, update the computer name
-        $("#unitTagId").change(function () {
-            var code = $('#deskCode').val();
-            var utag = $(this).val();
-
-            if (code && utag) {
-                $.ajax({
-                    url: '@Url.Action("GetComputerName", "DesktopInventories")',
-                    type: 'GET',
-                    data: { deskCode: code, unitTag: utag },
-                    success: function (data) {
-                        $('#computerName').val(data);
-                    },
-                    error: function () {
-                        alert('Error fetching computer name.');
-                    }
-                });
-            }
-        });
-
-        // Owner partial view
-        $("#ownertable").click(function () {
-            $.ajax({
-                url: "@Url.Action("DesktopOwnerPartialView", "Owners")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                },
-                error: function () {
-                    alert('Error loading owner information.');
+                    });
                 }
             });
-        });
 
 
-        // Function to hide the display table
-        function hideTable() {
-            $(".displaytable").empty();  // Clear the content of the display table
-        }
 
-        // Hide the display table when clicking anywhere outside the input fields
-        $(document).click(function (event) {
-            // Check if the clicked element is not within the periptable or ownertable
-            if (!$(event.target).closest('#ownertable, .displaytable').length) {
-                hideTable();  // Hide the display table if clicked outside
+            // On unit tag change, update the computer name
+            $("#unitTagId").change(function () {
+                var code = $('#deskCode').val();
+                var utag = $(this).val();
+
+                if (code && utag) {
+                    $.ajax({
+                        url: '@Url.Action("GetComputerName", "DesktopInventories")',
+                        type: 'GET',
+                        data: { deskCode: code, unitTag: utag },
+                        success: function (data) {
+                            $('#computerName').val(data);
+                        },
+                        error: function () {
+                            alert('Error fetching computer name.');
+                        }
+                    });
+                }
+            });
+
+            // Owner partial view
+            $("#ownertable").click(function () {
+                $.ajax({
+                    url: "@Url.Action("DesktopOwnerPartialView", "Owners")",
+                    type: "GET",
+                    success: function (res) {
+                        $(".displaytable").html(res);
+                    },
+                    error: function () {
+                        alert('Error loading owner information.');
+                    }
+                });
+            });
+
+
+            // Function to hide the display table
+            function hideTable() {
+                $(".displaytable").empty();  // Clear the content of the display table
             }
-        });
 
-        // Optional: Allow hiding the table if 'Esc' key is pressed
-        $(document).keyup(function (e) {
-            if (e.key === "Escape") {
-                hideTable();  // Hide the table when the 'Esc' key is pressed
-            }
-        });
+            // Hide the display table when clicking anywhere outside the input fields
+            $(document).click(function (event) {
+                // Check if the clicked element is not within the periptable or ownertable
+                if (!$(event.target).closest('#ownertable, .displaytable').length) {
+                    hideTable();  // Hide the display table if clicked outside
+                }
+            });
 
-    });
-</script>
+            // Optional: Allow hiding the table if 'Esc' key is pressed
+            $(document).keyup(function (e) {
+                if (e.key === "Escape") {
+                    hideTable();  // Hide the table when the 'Esc' key is pressed
+                }
+            });
+
+        });
+    </script>
+}
+
+

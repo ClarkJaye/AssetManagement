@@ -43,25 +43,25 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#ownertable").click(function () {
-            $('#oid').val(null);
-            $('#odes').val(null);
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#ownertable").click(function () {
+                $('#oid').val(null);
+                $('#odes').val(null);
 
-            $.ajax({
-                url: "@Url.Action("ReturnPartialView", "ReturnTypes")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
+                $.ajax({
+                    url: "@Url.Action("ReturnPartialView", "ReturnTypes")",
+                    type: "GET",
+                    success: function (res) {
+                        $(".displaytable").html(res);
+                    }
+                })
             })
+
+
+
         })
-
-
-
-    })
-</script>
+    </script>
+}

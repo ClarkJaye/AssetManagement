@@ -25,10 +25,6 @@ namespace AssetManagement.Models
         [DisplayName("SERIAL NUMBER")]
         public MonitorDetail MonitorDetail { get; set; }
 
-        [Column("computer_name", TypeName = "VARCHAR(50)")]
-        [DisplayName("COMPUTER NAME")]
-        public string? ComputerName { get; set; }
-
         [Column("mborrower_code")]
         [DisplayName("OWNER")]
         public string OwnerID { get; set; }

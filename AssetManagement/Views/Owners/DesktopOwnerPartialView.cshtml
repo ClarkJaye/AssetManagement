@@ -91,12 +91,8 @@
 </div>
 
 
-
-
 <script>
     $(document).ready(function () {
-
-
         // Add click event listener to each row in the table
         $('table tbody tr').click(function () {
             // Get the id from the clicked row's data-id attribute
@@ -112,12 +108,7 @@
             $('#oid').val(id);
             $('#odes').val(ld);
         });
-    });
 
-
-
-    //FILTERING
-    $(document).ready(function () {
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {
@@ -126,4 +117,3 @@
         });
     });
 </script>
-

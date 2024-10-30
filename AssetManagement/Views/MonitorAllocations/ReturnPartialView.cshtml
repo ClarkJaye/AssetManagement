@@ -3,144 +3,101 @@
 @{
     ViewData["Title"] = "Index";
 }
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-
-    .allocation-details {
-        margin-bottom: 20px;
-        background-color: #f2f2f2;
-        padding: 20px;
-        border-radius: 5px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .allocation-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .allocation-description {
-        font-size: 18px;
-        color: #666;
-        margin-top: 10px;
-    }
-
-</style>
-
-<div class="allocation-details">
-    <h4 class="allocation-title">Return Monitors Allocation</h4>
-</div>
-<p>
-    <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index" asp-controller="ReturnMTAs">Back</a>
-</p>
-<div class="table-container">
-    <table class="table custom-fontsize p-4 ">
-        <thead>
-            <tr>
-                <th hidden>
-                    @Html.DisplayNameFor(model => model.AllocId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MonitorDetails.MonitorInventory)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SerialNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FixedassetTag)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateDeployed)
-                </th>
-                <th hidden>
-                    @Html.DisplayNameFor(model => model.AllocationStatus)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateUpdated)
-                </th>
-                <th>
-                   CREATED BY
-                </th>
-                <th>
-                    UPDATED BY
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+<div class="m-4 px-1">
+    <div class="allocation-details">
+        <h4 class="allocation-title">Return Monitors Allocation</h4>
+    </div>
+    <p>
+        <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index" asp-controller="ReturnMTAs">Back to List</a>
+    </p>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td hidden>
-                        @Html.DisplayFor(modelItem => item.AllocId)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MonitorDetails.MonitorInventory.Description)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.SerialNumber)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.FixedassetTag)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.DateDeployed)
-                    </td>
-                    <td hidden>
-                        @Html.DisplayFor(modelItem => item.AllocationStatus)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                    </td>
-                    <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                    </td>
-                    <td>
-                        <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
-                    </td>
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.AllocId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owner)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MonitorDetails.MonitorInventory)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SerialNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FixedassetTag)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateDeployed)
+                    </th>
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.AllocationStatus)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateCreated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateUpdated)
+                    </th>
+                    <th>
+                        CREATED BY
+                    </th>
+                    <th>
+                        UPDATED BY
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.AllocId)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MonitorDetails.MonitorInventory.Description)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.SerialNumber)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.FixedassetTag)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.DateDeployed)
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.AllocationStatus)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.DateUpdated)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                        </td>
+                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                            @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                        </td>
+                        <td>
+                            <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="displaytable"> </div>
 </div>
-<div class="displaytable"> </div>
+
 
 <script>
     $(document).ready(function () {
@@ -148,7 +105,7 @@
             var userCode = "@ViewBag.Id";
 
             $.ajax({
-                url: "@Url.Action("InventorySecOwnerDetails","MonitorInventories")",
+                url: "@Url.Action("InventorySecOwnerDetails", "MonitorInventories")",
                 type: "GET",
                 data: { userCODE: userCode },
                 success: function (res) {
@@ -162,7 +119,7 @@
             var userCode = "@ViewBag.Id";
 
             $.ajax({
-                url: "@Url.Action("seeDetails","MonitorInventories")",
+                url: "@Url.Action("seeDetails", "MonitorInventories")",
                 type: "GET",
                 data: { userCODE: userCode },
                 success: function (res) {
@@ -176,7 +133,7 @@
             var userCode = "@ViewBag.Id";
 
             $.ajax({
-                url: "@Url.Action("ReturnDetails","MonitorInventories")",
+                url: "@Url.Action("ReturnDetails", "MonitorInventories")",
                 type: "GET",
                 data: { userCODE: userCode },
                 success: function (res) {

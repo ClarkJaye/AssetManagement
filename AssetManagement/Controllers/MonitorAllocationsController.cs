@@ -30,7 +30,6 @@ namespace AssetManagement.Controllers
         {
             await FindStatus();
 
-
             var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorDetails.MonitorInventory).Where(x => x.AllocationStatus == "IN").Include(l => l.Owner).Include(l => l.Updatedby);
             return View(await assetManagementContext.ToListAsync());
         }
@@ -213,11 +212,12 @@ namespace AssetManagement.Controllers
                 }
                 else
                 {
-                    var totalActiveLaptops = await _context.tbl_ictams_monitoralloc.CountAsync(x => x.AllocationStatus == "AC");
-                    var totalInactiveLaptops = await _context.tbl_ictams_monitoralloc.CountAsync(x => x.AllocationStatus == "IN");
+                    // Count total laptops
+                    var totalAlloc = await _context.tbl_ictams_monitordetails.CountAsync(x => x.MonitorStatus == "AC");
+                    var totalNotAlloc = await _context.tbl_ictams_monitorinv.SumAsync(x => x.Quantity - x.AllocatedNo);
 
-                    ViewBag.TotalActiveLaptops = totalActiveLaptops;
-                    ViewBag.TotalInactiveLaptops = totalInactiveLaptops;
+                    ViewBag.TotalActive = totalAlloc;
+                    ViewBag.TotalInactive = totalNotAlloc;
 
                     var assetManagementContext = _context.tbl_ictams_monitoralloc.Where(x => x.AllocationStatus != "IN")
                         .Include(l => l.Status)
@@ -307,11 +307,11 @@ namespace AssetManagement.Controllers
         // GET: MonitorAllocations/Create
         public IActionResult Create()
         {
-            ViewData["AllocCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["SerialNumber"] = new SelectList(_context.Set<MonitorDetail>(), "SerialNumber", "SerialNumber");
-            ViewData["monitorCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "monitorCode");
-            ViewData["OwnerCode"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerCode");
-            ViewData["AllocationStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
+            ViewData["AllocCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserFullName");
+            ViewData["monitorCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "Description");
+            ViewData["SerialNumber"] = new SelectList(_context.tbl_ictams_monitordetails, "SerialNumber", "SerialNumber");
+            ViewData["OwnerCode"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerFullName");
+            ViewData["AllocationStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
             ViewData["AllocUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
             return View();
         }

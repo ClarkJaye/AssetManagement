@@ -7,7 +7,8 @@
     --grey: #eee;
     --dark: #342E37;
     --dark-grey: #AAAAAA;
-    --red: #E57373;
+    /*--red: #E57373;*/
+    --red: #2c3e50;
     --green: #4CAF50;
     --btn: #d24f4f;
 }

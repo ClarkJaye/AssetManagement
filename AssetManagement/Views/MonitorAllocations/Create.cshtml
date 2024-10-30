@@ -3,141 +3,134 @@
 @{
     ViewData["Title"] = "Create";
 }
-<style>
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
 
-    .custom-fontsize {
-        font-size: 11px;
-    }
+<div class="m-4">
+    <h4>Monitor Allocation</h4>
+    <hr />
+    <div>
+        <form asp-action="Create">
+            <div class="row form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group col-md-3 mb-3" hidden>
+                    <label asp-for="AllocId" class="control-label"></label>
+                    <input asp-for="AllocId" class="form-control" />
+                    <span asp-validation-for="AllocId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="monitorCode" class="control-label"></label>
+                    <select asp-for="monitorCode" class="form-select" asp-items="ViewBag.monitorCode" id="monCode">
+                        <option selected disabled>Select Monitor code</option>
+                    </select>
+                    <span asp-validation-for="monitorCode" class="text-danger"></span>
+                </div>
 
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-    }
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-</style>
-@{
-    var alertMessage = TempData["AlertMessage"] as string;
-}
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="SerialNumber" class="control-label"></label>
+                    <select asp-for="SerialNumber" class="form-select" id="serialNumber" disabled>
+                        <option selected disabled>Select serial number</option>
+                    </select>
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                </div>
+               
+                <div class="form-group col-md-3 mb-3" id="ownertable">
+                    <label asp-for="OwnerCode" class="control-label"></label>
+                    <input asp-for="OwnerCode" class="form-control" id="oid" hidden required />
+                    <input class="form-select" id="odes" readonly required placeholder="select owner below" />
+                </div>
 
-@if (!string.IsNullOrEmpty(alertMessage))
-{
-    <div class="alert alert-danger" style="background-color: #BF1E25; color:white;">
-        @alertMessage
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="FixedassetTag" class="control-label"></label>
+                    <input asp-for="FixedassetTag" class="form-control" placeholder="Enter asset tag" required />
+                    <span asp-validation-for="FixedassetTag" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 mb-3" hidden>
+                    <label asp-for="AllocationStatus" class="control-label"></label>
+                    <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
+                    <span asp-validation-for="AllocationStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3 d-flex align-items-center gap-2">
+                    <input type="submit" value="Create" class="btn btn-outline-red" />
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </form>
     </div>
-}
-<h4>Monitor Allocation</h4>
-<hr />
-<div>
-    <form asp-action="Create">
-        <div class="row form-group">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="AllocId" class="control-label"></label>
-                <input asp-for="AllocId" class="form-control" />
-                <span asp-validation-for="AllocId" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="laptable">
-                <label asp-for="monitorCode" class="control-label"></label>
-                <input asp-for="monitorCode" class="form-control" id="lapid" hidden />
-                <input class="form-control" id="lapdes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2" id="setable">
-                <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" readonly class="form-control" id="seid" required style="background-color: white;" />
-                <span asp-validation-for="SerialNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" id="ownertable">
-                <label asp-for="OwnerCode" class="control-label"></label>
-                <input asp-for="OwnerCode" class="form-control" id="oid" hidden />
-                <input class="form-control" id="odes" readonly style="background-color: white;" />
-            </div>
-            <div class="form-group col-2">
-                <label asp-for="FixedassetTag" class="control-label"></label>
-                <input asp-for="FixedassetTag" class="form-control" required />
-                <span asp-validation-for="FixedassetTag" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" hidden>
-                <label asp-for="AllocationStatus" class="control-label"></label>
-                <select asp-for="AllocationStatus" class="form-control" asp-items="ViewBag.AllocationStatus"></select>
-                <span asp-validation-for="AllocationStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group col-2" style="margin-top:23px;">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">BACK</a>
-            </div>
-        </div>
-    </form>
-</div>
 
-<div class="displaytable"></div>
+    <div class="displaytable"></div>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $("#monCode").change(function () {
+                var code = $(this).val();
+
+                $('#serialNumber').empty().append('<option selected disabled>Select serial number</option>').prop('disabled', true);
+                if (code) {
+                    $.ajax({
+                        url: '@Url.Action("GetSerialNumbers", "MonitorInventories")',
+                        type: 'GET',
+                        data: { monCode: code },
+                        success: function (data) {
+                            if (data && data.length > 0) {
+                                $.each(data, function (i, item) {
+                                    $('#serialNumber').append($('<option>', {
+                                        value: item.serialNumber,
+                                        text: item.serialNumber
+                                    }));
+                                });
+                                $('#serialNumber').prop('disabled', false);
+                            } else {
+                                $('#serialNumber').empty().append('<option selected>No Monitor Available</option>');
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching monitor device.');
+                        }
+                    });
+                }
+            });
+
+            //OWNER
+            $("#ownertable").click(function () {
+                $('#oid').val(null);
+
+                $('#odes').val(null);
+                $.ajax({
+                    url: "@Url.Action("MonitorOwnerPartialView", "Owners")",
+                    type: "GET",
+                    success: function (res) {
+                        $(".displaytable").html(res);
+                    }
+                })
+            })
+
+            // Function to hide the display table
+            function hideTable() {
+                $(".displaytable").empty();  // Clear the content of the display table
+            }
+
+            // Hide the display table when clicking anywhere outside the input fields
+            $(document).click(function (event) {
+                // Check if the clicked element is not within the periptable or ownertable
+                if (!$(event.target).closest('#ownertable, .displaytable').length) {
+                    hideTable();  // Hide the display table if clicked outside
+                }
+            });
+
+            // Optional: Allow hiding the table if 'Esc' key is pressed
+            $(document).keyup(function (e) {
+                if (e.key === "Escape") {
+                    hideTable();  // Hide the table when the 'Esc' key is pressed
+                }
+            });
+
+        })
+    </script>
 }
 
-<script>
-    $(document).ready(function () {
-
-        $("#laptable").click(function () {
-
-            $('#lapid').val(null);
-
-            $('#lapdes').val(null);
-            $.ajax({
-                url: "@Url.Action("MonitorInvPartialView","MonitorInventories")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        $("#setable").click(function () {
-            $('#seid').val(null);
-
-            var laptopCode = $('#lapid').val();
-
-            $.ajax({
-                url: "@Url.Action("SeeAllSerial", "MonitorInventories")",
-                type: "GET",
-                data: { id: laptopCode },
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-
-        //OWNER
-
-        $("#ownertable").click(function () {
-
-            $('#oid').val(null);
-
-            $('#odes').val(null);
-            $.ajax({
-                url: "@Url.Action("MonitorOwnerPartialView","Owners")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-
-
-    })
-</script>

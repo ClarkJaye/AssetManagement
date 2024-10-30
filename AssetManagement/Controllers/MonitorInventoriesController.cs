@@ -49,11 +49,34 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE)).Include(l => l.MonitorDetail.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
-                return View(await assetManagementContext.ToListAsync());
+                var assetManagementContext = await _context.tbl_ictams_monitorborrowed
+                    .Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE))
+                    .Include(l => l.MonitorDetail)
+                    .Include(l => l.MonitorDetail.MonitorInventory)
+                    .Include(l => l.Owner)
+                    .Include(l => l.Status)
+                    .Include(l => l.UserCreated)
+                    .Include(l => l.UserUpdated).ToListAsync();
+
+                return View(assetManagementContext);
             }
             return View();
         }
+
+        public JsonResult GetSerialNumbers(string monCode)
+        {
+            // Get serial numbers from inventory details that are available and not already allocated
+            var serials = _context.tbl_ictams_monitordetails
+                .Where(l => l.monitorCode == monCode && l.MonitorStatus == "AV")
+                .Where(l => !_context.tbl_ictams_monitoralloc
+                    .Any(alloc => alloc.SerialNumber == l.SerialNumber && alloc.monitorCode == monCode && alloc.AllocationStatus != "AC" && alloc.AllocationStatus != "IN"))
+                .Select(l => new { l.SerialNumber })
+                .ToList();
+
+            return Json(serials);
+        }
+
+
         // GET: MonitorAllocations
         public async Task<IActionResult> InventoryDetails(string id, string ids, string id2)
         {
@@ -171,7 +194,6 @@ namespace AssetManagement.Controllers
             }
 
             return View("~/Views/MonitorInventories/RetrieveRow.cshtml", monitorInventory);
-
         }
         public async Task<IActionResult> Inactive()
         {
@@ -319,14 +341,14 @@ namespace AssetManagement.Controllers
 
                         _context.Update(inventoryCode);
                         await _context.SaveChangesAsync();
-                        // ...
-                        TempData["SuccessNotification"] = "Successfully deleted!";
-                        // ...
-                        return RedirectToAction(nameof(Index));
+                        TempData["SuccessNotification"] = "Successfully deleted!";                     
                     }
                 }
+                else
+                {
+                    TempData["AlertMessage"] = $"Monitor Inventory Code {id} not found.!";
+                }
             }
-
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Retrieve(string[] selectedIds)
@@ -352,14 +374,13 @@ namespace AssetManagement.Controllers
 
                     _context.Update(inventoryCode);
                     await _context.SaveChangesAsync();
-
-                    // ...
-                    TempData["SuccessNotification"] = "Successfully retrieved!";
-                    // ...
-                    return RedirectToAction(nameof(Index));
+                    TempData["SuccessNotification"] = $"Successfully retrieved data";
+                }
+                else
+                {
+                    TempData["AlertMessage"] = $"Monitor Inventory Code {id} not found.!";
                 }
             }
-
             return RedirectToAction(nameof(Index));
         }
 
