@@ -26,119 +26,123 @@
     </div>
 
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        CODE
-                    </th>
-                    <th>
-                        PO
-                    </th>
-                    <th>
-                        SERIAL
-                    </th>
-                    <th>
-                        PRICE
-                    </th>
-                    <th>
-                        VENDOR
-                    </th>
-                    <th>
-                        PURCHASE DATE
-                    </th>
-                    <th>
-                        DEPLOYED DATE
-                    </th>
-                    <th>
-                        STATUS
-                    </th>
-                    <th>
-                        CREATED BY
-                    </th>
-                    <th>
-                        CREATED AT
-                    </th>
-                    <th>
-                        UPDATED BY
-                    </th>
-                    <th>
-                        UPDATE AT
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PO)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SerialNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Vendor.VendorName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PurchaseDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DeployedDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <form method="post" asp-action="Delete" asp-controller="MonitorDetails" asp-route-code="@item.monitorCode" asp-route-serial="@item.SerialNumber">
-                                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure you want to delete the selected item(s)?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                CODE
+                            </th>
+                            <th>
+                                PO
+                            </th>
+                            <th>
+                                SERIAL
+                            </th>
+                            <th>
+                                PRICE
+                            </th>
+                            <th>
+                                VENDOR
+                            </th>
+                            <th>
+                                PURCHASE DATE
+                            </th>
+                            <th>
+                                DEPLOYED DATE
+                            </th>
+                            <th>
+                                STATUS
+                            </th>
+                            <th>
+                                CREATED BY
+                            </th>
+                            <th>
+                                CREATED AT
+                            </th>
+                            <th>
+                                UPDATED BY
+                            </th>
+                            <th>
+                                UPDATE AT
+                            </th>
+                            <th style="text-align:center!important;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MonitorInventory.monitorCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PO)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PurchaseDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeployedDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status.status_name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateUpdated)
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form method="post" asp-action="Delete" asp-controller="MonitorDetails" asp-route-code="@item.monitorCode" asp-route-serial="@item.SerialNumber">
+                                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to delete the selected item(s)?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <button type="button" class="multi-delete-button btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                <span class="fas fa-trash-alt"></span> Delete
+                                            </button>
+                                        </form>
                                     </div>
-                                    <button type="button" class="multi-delete-button btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                        <span class="fas fa-trash-alt"></span> Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 

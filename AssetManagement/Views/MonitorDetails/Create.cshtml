@@ -1,7 +1,7 @@
 ﻿@model AssetManagement.Models.MonitorDetail
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add Monitor Quantity";
 }
 
 
@@ -13,13 +13,29 @@
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-md-2 mb-2">
-                    <label asp-for="monitorCode" class="control-label"></label>
-                    <input value="@ViewBag.Code" readonly asp-for="monitorCode" class="form-control" />
-                </div>
+                @if (ViewBag.Code != null)
+                {
+                    <div class="form-group col-md-2 mb-3">
+                        <label asp-for="monitorCode" class="control-label"></label>
+                        <input asp-for="monitorCode" value="@ViewBag.Code" readonly hidden />
+                        <input id="code" value="@ViewBag.Code" disabled class="form-select" />
+                        <span asp-validation-for="monitorCode" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-2 mb-3">
+                        <label asp-for="monitorCode" class="control-label"></label>
+                        <select asp-for="monitorCode" class="form-select" asp-items="ViewBag.MTInvCode" onchange="loadPartialView(this.value)">
+                            <option selected disabled>select monitor code</option>
+                        </select>
+                        <span asp-validation-for="monitorCode" class="text-danger"></span>
+                    </div>
+                }
+
                 <div class="form-group col-md-2 mb-2">
                     <label asp-for="SerialNumber" class="control-label"></label>
-                    <input asp-for="SerialNumber" class="form-control" placeholder="Enter Serial No" required />
+                    <input asp-for="SerialNumber" class="form-control" placeholder="Enter Serial No" required id="serial"/>
                     <span asp-validation-for="SerialNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2 mb-2">
@@ -32,11 +48,14 @@
                     <input type="number" asp-for="Price" class="form-control" placeholder="Enter Price" required />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2 mb-2" id="vendortable">
+                <div class="form-group col-md-2 mb-3">
                     <label asp-for="MonitorVendor" class="control-label"></label>
-                    <input asp-for="MonitorVendor" value="0" class="form-control" id="vid" hidden />
-                    <input class="form-control" id="vname" readonly style="background-color: white;" placeholder="Select vendor below" />
+                    <select asp-for="MonitorVendor" class="form-select" asp-items="ViewBag.MTVendor" required>
+                        <option selected disabled>select vendor</option>
+                    </select>
+                    <span asp-validation-for="MonitorVendor" class="text-danger"></span>
                 </div>
+
                 <div class="form-group col-md-2 mb-2">
                     <label asp-for="PurchaseDate" class="control-label"></label>
                     <input asp-for="PurchaseDate" class="form-control" />
@@ -48,51 +67,44 @@
                     <span asp-validation-for="DeployedDate" class="text-danger"></span>
                 </div>
                 <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
-                    <input type="submit" value="Create" class="btn btn-red " />
+                    <input type="submit" value="Create" class="btn btn-theme " />
                     <a class="btn btn-outline-secondary" asp-controller="MonitorInventories" asp-action="Index">Back to List</a>
                 </div>
             </div>
         </form>
     </div>
-
-<div class="displaytable"></div>
+    <div class="displaytable"></div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        //VENDOR
-        $("#vendortable").click(function () {
 
-            $('#vid').val(null);
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-            $('#vname').val(null);
-            $.ajax({
-                url: "@Url.Action("VendorsPartialView", "Vendors")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var code = $("#code").val();
+            if (code) {
+                $("#serial").click(function () {
+                    loadPartialView(code);
+                })
+            }
+            function loadPartialView(InvCode) {
+                if (InvCode) {
+                    $.ajax({
+                        url: '@Url.Action("MTInvPartialView", "MonitorInventories")',
+                        type: "GET",
+                        data: { code: InvCode },
+                        success: function (res) {
+                            $(".displaytable").html(res);
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("Error: " + error);
+                        }
+                    });
                 }
-            })
+            }
         })
-
-
-        // Function to hide the display table
-        function hideTable() {
-            $(".displaytable").empty(); 
-        }
-
-        $(document).click(function (event) {
-            if (!$(event.target).closest('#vendortable, .displaytable').length) {
-                hideTable();  
-            }
-        });
-
-        // Optional: Allow hiding the table if 'Esc' key is pressed
-        $(document).keyup(function (e) {
-            if (e.key === "Escape") {
-                hideTable();  
-            }
-        });
-    })
-
-</script>
+    </script>
+}

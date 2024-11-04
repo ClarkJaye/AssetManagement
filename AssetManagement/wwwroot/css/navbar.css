@@ -8,7 +8,7 @@
 }
 
 .dropdown-menu::-webkit-scrollbar-thumb {
-    background: var(--red);
+    background: var(--theme);
     border-radius: 5px;
 }
 
@@ -18,7 +18,7 @@
 
 
 header .navbar {
-    background-color: var(--red)!important; 
+    background-color: var(--theme)!important; 
     padding: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -33,14 +33,14 @@ header .navbar {
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-    color: var(--red)!important;
+    color: var(--theme)!important;
     background-color: var(--light);
     border-radius: 5px!important;
 }
 
 
 li.nav-item.dropdown.show .nav-link {
-    color: var(--red)!important;
+    color: var(--theme)!important;
     background-color: var(--light);
     border-radius: 5px !important;
 }
@@ -121,7 +121,7 @@ li.nav-item.dropdown.show .nav-link {
 
         /* Level 1 menu hover */
         .dropdown-menu li > a:hover {
-            color: var(--red);
+            color: var(--theme);
             background: rgb(239, 237, 237);
             font-weight: 900;
         }
@@ -139,7 +139,7 @@ li.nav-item.dropdown.show .nav-link {
         /* Level 2 menu hover */
         .dropdown-submenu > .dropdown-menu > li > a:hover {
             background: rgb(239, 237, 237);
-            color: var(--red);
+            color: var(--theme);
             font-weight: 900;
         }
 
@@ -156,18 +156,18 @@ li.nav-item.dropdown.show .nav-link {
         /* Level 3 menu hover */
         .dropdown-submenu .dropdown-submenu > .dropdown-menu > li > a:hover {
             background: rgb(239, 237, 237);
-            color: var(--red);
+            color: var(--theme);
             font-weight: 900;
         }
 
 /* Arrow indicator */
 .dropdown-submenu > a:after {
-    border-color: var(--red);
+    border-color: var(--theme);
 }
 
 /* Arrow indicator on hover */
 .dropdown-submenu:hover > a:after {
-    border-left-color: var(--red);
+    border-left-color: var(--theme);
     position: relative;
     right: 5px;
 }
@@ -244,7 +244,7 @@ li.nav-item.dropdown.show .nav-link {
 }
 
     .dev-opt .box-opt:hover {
-        background-color: var(--red);
+        background-color: var(--theme);
     }
 
     .dev-opt .box-opt a:hover {

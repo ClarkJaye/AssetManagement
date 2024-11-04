@@ -179,7 +179,7 @@ namespace AssetManagement.Controllers
         // POST: LaptopBorroweds/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UnitID,SerialNumber,OwnerID,Deptment_Code,ComputerName,DateBorrow,Remark,Expected_return")] LaptopBorrowed laptopBorrowed)
+        public async Task<IActionResult> Create([Bind("UnitID,SerialNumber,OwnerID,Deptment_Code,ComputerName,DateBorrow,Remark,Expected_return,Return_date")] LaptopBorrowed laptopBorrowed)
         {
             var findLaptop = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(x => x.laptoptinvCode == laptopBorrowed.UnitID);
             if (findLaptop == null)

@@ -28,13 +28,15 @@
 
                 <div class="form-group col-md-2 mb-3">
                     <label asp-for="UnitID" class="control-label"></label>
-                    <input asp-for="UnitID" class="form-control" id="UnitID" readonly required />
+                    <input asp-for="UnitID" class="form-control" id="unitID" readonly required />
                     <span asp-validation-for="UnitID" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-2 mb-3" id="setable">
+                <div class="form-group col-md-2 mb-3">
                     <label asp-for="UnitTag" class="control-label"></label>
-                    <input asp-for="UnitTag" readonly class="form-control" required  />
+                    <select asp-for="UnitTag" class="form-select" required>
+                        <option selected disabled>Select serial number</option>
+                    </select>
                     <span asp-validation-for="UnitTag" class="text-danger"></span>
                 </div>
 
@@ -70,7 +72,7 @@
                     <span asp-validation-for="Remark" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2 mb-3" style="margin-top:23px;">
-                    <input type="submit" value="Create" class="btn btn-red createbtn" />
+                    <input type="submit" value="Create" class="btn btn-theme createbtn" />
                     <a class="btn btn-outline-secondary" asp-action="DeskInvPartialView">Back to List</a>
                 </div>
             </div>
@@ -90,7 +92,7 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
         //OWNER
         $("#ownertable").click(function () {
 
@@ -111,31 +113,29 @@
         $('#UnitTag').prop('disabled', true);
 
         // Check if UnitID has a value on page load
-        var unitID = $('#UnitID').val();
-        if (unitID) {
+        var unitID = $('#unitID').val();
+        if (unitID != null) {
             loadSerialNumbers(unitID);
         }
 
         // Function to load serial numbers based on UnitID
-        function loadSerialNumbers(laptopCode) {
+        function loadSerialNumbers(code) {
             $.ajax({
                 url: '@Url.Action("GetUnitNumbers", "DesktopInventories")',
                 type: 'GET',
-                data: { laptopCode: laptopCode },
+                data: { code: code },
                 success: function (data) {
-                    $('#UnitTag').empty().append('<option selected disabled>Select serial number</option>');
-                        console.log(data)
-
+                    $('#UnitTag').empty().append('<option selected disabled>Select unit tag number</option>');
                     if (data && data.length > 0) {
                         $.each(data, function (i, item) {
                             $('#UnitTag').append($('<option>', {
-                                value: item.serialCode,
-                                text: item.serialCode
+                                value: item.unitTag,
+                                text: item.unitTag
                             }));
                         });
                         $('#UnitTag').prop('disabled', false); // Enable dropdown if data exists
                     } else {
-                        $('#UnitTag').append('<option selected disabled>No Unit Tag available</option>');
+                        $('#UnitTag').append('<option selected disabled>No unit tag available</option>');
                         $('#UnitTag').prop('disabled', true); // Disable the dropdown
                     }
                 },
@@ -149,14 +149,14 @@
 
         // On serial number change, update computer name
         $('#UnitTag').change(function () {
-            var laptopCode = $('#UnitID').val();
-            var serialNumber = $(this).val();
+            var code = $('#unitID').val();
+            var unitTag = $(this).val();
 
-            if (laptopCode && serialNumber) {
+            if (code && unitTag) {
                 $.ajax({
                     url: '@Url.Action("GetComputerName", "DesktopInventories")',
                     type: 'GET',
-                    data: { laptopCode: laptopCode, serialNumber: serialNumber },
+                    data: { code: code, unitTag: unitTag },
                     success: function (data) {
                         $('#ComputerName').val(data);
                     }

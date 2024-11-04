@@ -7,14 +7,14 @@
     --grey: #eee;
     --dark: #342E37;
     --dark-grey: #AAAAAA;
-    /*--red: #E57373;*/
-    --red: #2c3e50;
+    /*--theme: #E57373;*/
+    --theme: #2c3e50;
     --green: #4CAF50;
-    --btn: #d24f4f;
+    --btn: #2c3e50;
 }
 
 html {
-    font-size: 14px;
+    font-size: 12px;
     position: relative;
     min-height: 100%;
 }
@@ -23,20 +23,20 @@ a{
     text-decoration: none;
 }
 
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
     html {
         font-size: 16px;
     }
-}
+}*/
 
 /*.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--red);
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--theme);
     border-color: transparent;
 }
 */
 
 .btn-link.nav-link:focus, .form-select:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--red);
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--theme);
     border-color: transparent;
 }
 
@@ -48,22 +48,22 @@ body {
 }
 
 /* Button styling */
-.btn-red {
+.btn-theme {
     background-color: var(--btn);
     color: var(--light);
 }
-    .btn-red:hover {
-        background-color: var(--red);
+    .btn-theme:hover {
+        background-color: #2c3e50c7;
         color: var(--light);
     }
 
 /* Button styling */
-.btn-outline-red {
+.btn-outline-theme {
     border-color: var(--btn);
     color: var(--btn);
 }
 
-    .btn-outline-red:hover {
+    .btn-outline-theme:hover {
         background-color: var(--btn);
         color: var(--light);
     }
@@ -114,8 +114,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
     .custom-checkbox:checked {
-        background-color: var(--red); 
-        border-color: var(--red); 
+        background-color: var(--theme); 
+        border-color: var(--theme); 
     }
 
         .custom-checkbox:checked::before {
@@ -253,9 +253,42 @@ input#dt-search-0 {
 .table {
     font-size: 14px;
 }
+/* For Card or Table*/
+.table-hover tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.table th, .table td {
+    border-top: none !important;
+    padding: 16px;
+    font-size: 12px;
+    vertical-align: middle;
+    text-align: left !important;
+}
+
+.card-selected {
+    border-radius: 12px !important;
+    background: var(--light) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header-selected {
+    font-weight: 500;
+    border-bottom: 2px solid #e0e0e0;
+    background: var(--light) !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+
+
+/*.table {
+    font-size: 14px;
+}
 
     .table thead {
         background-color: var(--bs-gray-600);
+        background: var(--theme);
         color: #fff;
     }
 
@@ -265,7 +298,7 @@ input#dt-search-0 {
 
     .table thead th, .table tbody td {
         text-align: left !important;
-    }
+    }*/
 
 /* Style Previous and Next buttons DATABALES */
 /*.dt-container .dt-paging-button.page-item button {
@@ -273,14 +306,14 @@ input#dt-search-0 {
     margin: 0 2px;
     cursor: pointer;
     border-radius: 3px;
-    background-color: var(--red) !important;
-    border-color: var(--red) !important;
+    background-color: var(--theme) !important;
+    border-color: var(--theme) !important;
     color: white !important;
 }
 
     .dt-container .dt-paging-button.page-item.disabled button {
-        background-color: var(--red) !important;
-        border-color: var(--red) !important;
+        background-color: var(--theme) !important;
+        border-color: var(--theme) !important;
         color: white !important;
     }*/
 

@@ -73,7 +73,7 @@
                     <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">@Html.DisplayFor(modelItem => item.DateUpdated)</td>
                     <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description" id="userCode2" name="userCODE">@Html.DisplayFor(modelItem => item.Updatedby.UserFullName)</td>
                     <td>
-                        <a class="btn btn-sm btn-red" asp-controller="SecondOwnerAllocs" asp-action="Create" asp-route-id="@item.AllocId" asp-route-ids="@item.LaptopCode" asp-route-ids2="@item.SerialNumber">Select Second Owner</a>
+                        <a class="btn btn-sm btn-theme" asp-controller="SecondOwnerAllocs" asp-action="Create" asp-route-id="@item.AllocId" asp-route-ids="@item.LaptopCode" asp-route-ids2="@item.SerialNumber">Select Second Owner</a>
                     </td>
                 </tr>
             }

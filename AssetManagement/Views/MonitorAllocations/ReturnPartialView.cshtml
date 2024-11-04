@@ -11,89 +11,95 @@
     <p>
         <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index" asp-controller="ReturnMTAs">Back to List</a>
     </p>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th hidden>
-                        @Html.DisplayNameFor(model => model.AllocId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Owner)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.MonitorDetails.MonitorInventory)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SerialNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FixedassetTag)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateDeployed)
-                    </th>
-                    <th hidden>
-                        @Html.DisplayNameFor(model => model.AllocationStatus)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateCreated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateUpdated)
-                    </th>
-                    <th>
-                        CREATED BY
-                    </th>
-                    <th>
-                        UPDATED BY
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.AllocId)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MonitorDetails.MonitorInventory.Description)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.SerialNumber)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.FixedassetTag)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.DateDeployed)
-                        </td>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.AllocationStatus)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                        </td>
-                        <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                        </td>
-                        <td>
-                            <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.AllocId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.MonitorDetails.MonitorInventory)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SerialNumber)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FixedassetTag)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DateDeployed)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.AllocationStatus)
+                            </th>
+                            <th>
+                                CREATED
+                            </th>
+                            <th>
+                                CREATED BY
+                            </th>
+                            <th>
+                                UPDATED
+                            </th>
+                            <th>
+                                UPDATED BY
+                            </th>
+                            <th style="text-align: center!important">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.AllocId)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MonitorDetails.MonitorInventory.Description)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.FixedassetTag)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.DateDeployed)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.AllocationStatus)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.DateUpdated)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                                </td>
+                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
+                                    @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="displaytable"> </div>
 </div>

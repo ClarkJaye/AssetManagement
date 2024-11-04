@@ -5,90 +5,89 @@
     Layout = null;
 }
 
+<hr />
+<div class="mx-5">
+    <!-- Action Buttons -->
+    <div class="d-flex align-items-center justify-content-end mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+        </div>
+    </div>
 
-<!-- Action Buttons -->
-<div class="d-flex align-items-center justify-content-end mb-4">
-    <div class="d-flex align-items-center gap-2">
-        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive" style="cursor: pointer; max-height: 600px;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerFullName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerLocation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerOffice)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.Status)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.Department)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.DateCreated)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.OwnerList.Any())
+                        {
+                            @foreach (var item in Model.OwnerList)
+                            {
+                                <tr data-id="@item.OwnerCode" data-ld="@item.OwnerFullName">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OwnerCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OwnerFullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Location.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Store.StoreName)
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status.status_name)</span>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateCreated)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="12" class="text-center">
+                                    No data available.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="table-responsive" style="cursor: pointer;">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerFullName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerLocation)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerOffice)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.DateUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Createdby)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Updatedby)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Department)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.OwnerList)
-            {
-                <tr data-id="@item.OwnerCode" data-ld="@item.OwnerFullName">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OwnerCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OwnerFullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Location.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Store.StoreName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status.status_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-</div>
 
 
 <script>

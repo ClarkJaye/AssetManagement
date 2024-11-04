@@ -89,9 +89,16 @@ namespace AssetManagement.Controllers
         }
 
         // GET: ReturnMTAs/Create
-        public IActionResult Create(string id)
-        {
-            ViewBag.Id = id;
+        public async Task<IActionResult> Create(string id)
+     {
+            var item = await _context.tbl_ictams_monitoralloc.Include(x=>x.MonitorDetails)
+                .FirstOrDefaultAsync(i => i.AllocId == id);
+
+            ViewData["allocID"] = item.AllocId;  
+            ViewData["monitorCode"] = item.MonitorDetails.monitorCode;
+            ViewData["monitorSerial"] = item.MonitorDetails.SerialNumber;
+            ViewData["mtStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name", item.Status);
+
             return View();
         }
 

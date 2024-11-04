@@ -14,7 +14,7 @@
 }
 
 
-<div class="m-4">
+<div class="m-5">
     <h4>Monitor  Inventory</h4>
     <hr />
     <div>
@@ -31,22 +31,18 @@
                     <input asp-for="Description" class="form-control" placeholder="Enter description" />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-4 mb-2" id="modeltable">
+                <div class="form-group col-md-4 mb-2">
                     <label asp-for="MonitorModel" class="control-label"></label>
-                    <input asp-for="MonitorModel" value="0" class="form-control" id="modelid" hidden />
-                    <input class="form-select" id="modeldes" placeholder="Select model  below" readonly style="background-color: white;" required />
+                    <select asp-for="MonitorModel" class="form-select" asp-items="ViewBag.MonitorModel"></select>
+                    <span asp-validation-for="MonitorModel" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-4 mb-2" hidden>
-                    <label asp-for="AllocatedNo" class="control-label"></label> 
-                    <input asp-for="AllocatedNo" value="0" class="form-control" />
-                    <span asp-validation-for="AllocatedNo" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-4 mb-2" hidden>
+                <div class="form-group col-md-4 mb-2">
                     <label asp-for="MonitorStatus" class="control-label"></label>
-                    <select asp-for="MonitorStatus" class="form-control" asp-items="ViewBag.MonitorStatus"></select>
+                    <select asp-for="MonitorStatus" class="form-select" asp-items="ViewBag.MonitorStatus"></select>
+                    <span asp-validation-for="MonitorStatus" class="text-danger"></span>
                 </div>
                 <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
-                    <input type="submit" value="Create" class="btn btn-red createbtn" />
+                    <input type="submit" value="Create" class="btn btn-theme createbtn" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>
             </div>

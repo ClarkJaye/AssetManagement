@@ -11,144 +11,134 @@
         <a class="btn btn-sm btn-secondary" asp-action="Index">Back to Lists</a>
     </div>
 
-    <hr />
-
-    <div class="table-responsive">
-        <table class="table table-striped table-datatable">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.desktopInvCode)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Description)
-                    </th>
-                    <th>
-                        TOTAL QUANTITY
-                    </th>
-                    <th>
-                        AVAILABLE QUANTITY
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Level)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Brand)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Model)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.MainBoard)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CPU)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GraphicsCard)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.HardDisk)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Memory)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OS)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Createdby)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateCreated)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Updatedby)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DateUpdated)
-                    </th>
-                    <th>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    var availableQty = item.Quantity - item.AllocatedNo;
-
-                    <tr data-id="@item.desktopInvCode" data-ld="@item.Description">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.desktopInvCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Quantity)
-                        </td>
-                        <td>
-                            @availableQty
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Level.LevelDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Brand.BrandDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Model.ModelDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MainBoard.BoardDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CPU.CPUDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GraphicsCard.GraphicsDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.HardDisk.HDDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Memory.MemoryDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OS.OSDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        @if (availableQty == 0)
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.desktopInvCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                TOTAL QUANTITY
+                            </th>
+                            <th>
+                                AVAILABLE QUANTITY
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Level)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Brand)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Model)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.MainBoard)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CPU)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.GraphicsCard)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.HardDisk)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Memory)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OS)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Createdby)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DateCreated)
+                            </th>
+                            <th>
+                                ACTION
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
-                            <td>
-                                <a class="btn btn-sm btn-outline-secondary disabled">BORROW</a>
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                <a class="btn btn-sm btn-outline-secondary " asp-action="Create" asp-controller="DesktopBorroweds" asp-route-id="@item.desktopInvCode">BORROW</a>
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
+                            var availableQty = item.Quantity - item.AllocatedNo;
 
+                            <tr data-id="@item.desktopInvCode" data-ld="@item.Description">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.desktopInvCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td>
+                                    @availableQty
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Level.LevelDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Brand.BrandDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Model.ModelDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MainBoard.BoardDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CPU.CPUDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GraphicsCard.GraphicsDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HardDisk.HDDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Memory.MemoryDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OS.OSDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                                </td>
+                                @if (availableQty != 0)
+                                {
+                                    <td>
+                                        <a class="btn btn-sm btn-theme" asp-action="Create" asp-controller="DesktopBorroweds" asp-route-id="@item.desktopInvCode">BORROW</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-secondary disabled">BORROW</a>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
 </div>
+
 
 
 

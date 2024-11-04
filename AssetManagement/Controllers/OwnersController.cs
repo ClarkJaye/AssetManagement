@@ -65,6 +65,7 @@ namespace AssetManagement.Controllers
              .Where(p => p.Status.status_code == "AC" && !_context.tbl_ictams_monitoralloc.Any(a => a.OwnerCode == p.OwnerCode && a.AllocationStatus == "AC"))
               .Where(p => p.Status.status_code == "AC" && !_context.tbl_ictams_monitornewalloc.Any(a => a.SecOwnerCode == p.OwnerCode && a.SecAllocationStatus == "AC"))
              .Include(o => o.Location)
+             .Include(o => o.Store)
              .Include(o => o.Createdby)
              .Include(o => o.Department)
              .Include(o => o.Status)

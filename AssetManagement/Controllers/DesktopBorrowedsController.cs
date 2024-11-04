@@ -51,7 +51,14 @@ namespace AssetManagement.Controllers
                         return RedirectToAction("ChangePassword", "Users");
                     }
 
-                    var assetManagementContext = _context.DesktopBorrowed.Where(x => x.StatusID=="AC").Include(d => d.InventoryDetails).Include(d => d.Owner).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
+                    var assetManagementContext = _context.DesktopBorrowed
+                        .Where(x => x.StatusID=="AC")
+                        .Include(d => d.InventoryDetails)
+                        .Include(d => d.Department)
+                        .Include(d => d.Owner)
+                        .Include(d => d.Status)
+                        .Include(d => d.UserCreated)
+                        .Include(d => d.UserUpdated);
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
@@ -62,7 +69,13 @@ namespace AssetManagement.Controllers
 
         public async Task<IActionResult> Inactive()
         {
-        var assetManagementContext = _context.DesktopBorrowed.Where(x => x.StatusID=="RT").Include(d => d.InventoryDetails).Include(d => d.Owner).Include(d => d.Status).Include(d => d.UserCreated).Include(d => d.UserUpdated);
+        var assetManagementContext = _context.DesktopBorrowed.Where(x => x.StatusID=="RT")
+                .Include(d => d.InventoryDetails)
+                .Include(d => d.Owner)
+                .Include(d => d.Status)
+                .Include(d => d.Department)
+                .Include(d => d.UserCreated)
+                .Include(d => d.UserUpdated);
         return View(await assetManagementContext.ToListAsync());
  
 
@@ -100,6 +113,7 @@ namespace AssetManagement.Controllers
 
             var desktopBorrowed = await _context.DesktopBorrowed
                 .Include(d => d.InventoryDetails)
+                .Include(d => d.Department)
                 .Include(d => d.Owner)
                 .Include(d => d.Status)
                 .Include(d => d.UserCreated)
@@ -112,19 +126,6 @@ namespace AssetManagement.Controllers
 
             return View(desktopBorrowed);
         }
-
-        //// GET: DesktopBorroweds/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["UnitID"] = new SelectList(_context.tbl_ictams_desktopinv, "desktopInvCode", "desktopInvCode");
-        //    ViewData["UnitTag"] = new SelectList(_context.tbl_ictams_desktopinvdetails, "unitTag", "unitTag");
-        //    ViewData["OwnerID"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerCode");
-        //    ViewData["StatusID"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
-        //    ViewData["CreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-        //    ViewData["RTUpdated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-        //    return View();
-        //}
-
 
         // GET: LaptopBorroweds/Create
         public async Task<IActionResult> Create(string id)
@@ -159,7 +160,7 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BorrowedID,UnitID,UnitTag,OwnerID,StatusID,DateBorrow,Remark,CreatedBy,DateCreated,RTUpdated,DateUpdated")] DesktopBorrowed desktopBorrowed)
+        public async Task<IActionResult> Create([Bind("BorrowedID,UnitID,UnitTag,OwnerID,Deptment_Code,StatusID,DateBorrow,Remark,ComputerName,CreatedBy,DateCreated,RTUpdated,DateUpdated,Expected_return,Return_date")] DesktopBorrowed desktopBorrowed)
         {
             var findLaptop = await _context.tbl_ictams_desktopinv
                 .Where(x => x.desktopInvCode == desktopBorrowed.UnitID)
@@ -202,11 +203,22 @@ namespace AssetManagement.Controllers
             desktopBorrowed.DateCreated = DateTime.Now;
             desktopBorrowed.StatusID = "AC";
 
+            var inv_alloc = await _context.DesktopInventory.FirstOrDefaultAsync(a => a.desktopInvCode == desktopBorrowed.UnitID);
+            if (inv_alloc != null)
+            {
+                inv_alloc.AllocatedNo++;
+            }
+
+            var inv_details = await _context.tbl_ictams_desktopinvdetails.FirstOrDefaultAsync(a => a.desktopInvCode == desktopBorrowed.UnitID && a.unitTag == desktopBorrowed.UnitTag);
+            if (inv_details != null)
+            {
+                inv_details.DTStatus = "AC";
+                inv_details.DeployedDate = DateTime.Now;
+            }
+
             _context.Add(desktopBorrowed);
             await _context.SaveChangesAsync();
-            // ...
             TempData["SuccessNotification"] = "Successfully borrow a desktop!";
-            // ...
             return RedirectToAction(nameof(Index));
         }
 
@@ -268,7 +280,6 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-
             var desktopBorrowed = await _context.DesktopBorrowed
                 .Include(d => d.InventoryDetails)
                 .Include(d => d.Owner)
@@ -280,7 +291,6 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-
             return View(desktopBorrowed);
         }
 
@@ -301,10 +311,21 @@ namespace AssetManagement.Controllers
                 desktopBorrowed.RTUpdated = ucode;
                 desktopBorrowed.StatusID = "RT";
                 _context.tbl_ictams_dtborrowed.Update(desktopBorrowed);
+
+                var inv_alloc = await _context.DesktopInventory.FirstOrDefaultAsync(a => a.desktopInvCode == desktopBorrowed.UnitID);
+                if (inv_alloc != null)
+                {
+                    inv_alloc.AllocatedNo--;
+                }
+
+                var inv_details = await _context.tbl_ictams_desktopinvdetails.FirstOrDefaultAsync(a => a.desktopInvCode == desktopBorrowed.UnitID && a.unitTag == desktopBorrowed.UnitTag);
+                if (inv_details != null)
+                {
+                    inv_details.DTStatus = "AV";
+                    inv_details.DeployedDate = null;
+                }
                 await _context.SaveChangesAsync();
-                // ...
                 TempData["SuccessNotification"] = "Successfully return a borrowed Desktop!";
-                // ...
                 return RedirectToAction(nameof(Index));
             }
 

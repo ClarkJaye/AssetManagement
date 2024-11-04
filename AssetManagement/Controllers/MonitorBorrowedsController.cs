@@ -65,7 +65,14 @@ namespace AssetManagement.Controllers
                 }
                 else
                 {
-                    var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "AC").Include(l => l.MonitorDetail.MonitorInventory).Include(l => l.MonitorDetail).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+                    var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "AC")
+                        .Include(l => l.MonitorDetail.MonitorInventory)
+                        .Include(l => l.MonitorDetail)
+                        .Include(l => l.Department)
+                        .Include(l => l.Owner)
+                        .Include(l => l.Status)
+                        .Include(l => l.UserCreated)
+                        .Include(l => l.UserUpdated);
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
@@ -75,7 +82,7 @@ namespace AssetManagement.Controllers
 
         public async Task<IActionResult> Inactive()
         {
-            var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "RT").Include(l => l.MonitorDetail.MonitorInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+            var assetManagementContext = _context.tbl_ictams_monitorborrowed.Where(x => x.StatusID == "RT").Include(l => l.MonitorDetail.MonitorInventory).Include(d => d.Department).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> BorrowedViews()
@@ -97,6 +104,7 @@ namespace AssetManagement.Controllers
                 .Include(m => m.MonitorDetail.MonitorInventory)
                 .Include(m => m.Owner)
                 .Include(m => m.Status)
+                .Include(d => d.Department)
                 .Include(m => m.UserCreated)
                 .Include(m => m.UserUpdated)
                 .FirstOrDefaultAsync(m => m.BorrowedID == id);
@@ -109,15 +117,30 @@ namespace AssetManagement.Controllers
         }
 
         // GET: MonitorBorroweds/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(string id)
         {
-            ViewData["SerialNumber"] = new SelectList(_context.tbl_ictams_monitordetails, "SerialNumber", "SerialNumber");
-            ViewData["UnitID"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "monitorCode");
-            ViewData["OwnerID"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerCode");
-            ViewData["StatusID"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
-            ViewData["CreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["UpdatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            return View();
+            var activeDept = await _context.tbl_ictams_department
+                                            .Where(l => l.Dept_status != "IN")
+                                            .ToListAsync();
+
+            ViewData["LTDept"] = new SelectList(activeDept, "Dept_code", "Dept_name");
+
+            var Inventory = await _context.tbl_ictams_monitorinv.FirstOrDefaultAsync(l => l.monitorCode == id);
+
+            if (Inventory == null)
+            {
+                return NotFound();
+            }
+
+            var monitor = await _context.tbl_ictams_monitordetails
+                                        .FirstOrDefaultAsync(ld => ld.monitorCode == Inventory.monitorCode);
+
+            var Borrowed = new MonitorBorrowed
+            {
+                UnitID = monitor?.monitorCode ?? string.Empty
+            };
+
+            return View(Borrowed);
         }
 
         // POST: MonitorBorroweds/Create
@@ -125,7 +148,7 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BorrowedID,UnitID,SerialNumber,OwnerID,StatusID,DateBorrow,Remark,CreatedBy,DateCreated,UpdatedBy,DateUpdated")] MonitorBorrowed monitorBorrowed)
+        public async Task<IActionResult> Create([Bind("BorrowedID,UnitID,SerialNumber,OwnerID,Deptment_Code,StatusID,DateBorrow,Remark,CreatedBy,DateCreated,UpdatedBy,DateUpdated,Expected_return,Return_date")] MonitorBorrowed monitorBorrowed)
         {
             var findLaptop = await _context.tbl_ictams_monitorinv
                 .Where(x => x.monitorCode == monitorBorrowed.UnitID)
@@ -168,11 +191,22 @@ namespace AssetManagement.Controllers
             monitorBorrowed.DateCreated = DateTime.Now;
             monitorBorrowed.StatusID = "AC";
 
+            var inv_alloc = await _context.tbl_ictams_monitorinv.FirstOrDefaultAsync(a => a.monitorCode == monitorBorrowed.UnitID);
+            if (inv_alloc != null)
+            {
+                inv_alloc.AllocatedNo++;
+            }
+
+            var inv_details = await _context.tbl_ictams_monitordetails.FirstOrDefaultAsync(a => a.monitorCode == monitorBorrowed.UnitID && a.SerialNumber == monitorBorrowed.SerialNumber);
+            if (inv_details != null)
+            {
+                inv_details.MonitorStatus = "AC";
+                inv_details.DeployedDate = DateTime.Now;
+            }
+
             _context.Add(monitorBorrowed);
             await _context.SaveChangesAsync();
-            // ...
             TempData["SuccessNotification"] = "Successfully borrow a monitor!";
-            // ...
             return RedirectToAction(nameof(Index));
         }
 
@@ -271,10 +305,22 @@ namespace AssetManagement.Controllers
                 _context.tbl_ictams_monitorborrowed.Update(laptopBorrowed);
             }
 
+            var inv_alloc = await _context.tbl_ictams_monitorinv.FirstOrDefaultAsync(a => a.monitorCode == laptopBorrowed.UnitID);
+            if (inv_alloc != null)
+            {
+                inv_alloc.AllocatedNo--;
+            }
+
+
+            var inv_details = await _context.tbl_ictams_monitordetails.FirstOrDefaultAsync(a => a.monitorCode == laptopBorrowed.UnitID && a.SerialNumber == laptopBorrowed.SerialNumber);
+            if (inv_details != null)
+            {
+                inv_details.MonitorStatus = "AC";
+                inv_details.DeployedDate = null;
+            }
+            
             await _context.SaveChangesAsync();
-            // ...
             TempData["SuccessNotification"] = "Successfully return a borrowed monitor!";
-            // ...
             return RedirectToAction(nameof(Index));
         }
 

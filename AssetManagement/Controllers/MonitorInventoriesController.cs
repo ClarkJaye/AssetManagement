@@ -45,6 +45,20 @@ namespace AssetManagement.Controllers
             }
             return View();
         }
+
+        public JsonResult GetSerialNumbers(string code)
+        {
+            // Get serial numbers from inventory details that are available and not already allocated
+            var unitTags = _context.tbl_ictams_monitordetails
+                .Where(l => l.monitorCode == code && l.MonitorStatus == "AV")
+                .Where(l => !_context.tbl_ictams_monitoralloc
+                    .Any(alloc => alloc.SerialNumber == l.SerialNumber && alloc.monitorCode == code && alloc.AllocationStatus != "AC" && alloc.AllocationStatus != "IN"))
+                .Select(l => new { l.SerialNumber })
+                .ToList();
+
+            return Json(unitTags);
+        }
+
         public async Task<IActionResult> Borrowed(string userCODE)
         {
             if (!string.IsNullOrEmpty(userCODE))
@@ -61,19 +75,6 @@ namespace AssetManagement.Controllers
                 return View(assetManagementContext);
             }
             return View();
-        }
-
-        public JsonResult GetSerialNumbers(string monCode)
-        {
-            // Get serial numbers from inventory details that are available and not already allocated
-            var serials = _context.tbl_ictams_monitordetails
-                .Where(l => l.monitorCode == monCode && l.MonitorStatus == "AV")
-                .Where(l => !_context.tbl_ictams_monitoralloc
-                    .Any(alloc => alloc.SerialNumber == l.SerialNumber && alloc.monitorCode == monCode && alloc.AllocationStatus != "AC" && alloc.AllocationStatus != "IN"))
-                .Select(l => new { l.SerialNumber })
-                .ToList();
-
-            return Json(serials);
         }
 
 
@@ -117,10 +118,25 @@ namespace AssetManagement.Controllers
         {
             var assetManagementContext = _context.tbl_ictams_monitorinv
                 .Where(x => x.MonitorStatus == "AV")
+                .OrderByDescending(x => x.monitorCode)
                 .Include(l => l.Createdby)
                 .Include(l => l.Model)
                 .Include(l => l.Status)
                 .Include(l => l.Updatedby);
+
+            return View(await assetManagementContext.ToListAsync());
+
+        }
+
+        // GET: MonitorInventories
+        public async Task<IActionResult> MTInvPartialView(string code)
+        {
+            var assetManagementContext = _context.tbl_ictams_monitordetails
+                .Where(x => x.monitorCode == code && x.MonitorStatus == "AV")
+                .OrderByDescending(x => x.monitorCode)
+                .Include(l => l.MonitorInventory)
+                .Include(l => l.Vendor)
+                .Include(l => l.Createdby);
 
             return View(await assetManagementContext.ToListAsync());
 
@@ -206,8 +222,8 @@ namespace AssetManagement.Controllers
         public IActionResult Create()
         {
             ViewData["MonitorCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["MonitorModel"] = new SelectList(_context.tbl_ictams_model, "ModelId", "ModelId");
-            ViewData["MonitorStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
+            ViewData["MonitorModel"] = new SelectList(_context.tbl_ictams_model, "ModelId", "ModelDescription");
+            ViewData["MonitorStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
             ViewData["MonitorUpdatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
             return View();
         }

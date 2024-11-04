@@ -16,11 +16,11 @@
     <table class="table custom-fontsize p-4 ">
         <thead>
             <tr>
-                <th>
+                <th hidden>
                     ID
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.InventoryDetails.DesktopInventory)
+                    CODE
                 </th>
                 <th>PO</th>
                 <th>
@@ -53,14 +53,14 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Updatedby)
                 </th>
-                <th>
+                <th class="text-center">ACTION</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td hidden>
                         @Html.DisplayFor(modelItem => item.AllocId)
                     </td>
                     <td>
@@ -119,9 +119,6 @@
                             </td>
                         }
                     }
-
-
-
                     <td>
                         @Html.DisplayFor(modelItem => item.Createdby.UserCode)
                     </td>
@@ -129,7 +126,7 @@
                         @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
                     </td>
                     <td>
-                        <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="DesktopNewAllocs" asp-route-id="@item.AllocId" asp-route-ids="@item.DesktopCode" asp-route-ids2="@item.UnitTag">Second Owner</a>
+                        <a class="btn btn-sm btn-outline-secondary editbtn" asp-action="Create" asp-controller="DesktopNewAllocs" asp-route-id="@item.AllocId" asp-route-ids="@item.DesktopCode" asp-route-ids2="@item.UnitTag">Second Owner</a>
                     </td>
                 </tr>
             }
@@ -138,9 +135,8 @@
     <div class="displaytable"> </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
         $(document).on("click", "#userCode", function () {
             var userCode = "@ViewBag.Id";
 

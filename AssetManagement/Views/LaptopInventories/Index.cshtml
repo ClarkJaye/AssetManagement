@@ -17,7 +17,7 @@
     <!-- Action Buttons -->
     <div class="d-flex align-items-center gap-2 mb-2 p-4">
         <div class="d-flex align-items-center gap-2">
-            <a class="btn btn-outline-red" asp-controller="LaptopInventories" asp-action="Create">
+            <a class="btn btn-outline-theme" asp-controller="LaptopInventories" asp-action="Create">
                 <i class="fas fa-pencil-alt"></i>
                 <span>Create New</span>
             </a>
@@ -222,7 +222,7 @@
                                 @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-outline-red" asp-action="Create" asp-controller="InventoryDetails" asp-route-id="@item.laptoptinvCode">Add</a>
+                                <a class="btn btn-sm btn-outline-theme" asp-action="Create" asp-controller="InventoryDetails" asp-route-id="@item.laptoptinvCode">Add</a>
                             </td>
                             <td>
                                 <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-controller="LaptopInventories" asp-route-id="@item.laptoptinvCode">Edit</a>

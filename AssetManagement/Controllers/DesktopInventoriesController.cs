@@ -48,6 +48,9 @@ namespace AssetManagement.Controllers
 
             var assetManagementContext = _context.tbl_ictams_desktopinvdetails
                 .Where(x => x.desktopInvCode == code && x.DTStatus == "AV")
+                .OrderByDescending(x => x.desktopInvCode)
+                .Include(l => l.DesktopInventory)
+                .Include(l => l.Vendor)
                 .Include(l => l.Createdby);
 
             // Return the partial view with the filtered data
@@ -73,23 +76,23 @@ namespace AssetManagement.Controllers
 
 
 
-        public JsonResult GetUnitNumbers(string deskCode)
+        public JsonResult GetUnitNumbers(string code)
         {
             // Get serial numbers from inventory details that are available and not already allocated
             var unitTags = _context.tbl_ictams_desktopinvdetails
-                .Where(l => l.desktopInvCode == deskCode && l.DTStatus == "AV")
+                .Where(l => l.desktopInvCode == code && l.DTStatus == "AV")
                 .Where(l => !_context.DesktopAllocation
-                    .Any(alloc => alloc.UnitTag == l.unitTag && alloc.DesktopCode == deskCode && alloc.AllocationStatus != "AC" && alloc.AllocationStatus != "IN"))
+                    .Any(alloc => alloc.UnitTag == l.unitTag && alloc.DesktopCode == code && alloc.AllocationStatus != "AC" && alloc.AllocationStatus != "IN"))
                 .Select(l => new { l.unitTag })
                 .ToList();
 
             return Json(unitTags);
         }
 
-        public JsonResult GetComputerName(string deskCode, string unitTag)
+        public JsonResult GetComputerName(string code, string unitTag)
         {
             var computerName = _context.tbl_ictams_desktopinvdetails
-                .Where(l => l.desktopInvCode == deskCode && l.unitTag == unitTag)
+                .Where(l => l.desktopInvCode == code && l.unitTag == unitTag)
                 .Select(l => l.ComputerName)
                 .FirstOrDefault();
 

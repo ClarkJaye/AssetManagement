@@ -29,6 +29,12 @@ namespace AssetManagement.Models
         [DisplayName("OWNER")]
         public string OwnerID { get; set; }
 
+        [Column("dept_code")]
+        [DisplayName("BORROWER DEPARTMENT")]
+        public int Deptment_Code { get; set; }
+        [ForeignKey("Deptment_Code")]
+        public virtual Department Department { get; set; }
+
         [Column("mborrowed_status")]
         [DisplayName("STATUS")]
         public string StatusID { get; set; }
@@ -36,6 +42,14 @@ namespace AssetManagement.Models
         [Column("mborrowed_date")]
         [DisplayName("DATE BORROWED")]
         public DateTime DateBorrow { get; set; }
+
+        [Column("return_date")]
+        [DisplayName("RETURN DATE")]
+        public DateTime? Return_date { get; set; }
+
+        [Column("expected_return_date")]
+        [DisplayName("EXPECTED RETURN DATE")]
+        public DateTime? Expected_return { get; set; }
 
         [Column("mborrowed_remarks")]
         [DisplayName("REMARKS")]

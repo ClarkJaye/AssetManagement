@@ -272,8 +272,14 @@ namespace AssetManagement.Controllers
                         desktopInv.AllocatedNo -= 1;
                     }
 
-                    // Update the profile
                     var ucode = HttpContext.Session.GetString("UserName");
+
+                    var InvDetails = await _context.tbl_ictams_desktopinvdetails.FirstOrDefaultAsync(a => a.desktopInvCode == desktopCode && a.unitTag == dtsecownerID.UnitTag);
+                    InvDetails.UpdatedDate = DateTime.Now;
+                    InvDetails.Updated = ucode;
+                    InvDetails.DTStatus = "AV";
+
+                    // Update the profile
                     dtsecownerID.AllocUpdated = ucode;
                     dtsecownerID.SecAllocationStatus = "IN";
                     dtsecownerID.DateUpdated = DateTime.Now;

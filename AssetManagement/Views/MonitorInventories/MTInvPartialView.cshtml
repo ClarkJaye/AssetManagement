@@ -1,76 +1,78 @@
-﻿@using AssetManagement.Models.View_Model;
+﻿@model IEnumerable<AssetManagement.Models.MonitorDetail>
 
-@model OwnerViewModel
 @{
     Layout = null;
-}
-@{
-    ViewData["Title"] = "Index";
 }
 
 <hr />
 <div class="mx-5">
-
     <!-- Action Buttons -->
-    <div class="d-flex align-items-center justify-content-end mt-5 mb-3">
+    <div class="d-flex align-items-center justify-content-between my-4">
+        <h4>Unit Tag Exist</h4>
+
         <div class="d-flex align-items-center gap-2">
             <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
         </div>
     </div>
 
-
     <div class="card shadow-sm card-selected">
         <div class="card-body">
-            <div class="table-responsive" style="cursor: pointer; max-height: 600px;">
+            <div class="table-responsive" style="cursor: pointer;">
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Owner.OwnerCode)
+                                DESCRIPTION
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Owner.OwnerFullName)
+                                DESKTOP CODE
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Owner.OwnerLocation)
+                                SERIAL NUMBER
+                            </th>
+                            <th hidden>
+                                PO
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Owner.OwnerOffice)
+                                UNIT PRICE
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Owner.Status)
+                                VENDOR
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Owner.Department)
+                                PURCHASE DATE
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Owner.DateCreated)
+                                CREATED DATE
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model != null && Model.OwnerList.Any())
+                        @if (Model != null && Model.Any())
                         {
-                            @foreach (var item in Model.OwnerList)
+                            @foreach (var item in Model)
                             {
-                                <tr data-id="@item.OwnerCode" data-ld="@item.OwnerFullName">
+                                <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.OwnerCode)
+                                        @Html.DisplayFor(modelItem => item.MonitorInventory.Description)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.OwnerFullName)
+                                        @Html.DisplayFor(modelItem => item.monitorCode)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Location.Description)
+                                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                                    </td>
+                                    <td hidden>
+                                        @Html.DisplayFor(modelItem => item.PO)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Store.StoreName)
+                                        @Html.DisplayFor(modelItem => item.Price)
                                     </td>
                                     <td>
-                                        <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status.status_name)</span>
+                                        @Html.DisplayFor(modelItem => item.Vendor.VendorName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                                        @Html.DisplayFor(modelItem => item.PurchaseDate)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.DateCreated)
@@ -94,32 +96,14 @@
 </div>
 
 
-
-
 <script>
     $(document).ready(function () {
-        // Add click event listener to each row in the table
-        $('table tbody tr').click(function () {
-            // Get the id from the clicked row's data-id attribute
-            var id = $(this).data('id');
-            var ld = $(this).data('ld');
-
-            // Remove the 'highlighted-row' class from any other row
-            $("tr.highlighted-row").removeClass("highlighted-row");
-
-            // Add the 'highlighted-row' class to the clicked row
-            $(this).closest("tr").addClass("highlighted-row");
-            $('#oid').val(id);
-            $('#odes').val(ld);
-        });
-
-        //FILTERING
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
-    });
-</script>
 
+    });
+</script>`

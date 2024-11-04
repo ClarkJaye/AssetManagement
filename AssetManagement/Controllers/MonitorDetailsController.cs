@@ -49,7 +49,8 @@ namespace AssetManagement.Controllers
         public IActionResult Create(string id)
         {
             ViewBag.Code = id;
-
+            ViewData["MTInvCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "Description");
+            ViewData["MTVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName");
             return View();
         }
 

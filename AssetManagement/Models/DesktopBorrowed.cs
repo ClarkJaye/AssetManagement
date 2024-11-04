@@ -53,7 +53,7 @@ namespace AssetManagement.Models
 
         [Column("expected_return_date")]
         [DisplayName("EXPECTED RETURN DATE")]
-        public DateTime Expected_return { get; set; }
+        public DateTime? Expected_return { get; set; }
 
 
         [Column("dtborrowed_remarks")]

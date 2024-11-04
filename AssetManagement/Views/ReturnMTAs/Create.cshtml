@@ -12,21 +12,27 @@
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="AllocID" value="@ViewBag.allocID" class="form-control" hidden/>
+
                 <div class="form-group col-md-2">
-                    <label asp-for="AllocID" class="control-label"></label>
-                    <input asp-for="AllocID" readonly value="@ViewBag.Id" class="form-control" />
+                    <label for="monitorCode" class="control-label">Monitor Code</label>
+                    <input id="monitorCode" value="@ViewBag.monitorCode" class="form-control" disabled />
                 </div>
-                <div class="form-group col-2" id="ownertable">
+
+                <div class="form-group col-md-2">
+                    <label for="serialNo" class="control-label">Serial Number</label>
+                    <input id="serialNo" value="@ViewBag.monitorSerial" disabled class="form-control" />
+                </div>
+
+                <div class="form-group col-md-3 mb-3">
                     <label asp-for="RTtype" class="control-label"></label>
-                    <input asp-for="RTtype" class="form-control" id="oid" hidden />
-                    <input class="form-select" id="odes" readonly placeholder="select return type below" required />
+                    <select asp-for="RTtype" class="form-select" id="serialNumber" asp-items="ViewBag.mtStatus">
+                        <option selected disabled>Select Return Type </option>
+                    </select>
+                    <span asp-validation-for="RTtype" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2" hidden>
-                    <label asp-for="RTStatus" class="control-label"></label>
-                    <select asp-for="RTStatus" class="form-control" asp-items="ViewBag.RTStatus"></select>
-                </div>
-                <div class="form-groupcol-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
-                    <input type="submit" value="Create" class="btn btn-red" />
+                <div class="form-group col-md-3 d-flex align-items-center gap-2">
+                    <input type="submit" value="Create" class="btn btn-theme" />
                     <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="MonitorAllocations">Back to List</a>
                 </div>
             </div>
@@ -40,24 +46,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#ownertable").click(function () {
-                $('#oid').val(null);
-                $('#odes').val(null);
-
-                $.ajax({
-                    url: "@Url.Action("ReturnPartialView", "ReturnTypes")",
-                    type: "GET",
-                    success: function (res) {
-                        $(".displaytable").html(res);
-                    }
-                })
-            })
-
-
-
-        })
-    </script>
 }
