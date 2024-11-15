@@ -11,13 +11,31 @@
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-md-2 mb-2">
-                    <label asp-for="laptoptinvCode" class="control-label"></label>
-                    <input value="@ViewBag.Code" readonly asp-for="laptoptinvCode" class="form-control" />
-                </div>
+
+
+                @if (ViewBag.Code != null)
+                {
+                    <div class="form-group col-md-2 mb-3">
+                        <label asp-for="laptoptinvCode" class="control-label"> LAPTOP DESCRIPTION </label>
+                        <input asp-for="laptoptinvCode" value="@ViewBag.Code" readonly hidden />
+                        <input id="code" value="@ViewBag.Description" disabled class="form-select" />
+                        <span asp-validation-for="laptoptinvCode" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-2 mb-3">
+                        <label asp-for="laptoptinvCode" class="control-label">LAPTOP DESCRIPTION </label>
+                        <select asp-for="laptoptinvCode" class="form-select" asp-items="ViewBag.LTInvCode" onchange="loadPartialView(this.value)">
+                            <option selected>select laptop code</option>
+                        </select>
+                        <span asp-validation-for="laptoptinvCode" class="text-danger"></span>
+                    </div>
+                }
+
                 <div class="form-group col-md-2 mb-2">
                     <label asp-for="SerialCode" class="control-label"></label>
-                    <input asp-for="SerialCode" class="form-control" required placeholder="Enter Serial No" />
+                    <input asp-for="SerialCode" class="form-control" required placeholder="Enter Serial No" id="serialTable" /> 
                     <span asp-validation-for="SerialCode" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2">
@@ -35,10 +53,11 @@
                     <input type="number" asp-for="Price" class="form-control" placeholder="Enter Price" required />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2 mb-2" id="vendortable">
+                <div class="form-group col-md-2 mb-3">
                     <label asp-for="LTDVendor" class="control-label"></label>
-                    <input asp-for="LTDVendor" value="0" class="form-select" id="vid" hidden />
-                    <input class="form-select" id="vname" readonly placeholder="Select Vendor Below" required />
+                    <select asp-for="LTDVendor" class="form-select" asp-items="ViewBag.LTVendor" required>
+                        <option selected disabled>select vendor</option>
+                    </select>
                     <span asp-validation-for="LTDVendor" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2 mb-2">
@@ -53,7 +72,7 @@
                 </div>
                 <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
                     <input type="submit" value="Create" class="btn btn-theme " />
-                    <a class="btn btn-outline-secondary" asp-controller="LaptopInventories" asp-action="Index">Back to List</a>
+                    <a class="btn btn-outline-secondary" asp-controller="LaptopInventories" asp-action="Index" asp-route-typeId="@ViewBag.LTTypeId">Back to List</a>
                 </div>
             </div>
         </form>
@@ -64,24 +83,34 @@
 
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        //VENDOR
-        $("#vendortable").click(function () {
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 
-            $('#vid').val(null);
-
-            $('#vname').val(null);
-            $.ajax({
-                url: "@Url.Action("VendorsPartialView", "Vendors")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
+    <script>
+        var code = $("#code").val();
+        if (code) {
+            $("#serialTable").click(function () {
+                loadPartialView(code);
             })
-        })
+        }
+        function loadPartialView(lapInvCode) {
+            if (lapInvCode) {
+                $.ajax({
+                    url: '@Url.Action("LapInvenPartialView", "LaptopInventories")',
+                    type: "GET",
+                    data: { code: lapInvCode },
+                    success: function (res) {
+                        $(".displaytable").html(res);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
+                });
+            }
+        }
+    </script>
 
+}
 
-    })
-
-</script>

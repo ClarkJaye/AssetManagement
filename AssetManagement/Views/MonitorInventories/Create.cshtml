@@ -14,8 +14,8 @@
 }
 
 
-<div class="m-5">
-    <h4>Monitor  Inventory</h4>
+<div class="m-4">
+    <h4>Add Monitor Inventory</h4>
     <hr />
     <div>
         <form asp-action="Create">
@@ -33,22 +33,25 @@
                 </div>
                 <div class="form-group col-md-4 mb-2">
                     <label asp-for="MonitorModel" class="control-label"></label>
-                    <select asp-for="MonitorModel" class="form-select" asp-items="ViewBag.MonitorModel"></select>
+                    <select asp-for="MonitorModel" class="form-select" asp-items="ViewBag.MonitorModel">
+                        <option selected disabled>Select Model</option>
+                    </select>
                     <span asp-validation-for="MonitorModel" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-4 mb-2">
+                <div class="form-group col-md-4 mb-2" hidden>
                     <label asp-for="MonitorStatus" class="control-label"></label>
-                    <select asp-for="MonitorStatus" class="form-select" asp-items="ViewBag.MonitorStatus"></select>
+                    <select asp-for="MonitorStatus" class="form-select" asp-items="ViewBag.MonitorStatus">
+                        <option selected disabled>Select Status</option>
+                    </select>
                     <span asp-validation-for="MonitorStatus" class="text-danger"></span>
                 </div>
-                <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
-                    <input type="submit" value="Create" class="btn btn-theme createbtn" />
+                <div class="form-group col-md-4 mb-2 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Save" class="btn btn-theme createbtn" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>
             </div>
         </form>
     </div>
-
     <div class="displaytable"></div>
 </div>
 
@@ -59,38 +62,3 @@
     }
 }
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        $("#modeltable").click(function () {
-
-            $('#modelid').val(null);
-
-            $('#modeldes').val(null);
-            $.ajax({
-                url: "@Url.Action("ModelPartialView", "Modelss")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        // Function to hide the display table
-        function hideTable() {
-            $(".displaytable").empty();
-        }
-
-        $(document).click(function (event) {
-            if (!$(event.target).closest('#modeltable, .displaytable').length) {
-                hideTable();
-            }
-        });
-
-        // Optional: Allow hiding the table if 'Esc' key is pressed
-        $(document).keyup(function (e) {
-            if (e.key === "Escape") {
-                hideTable();
-            }
-        });
-    })
-</script>

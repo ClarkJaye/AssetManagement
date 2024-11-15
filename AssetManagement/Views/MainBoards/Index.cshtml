@@ -13,29 +13,6 @@
     }
 </div>
 
-@if(@TempData["AlertMessage"] != null)
-{
-    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["AlertMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
-
-@if (TempData["SuccessNotification"] != null)
-{
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            Swal.fire({
-                title: 'Success',
-                text: '@TempData["SuccessNotification"]',
-                icon: 'success',
-                timer: 3000, // Automatically close the notification after 3 seconds
-                showConfirmButton: false
-            });
-        });
-    </script>
-}
 
 <div class="m-4 px-1">
     <a id="createbtn" class="btn btn-outline-theme createbtn">
@@ -48,74 +25,78 @@
 
 <hr />
 
-<div class="m-4">
+<div class="m-4 rendb">
     <div class="d-flex align-items-center justify-content-end px-2 mb-3">
-        <a class="btn btn-outline-secondary" asp-controller="Mainboards" asp-action="Inactive">
+        <a class="btn btn-secondary" asp-controller="Mainboards" asp-action="Inactive">
             <span class="fas fa-trash-alt"></span> Show Temporary Deleted
         </a>
     </div>
 
-    <div class="table-container">
-        <table id="mainboardTable" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BoardDescription)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BoardStatus)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BoardCreatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BoardCreatedDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BoardUpdatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BoardUpdatedDate)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BoardDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BoardStatus)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BoardCreatedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BoardCreatedDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BoardUpdatedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BoardUpdatedDate)
-                        </td>
-                        <td>
-                            <div class="d-flex justify-content-center align-items-center gap-2">
-                                <a class="btn btn-sm btn-outline-primary" asp-controller="MainBoards" asp-action="Edit" asp-route-id="@item.BoardID">
-                                    <span class="fas fa-pencil-alt"></span> Edit
-                                </a> |
-                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.BoardID">
-                                    <span class="fas fa-trash-alt"></span> Delete
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-container table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BoardDescription)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BoardStatus)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BoardCreatedBy)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BoardCreatedDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BoardUpdatedBy)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BoardUpdatedDate)
+                            </th>
+                            <th class="text-center">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BoardDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BoardStatus)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BoardCreatedBy)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BoardCreatedDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BoardUpdatedBy)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BoardUpdatedDate)
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="MainBoards" asp-action="Edit" asp-route-id="@item.BoardID">
+                                            <span class="fas fa-pencil-alt"></span> Edit
+                                        </a> |
+                                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.BoardID">
+                                            <span class="fas fa-trash-alt"></span> Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -148,38 +129,44 @@
     </div>
 </div>
 
+@if (@TempData["AlertMessage"] != null)
+{
+    <div id="alertMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Initialize DataTables
-        $('#mainboardTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous",
-                    next: "Next"
-                }
-            }
+
+@if (TempData["SuccessNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Success',
+                text: '@TempData["SuccessNotification"]',
+                icon: 'success',
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
         });
+    </script>
+}
 
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         $(".btn-delt").click(function () {
             $(this).closest("form").submit();
         })
 
         $("#createbtn").click(function () {
             $(this).hide();
-            $('.table-responsive ,.title ,.createbtn').hide();
+            $('.card, .rendb ,.title ,.createbtn').hide();
 
             $.ajax({
-                url: "@Url.Action("Create","MainBoards")",
+                url: "@Url.Action("Create", "MainBoards")",
                 type: "GET",
                 success: function (res) {
                     $(".createform").html(res);
@@ -190,7 +177,7 @@
         // Pass the selected ID to the modal
         $('#deleteModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
-            var id = button.data('id'); 
+            var id = button.data('id');
 
             // Update the modal's form action with the correct ID
             var form = $('#deleteForm');

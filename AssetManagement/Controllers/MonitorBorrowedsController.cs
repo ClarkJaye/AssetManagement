@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
@@ -315,7 +311,7 @@ namespace AssetManagement.Controllers
             var inv_details = await _context.tbl_ictams_monitordetails.FirstOrDefaultAsync(a => a.monitorCode == laptopBorrowed.UnitID && a.SerialNumber == laptopBorrowed.SerialNumber);
             if (inv_details != null)
             {
-                inv_details.MonitorStatus = "AC";
+                inv_details.MonitorStatus = "AV";
                 inv_details.DeployedDate = null;
             }
             

@@ -32,21 +32,31 @@
                     <input asp-for="PeripheralDescription" class="form-control" required placeholder="Enter Description" />
                     <span asp-validation-for="PeripheralDescription" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3 mb-3" id="brandtable">
+
+                <div class="form-group col-md-2">
                     <label asp-for="PeripheralBrand" class="control-label"></label>
-                    <input asp-for="PeripheralBrand" class="form-control" id="brandid" hidden required />
-                    <input class="form-select" id="branddes" readonly placeholder="Select Brand" required />
+                    <select asp-for="PeripheralBrand" class="form-select" asp-items="ViewBag.PBrand">
+                        <option selected disabled>select brand</option>
+                    </select>
+                    <span asp-validation-for="PeripheralBrand" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3 mb-3" id="devtable">
+
+                <div class="form-group col-md-2">
                     <label asp-for="PeripheralDevice" class="control-label"></label>
-                    <input asp-for="PeripheralDevice" class="form-control" id="devid" hidden />
-                    <input class="form-select" id="devdes" readonly placeholder="Select Devices" required />
+                    <select asp-for="PeripheralDevice" class="form-select" asp-items="ViewBag.PDevice">
+                        <option selected disabled>select brand</option>
+                    </select>
+                    <span asp-validation-for="PeripheralDevice" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3 mb-3" id="vendortable">
+
+                <div class="form-group col-md-2">
                     <label asp-for="PeripheralVendor" class="control-label"></label>
-                    <input asp-for="PeripheralVendor" class="form-control" id="vid" hidden />
-                    <input class="form-select" id="vname" readonly placeholder="Select Vendor" required />
+                    <select asp-for="PeripheralVendor" class="form-select" asp-items="ViewBag.PVendor">
+                        <option selected disabled>select brand</option>
+                    </select>
+                    <span asp-validation-for="PeripheralVendor" class="text-danger"></span>
                 </div>
+               
                 <div class="form-group col-md-3 mb-3">
                     <label asp-for="PeripheralQty" class="control-label"></label>
                     <input asp-for="PeripheralQty" class="form-control" value="0" required placeholder="Enter Quantity" />
@@ -58,16 +68,14 @@
                     <span asp-validation-for="PeripheralAllocation" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-3 mb-3 d-flex align-items-center gap-2" style="margin-top: 23px;">
+                <div class="form-group d-flex align-items-end gap-3 mt-3">
                     <input type="submit" value="Create" class="btn btn-theme" />
                     <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="LaptopPeripherals">Back to List</a>
                 </div>
             </div>
         </form>
     </div>
-    <div class="displaytable"></div>
 </div>
-
 
 
 @section Scripts {
@@ -75,62 +83,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    //Brand
-    $(document).ready(function () {
-
-        $("#brandtable").click(function () {
-            $.ajax({
-                url: "@Url.Action("BrandPartialView", "Brands")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-        //Vendor
-        $("#vendortable").click(function () {
-            $.ajax({
-                url: "@Url.Action("VendorsPartialView", "Vendors")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-        //Device
-        $("#devtable").click(function () {
-            $.ajax({
-                url: "@Url.Action("DevicePartialView", "DeviceTypes")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        })
-
-
-        // Function to hide the display table
-        function hideTable() {
-            $(".displaytable").empty();
-        }
-
-        $(document).click(function (event) {
-            if (!$(event.target).closest('#brandtable, #devtable, #vendortable, .displaytable').length) {
-                hideTable();
-            }
-        });
-
-        // Optional: Allow hiding the table if 'Esc' key is pressed
-        $(document).keyup(function (e) {
-            if (e.key === "Escape") {
-                hideTable();
-            }
-        });
-
-    })
-
-</script>
 

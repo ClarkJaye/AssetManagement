@@ -21,7 +21,7 @@
 }
 
 <div class="m-4 px-1">
-    <a id="createbtn" class="btn btn-outline-theme createbtn">
+    <a id="createbtn" class="btn btn-theme createbtn">
         <i class="fas fa-pencil-alt"></i>
         <span>Create New</span>
     </a>
@@ -37,9 +37,11 @@
             <span class="fas fa-trash-alt"></span> Show Temporary Deleted
         </a>
     </div>
-    <div class="table-responsive">
-        <table class="table table-datatable">
-            <thead>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-container table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Store_code)
@@ -62,7 +64,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Updatedby)
                     </th>
-                    <th></th>
+                            <th class="text-center">ACTION</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,8 +110,9 @@
                 }
             </tbody>
         </table>
+            </div>
+        </div>
     </div>
-
 </div>
 
 
@@ -134,9 +137,8 @@
     </script>
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
         $(".btn-delt").click(function () {
             $(this).closest("form").submit();
         })

@@ -1,0 +1,125 @@
+﻿@model IEnumerable<AssetManagement.Models.InventoryDetails>
+
+@{
+    Layout = null;
+}
+
+
+<hr />
+<div class="mx-5">
+
+    <!-- Action Buttons -->
+    <div class="d-flex align-items-center justify-content-between my-4">
+        <h4>Unit Tag Exist</h4>
+
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+        </div>
+    </div>
+
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive" style="cursor: pointer;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                DESCRIPTION
+                            </th>
+                            <th>
+                                LAPTOP CODE
+                            </th>
+                            <th>
+                                SERIAL 
+                            </th>
+                            <th>
+                                COMPUTER NAME
+                            </th>
+                            <th>
+                                PO
+                            </th>
+                            <th>
+                                UNIT PRICE
+                            </th>
+                            <th>
+                                VENDOR
+                            </th>
+                            <th>
+                                STATUS
+                            </th>
+                            <th>
+                                PURCHASE DATE
+                            </th>
+                            <th>
+                                CREATED DATE
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LaptopInventory.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.laptoptinvCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SerialCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ComputerName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PO)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Vendor.VendorName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                                    </td>
+                                    <td>
+                                        @item.PurchaseDate?.ToString("MMM dd yyyy h:mm tt")
+                                    </td>
+                                    <td>
+                                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="12" class="text-center">
+                                    No data available.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#filterInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+    });
+</script>

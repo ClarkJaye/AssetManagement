@@ -250,7 +250,7 @@ namespace AssetManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(string username, string newpassword, string conpassword)
+        public async Task<IActionResult> ChangePassword(string newpassword, string conpassword)
         {
             if (ModelState.IsValid)
             {

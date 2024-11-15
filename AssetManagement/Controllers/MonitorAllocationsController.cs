@@ -308,7 +308,7 @@ namespace AssetManagement.Controllers
         public IActionResult Create()
         {
             ViewData["AllocCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserFullName");
-            ViewData["monitorCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "Description");
+            ViewData["monitorCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "monitorCode");
             ViewData["SerialNumber"] = new SelectList(_context.tbl_ictams_monitordetails, "SerialNumber", "SerialNumber");
             ViewData["OwnerCode"] = new SelectList(_context.tbl_ictams_owners, "OwnerCode", "OwnerFullName");
             ViewData["AllocationStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
@@ -427,10 +427,7 @@ namespace AssetManagement.Controllers
 
                 _context.Add(monitorAllocation);
                 await _context.SaveChangesAsync();
-
-                // ...
                 TempData["SuccessNotification"] = "Successfully added a new allocation!";
-                // ...
                 return RedirectToAction(nameof(Index));
             }
             else if (allocatedQuantity >= availableQuantity)

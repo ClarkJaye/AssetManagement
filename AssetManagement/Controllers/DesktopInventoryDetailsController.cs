@@ -24,7 +24,7 @@ namespace AssetManagement.Controllers
         // GET: DesktopInventoryDetails
         public async Task<IActionResult> Index()
         {
-            var assetManagementContext = _context.tbl_ictams_desktopinvdetails.Where(x=>x.DTStatus == "AV").Include(d => d.Createdby).Include(d => d.Status).Include(d => d.Updatedby).Include(d => d.Vendor);
+            var assetManagementContext = _context.tbl_ictams_desktopinvdetails.Include(d => d.Createdby).Include(d => d.Status).Include(d => d.Updatedby).Include(d => d.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -170,7 +170,7 @@ namespace AssetManagement.Controllers
                 existingDetail.Updated = ucode;
                 existingDetail.UpdatedDate = DateTime.Now;
 
-                TempData["SuccessNotification"] = "Successfully Udpdated";
+                TempData["SuccessNotification"] = "Successfully Updated";
                 // Save changes
                 await _context.SaveChangesAsync();
             }

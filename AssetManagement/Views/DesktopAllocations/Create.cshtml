@@ -53,13 +53,13 @@
                     <span asp-validation-for="FixedassetTag" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-2 mb-3">
+             @*    <div class="form-group col-md-2 mb-3">
                     <label for="attform" class="control-label">Attached Form</label>
                     <input id="attform" class="form-control" type="file" />
-                </div>
+                </div> *@
 
                 <div class="form-group col-md-2 d-flex align-items-center gap-2">
-                    <input type="submit" value="Create" class="btn btn-outline-theme" />
+                    <input type="submit" value="Create" class="btn btn-theme" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                     $.ajax({
                         url: '@Url.Action("GetUnitNumbers", "DesktopInventories")',
                         type: 'GET',
-                        data: { deskCode: code },
+                        data: { code: code },
                         success: function (data) {
                             if (data && data.length > 0) {
                                 $.each(data, function (i, item) {

@@ -166,11 +166,52 @@ namespace AssetManagement.Utility
             TempData["Welcome"] = "Welcome!";
 
         }
+        protected async Task FindStatusLTT(int typeId)
+        {
+            var laptopsToUpdate = await _context.tbl_ictams_laptopinv
+               .Where(x => x.Quantity == x.AllocatedNo && x.LTStatus == "AV" && x.TypeId == typeId)
+               .ToListAsync();
+
+            foreach (var laptop in laptopsToUpdate)
+            {
+                laptop.LTStatus = "CO";
+            }
+
+            var laptopsToUpdateAV = await _context.tbl_ictams_laptopinv
+                .Where(x => x.Quantity != x.AllocatedNo && x.LTStatus == "CO"&& x.TypeId == typeId)
+                .ToListAsync();
+
+            foreach (var laptop in laptopsToUpdateAV)
+            {
+                laptop.LTStatus = "AV";
+            }
+
+            var desktopToUpdate = await _context.tbl_ictams_desktopinv
+       .Where(x => x.Quantity == x.AllocatedNo && x.DTStatus == "AV")
+       .ToListAsync();
+
+            foreach (var laptop in desktopToUpdate)
+            {
+                laptop.DTStatus = "CO";
+            }
+
+            var desktopToUpdateAV = await _context.tbl_ictams_desktopinv
+       .Where(x => x.Quantity != x.AllocatedNo && x.DTStatus == "CO")
+       .ToListAsync();
+
+            foreach (var laptop in desktopToUpdateAV)
+            {
+                laptop.DTStatus = "AV";
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         protected async Task FindStatus()
         {
             var laptopsToUpdate = await _context.tbl_ictams_laptopinv
-       .Where(x => x.Quantity == x.AllocatedNo && x.LTStatus == "AV")
-       .ToListAsync();
+               .Where(x => x.Quantity == x.AllocatedNo && x.LTStatus == "AV")
+               .ToListAsync();
 
             foreach (var laptop in laptopsToUpdate)
             {

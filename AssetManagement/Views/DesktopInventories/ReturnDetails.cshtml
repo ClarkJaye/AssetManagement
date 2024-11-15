@@ -9,40 +9,33 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th hidden>
-                @Html.DisplayNameFor(model => model.ReturnID)
+            <th>
+                DESCRIPTION
             </th>
             <th>
-                ID
+                CODE
             </th>
             <th>
-                OWNER
+                SERIAL
             </th>
             <th>
-                COMPUTER NAME
+                ASSET TAG
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                RETURNER NAME
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
+                DATE DEPLOYED
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DesktopAllocation)
+                RETURN TYPE
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReturnType)
+                CREATED AT
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                CREATED BY
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserUpdated)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -52,34 +45,31 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.AllocId)
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.InventoryDetails.DesktopInventory.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.OwnerCode)
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.InventoryDetails.desktopInvCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.ComputerName)
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.InventoryDetails.unitTag)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.FixedassetTag)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.Owner.OwnerFullName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.AllocId)
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.InventoryDetails.DeployedDate)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ReturnType.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status.status_code)
+                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.UserCreated.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserUpdated.UserCode)
                     </td>
                 </tr>
             }

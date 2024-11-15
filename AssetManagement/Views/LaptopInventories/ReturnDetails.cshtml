@@ -6,90 +6,78 @@
 }
 
 
-<div class="table-responsive">
-    <table id="returnTable" class="table">
-        <thead>
-            <tr>
-                <th hidden>
-                    @Html.DisplayNameFor(model => model.ReturnID)
-                </th>
-                <th>
-                    ID
-                </th>
-                <th>
-                    OWNER
-                </th>
-                <th>
-                    COMPUTER NAME
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReturnType)
-                </th>
-                <th hidden>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserUpdated)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.ReturnID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopAllocation.AllocId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopAllocation.OwnerCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopAllocation.ComputerName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ReturnType.Description)
-                        </td>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.Status.status_code)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserCreated.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserUpdated.UserCode)
-                        </td>
-                    </tr>
-                }
-            }
-            else
+<h4>Return Laptop</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.ReturnID)
+            </th>
+            <th>
+                ID
+            </th>
+            <th>
+                OWNER
+            </th>
+            <th>
+                COMPUTER NAME
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnType)
+            </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                CREATED BY
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td colspan="12" class="text-center">
-                        No data available.
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.ReturnID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopAllocation.AllocId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopAllocation.OwnerCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopAllocation.ComputerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReturnType.Description)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.Status.status_code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserCreated.UserCode)
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
-</div>
+        }
+        else
+        {
+            <tr>
+                <td colspan="12" class="text-center">
+                    No data available.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 

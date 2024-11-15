@@ -6,96 +6,92 @@
 }
 
 
+<h4>Second Owner Laptop Allocation</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                DESCRIPTION
+            </th>
+            <th>CODE</th>
+            <th>
+                SERIAL
+            </th>
+            <th>
+                ASSET TAG
+            </th>
+            <th>
+                COMPUTER NAME
+            </th>
+            <th>PO</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Owner)
+            </th>
+            <th>
+                DATE DEPLOYED
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                CREATED BY
+            </th>
 
-<div class="table-responsive">
-    <table id="secOwnTable" class="table">
-        <thead>
-            <tr>
-                <th hidden>
-                    @Html.DisplayNameFor(model => model.SecAllocId)
-                </th>
-                <th>
-                    ID
-                </th>
-                <th>
-                    COMPUTER NAME
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner)
-                </th>
-                <th>PO</th>
-                <th>
-                    SERIAL
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Createdby)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Updatedby)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.SecAllocId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopAllocation.AllocId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopAllocation.ComputerName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopAllocation.SerialNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                        </td>
-                    </tr>
-                }
-            }
-
-            else
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td colspan="12" class="text-center">
-                        No data available.
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.laptoptinvCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.SerialCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopAllocation.FixedassetTag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopAllocation.ComputerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopAllocation.LaptopInventoryDetails.DeployedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
+        }
 
-</div>
+        else
+        {
+            <tr>
+                <td colspan="12" class="text-center">
+                    No data available.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -6,7 +6,7 @@
 
 
 <div class="m-4 px-1">
-    <h4>Deleted Items</h4>
+    <h4>Deleted Allocation History</h4>
     @if (TempData["Welcome"] != null)
     {
         <p>@TempData["Welcome"]</p>
@@ -19,118 +19,106 @@
 
     <hr />
 
-    <!-- Action Buttons -->
-    <div class="d-flex align-items-center justify-content-end gap-2 mb-2">
-        <div class="d-flex align-items-center gap-2">
-            <input type="text" class="form-control" id="filterInput" placeholder="Search..." style="width: 350px;">
+
+    <!-- Table -->
+    <div class="mt-4">
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+
+                                <th>ID</th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Owner)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LaptopPeripheral)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SerialNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FixedAssetTag)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DatePurchased)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.AgeYears)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PONumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PeripheralAllocCreatedAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PeripheralAllocUpdateAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UnitPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UpdatedBy)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocationId)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralDescription)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FixedAssetTag)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DatePurchased)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AgeYears)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PONumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocCreatedAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocUpdateAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-
-                    <th>ID</th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Owner)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LaptopPeripheral)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SerialNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FixedAssetTag)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DatePurchased)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AgeYears)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PONumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PeripheralAllocCreatedAt)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PeripheralAllocUpdateAt)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UnitPrice)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CreatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UpdatedBy)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.PeripheralAllocationId)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralDescription)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.SerialNumber)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.FixedAssetTag)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.DatePurchased)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.AgeYears)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.PONumber)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.PeripheralAllocCreatedAt)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.PeripheralAllocUpdateAt)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.UnitPrice)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
-                        </td>
-                        <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                            @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="displaytable"> </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        //FILTERING
-        $('#filterInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            $('tbody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-</script>
+

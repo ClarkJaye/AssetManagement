@@ -12,31 +12,41 @@
         <form asp-action="Create" id="createForm">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-md-2">
-                    <label asp-for="AllocID" class="control-label"></label>
-                    <input asp-for="AllocID" readonly value="@ViewBag.Id" class="form-control" />
-                    <span asp-validation-for="AllocID" class="text-red"></span>
+                <input asp-for="AllocID" value="@ViewBag.allocID" class="form-control" hidden />
+
+                <div class="form-group col-md-3 mb-3">
+                    <label for="laptopCode" class="control-label">Laptop Code</label>
+                    <input id="laptopCode" value="@ViewBag.LTCode" class="form-control" disabled />
                 </div>
-                <div class="form-group col-md-2" id="ownertable">
+
+                <div class="form-group col-md-3 mb-3">
+                    <label for="serialNo" class="control-label">Serial Number</label>
+                    <input id="serialNo" value="@ViewBag.LTSerial" disabled class="form-control" />
+                </div>
+
+                <div class="form-group col-md-3 mb-3">
                     <label asp-for="RTtype" class="control-label"></label>
-                    <input asp-for="RTtype" class="form-control" id="oid" hidden />
-                    <input class="form-select" id="odes" readonly required placeholder="Select Return Type Below" />
-                    <span asp-validation-for="RTtype" class="text-red"></span>
+                    <select asp-for="RTtype" class="form-select" asp-items="ViewBag.LTReturnType">
+                        <option selected disabled>Select Return Type </option>
+                    </select>
+                    <span asp-validation-for="RTtype" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2" hidden>
-                    <label asp-for="RTStatus" class="control-label"></label>
-                    <select asp-for="RTStatus" class="form-control" asp-items="ViewBag.RTStatus"></select>
-                    <span asp-validation-for="RTStatus" class="text-red"></span>
-                </div>
-                <div class="form-group col-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
-                    <input type="submit" id="createBtn" value="Return" class="btn btn-theme" />
-                    <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="ReturnLTAs">Back to List</a>
+
+                <div class="form-group d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Save" class="btn btn-theme" />
+                    <a class="btn btn-outline-secondary" asp-action="ReturnPartialView" asp-controller="LaptopAllocations">
+                        <span class="fas fa-undo"></span>
+                        Back to Return List
+                    </a>
+                    <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="LaptopAllocations">
+                        <span class="fas fa-undo"></span>
+                        Go To Inventory Allocation
+                    </a>
                 </div>
             </div>
         </form>
     </div>
-
-    <div class="displaytable mt-4"></div>
+    <div class="displaytable"></div>
 </div>
 
 @section Scripts {
@@ -44,26 +54,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Disable submit button after first click to prevent multiple submissions
-        $('#createForm').submit(function () {
-            $('#createBtn').prop('disabled', true);
-        });
-
-        // Show partial view on click
-        $("#ownertable").click(function () {
-            $('#oid').val(null);
-            $('#odes').val(null);
-
-            $.ajax({
-                url: "@Url.Action("ReturnPartialView", "ReturnTypes")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            })
-        });
-    });
-</script>

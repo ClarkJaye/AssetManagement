@@ -13,12 +13,12 @@
         <form asp-action="Edit" class="row" id="edit-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="GraphicsID" />
-            <div class="form-group col-6">
+            <div class="form-group col-md-3">
                 <label asp-for="GraphicsDescription" class="form-label"></label>
                 <input asp-for="GraphicsDescription" class="form-control" />
                 <span asp-validation-for="GraphicsDescription" class="text-danger"></span>
             </div>
-            <div class="form-group col-4">
+            <div class="form-group col-md-3">
                 <label asp-for="GraphicsStatus" class="control-label"></label>
                 <input asp-for="GraphicsStatus" class="form-control" />
                 <span asp-validation-for="GraphicsStatus" class="text-danger"></span>
@@ -44,7 +44,7 @@
                 <span asp-validation-for="GraphicsUpdatedDate" class="text-danger"></span>
             </div>
             <div class="form-group mt-4 mb-2 col">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-theme" />
                 <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
             </div>
         </form>

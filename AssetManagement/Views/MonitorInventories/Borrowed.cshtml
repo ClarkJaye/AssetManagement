@@ -10,28 +10,37 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Owner)
+                DESCRIPTION
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateBorrow)
+                CODE
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Remark)
+                SERIAL
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                DEPARTMENT
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                BORROWER
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
+                DATE OF BORROWED
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserCreated)
+                EXPECTED RETURN DATE
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserUpdated)
+                RETURN DATE
+            </th>
+            <th>
+                REMARK
+            </th>
+            <th>
+                CREATED AT
+            </th>
+            <th>
+                CREATED BY
             </th>
         </tr>
     </thead>
@@ -40,28 +49,37 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.MonitorDetail.MonitorInventory.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonitorDetail.MonitorInventory.monitorCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonitorDetail.SerialNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateBorrow)
+                    @item.DateBorrow.ToString("MMM dd yyyy h:mm tt")
+                </td>
+                <td>
+                    @item.Expected_return?.ToString("MMM dd yyyy h:mm tt")
+                </td>
+                <td>
+                    @item.Return_date?.ToString("MMM dd yyyy h:mm tt")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Remark)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status.status_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateUpdated)
+                    @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.UserCreated.UserFullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserUpdated.UserFullName)
                 </td>
             </tr>
         }

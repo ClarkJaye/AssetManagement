@@ -30,7 +30,7 @@
                             <th>
                                 SERIAL NUMBER
                             </th>
-                            <th hidden>
+                            <th>
                                 PO
                             </th>
                             <th>
@@ -38,6 +38,9 @@
                             </th>
                             <th>
                                 VENDOR
+                            </th>
+                            <th>
+                                STATUS
                             </th>
                             <th>
                                 PURCHASE DATE
@@ -62,7 +65,7 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.SerialNumber)
                                     </td>
-                                    <td hidden>
+                                    <td>
                                         @Html.DisplayFor(modelItem => item.PO)
                                     </td>
                                     <td>
@@ -72,10 +75,13 @@
                                         @Html.DisplayFor(modelItem => item.Vendor.VendorName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.PurchaseDate)
+                                        @Html.DisplayFor(modelItem => item.Status.status_name)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.DateCreated)
+                                        @item.PurchaseDate?.ToString("MMM dd yyyy h:mm tt")
+                                    </td>
+                                    <td>
+                                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
                                     </td>
                                 </tr>
                             }

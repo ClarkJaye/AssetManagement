@@ -56,13 +56,13 @@
                     <span asp-validation-for="AllocationStatus" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-2">
+                @* <div class="form-group col-md-2">
                     <label for="attform" class="control-label">Attached Form</label>
                     <input id="attform" class="form-control" type="file" />
-                </div>
+                </div> *@
 
-                <div class="form-group col-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
-                    <input type="submit" value="Create" class="btn btn-outline-theme" />
+                <div class="form-group col-md-2 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Save" class="btn btn-theme" />
                     <a class="btn btn-outline-secondary" asp-controller="LaptopAllocations" asp-action="Index">Back to List</a>
                 </div>
             </div>
@@ -77,85 +77,91 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-        // On laptop code change, update serial numbers
-        $("#laptopCode").change(function () {
-            var laptopCode = $(this).val();
+            // On laptop code change, update serial numbers
+            $("#laptopCode").change(function () {
+                var laptopCode = $(this).val();
 
-            if (laptopCode) {
-                $.ajax({
-                    url: '@Url.Action("GetSerialNumbers", "LaptopInventories")',
-                    type: 'GET',
-                    data: { laptopCode: laptopCode },
-                    success: function (data) {
-                        $('#serialNumber').empty().append('<option selected disabled>Select serial number</option>');
-                        $.each(data, function (i, item) {
-                            $('#serialNumber').append($('<option>', {
-                                value: item.serialCode,
-                                text: item.serialCode
-                            }));
-                        });
-                        $('#serialNumber').prop('disabled', false);
-                    }
-                });
-            }
-        });
-
-        // On serial number change, update computer name
-        $("#serialNumber").change(function () {
-            var laptopCode = $('#laptopCode').val();
-            var serialNumber = $(this).val();
-
-            if (laptopCode && serialNumber) {
-                $.ajax({
-                    url: '@Url.Action("GetComputerName", "LaptopInventories")',
-                    type: 'GET',
-                    data: { laptopCode: laptopCode, serialNumber: serialNumber },
-                    success: function (data) {
-                        $('#ComputerName').val(data);
-                    }
-                });
-            }
-        });
-
-        //OWNER
-
-        $("#ownertable").click(function () {
-            $.ajax({
-                url: "@Url.Action("OwnerPartialView", "Owners")",
-                type: "GET",
-                success: function (res) {
-                    $(".displaytable").html(res);
+                $('#serialNumber').empty().append('<option selected disabled>Select serial number</option>').prop('disabled', true);
+                if (laptopCode) {
+                    $.ajax({
+                        url: '@Url.Action("GetSerialNumbers", "LaptopInventories")',
+                        type: 'GET',
+                        data: { laptopCode: laptopCode },
+                        success: function (data) {
+                            if (data && data.length > 0) {
+                                $.each(data, function (i, item) {
+                                    $('#serialNumber').append($('<option>', {
+                                        value: item.serialCode,
+                                        text: item.serialCode
+                                    }));
+                                });
+                                $('#serialNumber').prop('disabled', false);
+                            } else {
+                                $('#serialNumber').empty().append('<option selected>No serial Available</option>');
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching serial device.');
+                        }
+                    });
                 }
+            });
+
+            // On serial number change, update computer name
+            $("#serialNumber").change(function () {
+                var laptopCode = $('#laptopCode').val();
+                var serialNumber = $(this).val();
+
+                if (laptopCode && serialNumber) {
+                    $.ajax({
+                        url: '@Url.Action("GetComputerName", "LaptopInventories")',
+                        type: 'GET',
+                        data: { laptopCode: laptopCode, serialNumber: serialNumber },
+                        success: function (data) {
+                            $('#ComputerName').val(data);
+                        }
+                    });
+                }
+            });
+
+            //OWNER
+
+            $("#ownertable").click(function () {
+                $.ajax({
+                    url: "@Url.Action("OwnerPartialView", "Owners")",
+                    type: "GET",
+                    success: function (res) {
+                        $(".displaytable").html(res);
+                    }
+                })
             })
+
+
+
+            // Function to hide the display table
+            function hideTable() {
+                $(".displaytable").empty();  // Clear the content of the display table
+            }
+
+            // Hide the display table when clicking anywhere outside the input fields
+            $(document).click(function (event) {
+                // Check if the clicked element is not within the periptable or ownertable
+                if (!$(event.target).closest('#laptopCode, #serialNumber, #ownertable, .displaytable').length) {
+                    hideTable();  // Hide the display table if clicked outside
+                }
+            });
+
+            // Optional: Allow hiding the table if 'Esc' key is pressed
+            $(document).keyup(function (e) {
+                if (e.key === "Escape") {
+                    hideTable();  // Hide the table when the 'Esc' key is pressed
+                }
+            });
+
+
         })
-
-
-
-        // Function to hide the display table
-        function hideTable() {
-            $(".displaytable").empty();  // Clear the content of the display table
-        }
-
-        // Hide the display table when clicking anywhere outside the input fields
-        $(document).click(function (event) {
-            // Check if the clicked element is not within the periptable or ownertable
-            if (!$(event.target).closest('#laptopCode, #serialNumber, #ownertable, .displaytable').length) {
-                hideTable();  // Hide the display table if clicked outside
-            }
-        });
-
-        // Optional: Allow hiding the table if 'Esc' key is pressed
-        $(document).keyup(function (e) {
-            if (e.key === "Escape") {
-                hideTable();  // Hide the table when the 'Esc' key is pressed
-            }
-        });
-
-
-    })
-</script>
+    </script>
+}

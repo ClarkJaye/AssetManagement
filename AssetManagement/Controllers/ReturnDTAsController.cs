@@ -91,9 +91,15 @@ namespace AssetManagement.Controllers
         }
 
         // GET: DesktopReturns/Create
-        public IActionResult Create(string id)
+        public async Task<IActionResult> Create(string id)
         {
-            ViewBag.Id = id;
+            var item = await _context.tbl_ictams_desktopalloc.Include(x => x.InventoryDetails)
+               .FirstOrDefaultAsync(i => i.AllocId == id);
+
+            ViewData["allocID"] = item.AllocId;
+            ViewData["DTCode"] = item.InventoryDetails.desktopInvCode;
+            ViewData["DTunitTag"] = item.InventoryDetails.unitTag;
+            ViewData["DTReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
             return View();
         }
 
@@ -183,6 +189,7 @@ namespace AssetManagement.Controllers
         public IActionResult CreateSecReturn(string id)
         {
             ViewBag.Id = id;
+            ViewData["ReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
             return View();
         }
         [HttpPost]
@@ -257,6 +264,8 @@ namespace AssetManagement.Controllers
         {
 
             ViewBag.Id = id;
+            ViewData["MTReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
+
             if (id == null || _context.tbl_ictams_dtareturn == null)
             {
                 return NotFound();
@@ -291,7 +300,6 @@ namespace AssetManagement.Controllers
             _context.Update(desktopReturn);
             TempData["SuccessNotification"] = "Successfully updated!";
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
 

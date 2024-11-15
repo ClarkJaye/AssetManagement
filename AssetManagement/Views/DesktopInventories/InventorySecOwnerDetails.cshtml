@@ -10,33 +10,35 @@
     <thead>
         <tr>
             <th>
+                DESCRIPTION
+            </th>
+            <th>CODE</th>
+            <th>
+                UNIT TAG
+            </th>
+            <th>
+                ASSET TAG
+            </th>
+            <th>
+                COMPUTER NAME
+            </th>
+            <th>PO</th>
+            <th>
+                OWNER
+            </th>
+            <th>
+                DATE DEPLOYED
+            </th>
+            <th>
+                STATUS
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.DateCreated)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
+                CREATED BY
             </th>
-            <th>
-                INVENTORY DETAILS
-            </th>
-            <th>
-                DESKTOP ALLOCATION
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InventoryDetails)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Createdby)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Updatedby)
-            </th>
-            <th></th>
+
         </tr>
     </thead>
     <tbody>
@@ -46,31 +48,37 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.AllocId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status.status_code)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.Description)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.FixedassetTag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.ComputerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DesktopAllocation.DateDeployed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
                     </td>
                 </tr>
             }

@@ -20,7 +20,12 @@ namespace AssetManagement.Controllers
         // GET: InventoryDetails
         public async Task<IActionResult> Index()
         {
-            var assetManagementContext = _context.tbl_ictams_laptopinvdetails.Include(i => i.Createdby).Include(i => i.LaptopInventory).Include(i => i.Status).Include(i => i.Updatedby).Include(i => i.Vendor);
+            var assetManagementContext = _context.tbl_ictams_laptopinvdetails
+              .Include(i => i.Createdby)
+              .Include(i => i.LaptopInventory)
+              .Include(i => i.Status)
+              .Include(i => i.Updatedby)
+              .Include(i => i.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> AgingReport()
@@ -32,9 +37,9 @@ namespace AssetManagement.Controllers
             return View();
         }
         // GET: InventoryDetails/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string code, string serial)
         {
-            if (id == null || _context.tbl_ictams_laptopinvdetails == null)
+            if (code == null || serial == null || _context.tbl_ictams_laptopinvdetails == null)
             {
                 return NotFound();
             }
@@ -45,7 +50,7 @@ namespace AssetManagement.Controllers
                 .Include(i => i.Status)
                 .Include(i => i.Updatedby)
                 .Include(i => i.Vendor)
-                .FirstOrDefaultAsync(m => m.SerialCode == id);
+                 .FirstOrDefaultAsync(m => m.laptoptinvCode == code && m.SerialCode == serial);
             if (inventoryDetails == null)
             {
                 return NotFound();
@@ -242,10 +247,14 @@ namespace AssetManagement.Controllers
             return View(oldLaptops3);
         }
         // GET: InventoryDetails/Create
-        public IActionResult Create(string id)
+        public async Task<IActionResult> Create(string id, int typeId)
         {
+            var laptop = await _context.tbl_ictams_laptopinv.FirstOrDefaultAsync(x=>x.laptoptinvCode == id);
             ViewBag.Code = id;
-
+            ViewBag.Description = laptop.Description;
+            ViewData["LTTypeId"] = typeId;
+            ViewData["LTInvCode"] = new SelectList(_context.tbl_ictams_laptopinv, "laptoptinvCode", "Description");
+            ViewData["LTVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName");
             return View();
         }
 
@@ -308,19 +317,21 @@ namespace AssetManagement.Controllers
         }
 
         // GET: InventoryDetails/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string code, string serial)
         {
-            if (id == null || _context.tbl_ictams_laptopinvdetails == null)
+            if (code == null || serial == null || _context.tbl_ictams_laptopinvdetails == null)
             {
                 return NotFound();
             }
-
-            var inventoryDetails = await _context.tbl_ictams_laptopinvdetails.FindAsync(id);
+            var inventoryDetails = await _context.tbl_ictams_laptopinvdetails.Where(c => c.laptoptinvCode == code && c.SerialCode == serial).FirstOrDefaultAsync();
             if (inventoryDetails == null)
             {
                 return NotFound();
             }
-
+            ViewData["Created"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", inventoryDetails.Created);
+            ViewData["DTStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name", inventoryDetails.LTStatus);
+            ViewData["Updated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", inventoryDetails.Updated);
+            ViewData["LTVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName", inventoryDetails.LTDVendor);
             return View(inventoryDetails);
         }
 
@@ -329,39 +340,46 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("laptoptinvCode,SerialCode,PO,Price,LTDVendor,PurchaseDate,DeployedDate,LTStatus,Created,DateCreated,Updated,UpdatedDate")] InventoryDetails inventoryDetails)
+        public async Task<IActionResult> Edit([Bind("laptoptinvCode,SerialCode,ComputerName,PO,Price,LTDVendor,PurchaseDate,DeployedDate,LTStatus,Created,DateCreated,Updated,UpdatedDate")] InventoryDetails inventoryDetails)
         {
-            if (id != inventoryDetails.SerialCode)
+            try
             {
-                return NotFound();
-            }
+                var existingDetail = await _context.tbl_ictams_laptopinvdetails
+                   .FirstOrDefaultAsync(c => c.laptoptinvCode == inventoryDetails.laptoptinvCode && c.SerialCode == inventoryDetails.SerialCode);
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (existingDetail == null)
                 {
-                    _context.Update(inventoryDetails);
-                    await _context.SaveChangesAsync();
+                    TempData["ErrorNotification"] = "Updated Failed";
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!InventoryDetailsExists(inventoryDetails.SerialCode))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var ucode = HttpContext.Session.GetString("UserName");
+                // Update specific properties
+                existingDetail.PO = inventoryDetails.PO;
+                existingDetail.Price = inventoryDetails.Price;
+                existingDetail.LTDVendor = inventoryDetails.LTDVendor;
+                existingDetail.PurchaseDate = inventoryDetails.PurchaseDate;
+                existingDetail.DeployedDate = inventoryDetails.DeployedDate;
+                existingDetail.LTStatus = inventoryDetails.LTStatus;
+                existingDetail.Updated = ucode;
+                existingDetail.UpdatedDate = DateTime.Now;
+
+                TempData["SuccessNotification"] = "Successfully Updated";
+                // Save changes
+                await _context.SaveChangesAsync();
+
             }
-            ViewData["Created"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", inventoryDetails.Created);
-            ViewData["laptoptinvCode"] = new SelectList(_context.tbl_ictams_laptopinv, "laptoptinvCode", "laptoptinvCode", inventoryDetails.laptoptinvCode);
-            ViewData["LTStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code", inventoryDetails.LTStatus);
-            ViewData["Updated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode", inventoryDetails.Updated);
-            ViewData["LTDVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorID", inventoryDetails.LTDVendor);
-            return View(inventoryDetails);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!InventoryDetailsExists(inventoryDetails.laptoptinvCode, inventoryDetails.SerialCode))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -388,16 +406,13 @@ namespace AssetManagement.Controllers
                     {
                         laptopToUpdate.Quantity = laptopToUpdate.Quantity - 1;
                         await _context.SaveChangesAsync();
-                        // ...
                         TempData["SuccessNotification"] = "Successfully removed a laptop from inventory";
-                        // ...
                     }
                 }
                 catch (Exception)
                 {
                     TempData["ErrorNotification"] = "It cannot be deleted since it is already in used!";
                 }
-
             }
             else
             {
@@ -407,9 +422,9 @@ namespace AssetManagement.Controllers
             return RedirectToAction("Index", "LaptopInventories");
         }
 
-        private bool InventoryDetailsExists(string id)
+        private bool InventoryDetailsExists(string code, string serial)
         {
-          return (_context.tbl_ictams_laptopinvdetails?.Any(e => e.SerialCode == id)).GetValueOrDefault();
+            return (_context.tbl_ictams_laptopinvdetails?.Any(e => e.laptoptinvCode == code && e.SerialCode == serial)).GetValueOrDefault();
         }
     }
 }

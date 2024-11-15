@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
@@ -260,12 +256,12 @@ namespace AssetManagement.Controllers
         // GET: LaptopPeripherals/Create
         public IActionResult Create()
         {
-            ViewData["PeripheralBrand"] = new SelectList(_context.tbl_ictams_brand, "BrandId", "BrandId");
+            ViewData["PBrand"] = new SelectList(_context.tbl_ictams_brand, "BrandId", "BrandDescription");
+            ViewData["PDevice"] = new SelectList(_context.tbl_ictams_devicetype, "DevtypeID", "DevtypeDescription");
+            ViewData["PVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName");
+            ViewData["PeripheralStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name");
             ViewData["PeripheralCreatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["PeripheralDevice"] = new SelectList(_context.tbl_ictams_devicetype, "DevtypeID", "DevtypeID");
-            ViewData["PeripheralStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_code");
             ViewData["PeripheralUpdatedBy"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
-            ViewData["PeripheralVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorID");
             return View();
         }
 
@@ -318,6 +314,9 @@ namespace AssetManagement.Controllers
         // GET: LaptopPeripherals/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
+            ViewData["PBrand"] = new SelectList(_context.tbl_ictams_brand, "BrandId", "BrandDescription");
+            ViewData["PDevice"] = new SelectList(_context.tbl_ictams_devicetype, "DevtypeID", "DevtypeDescription");
+            ViewData["PVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName");
             if (id == null)
             {
                 return NotFound();

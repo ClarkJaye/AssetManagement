@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,6 +23,20 @@ namespace AssetManagement.Models
         [Column("ltpborrowed_status")]
         [DisplayName("STATUS")]
         public string StatusID { get; set; }
+
+        [Column("dept_code")]
+        [DisplayName("BORROWER DEPARTMENT")]
+        public int Deptment_Code { get; set; }
+        [ForeignKey("Deptment_Code")]
+        public virtual Department Department { get; set; }
+
+        [Column("return_date")]
+        [DisplayName("RETURN DATE")]
+        public DateTime? Return_date { get; set; }
+
+        [Column("expected_return_date")]
+        [DisplayName("EXPECTED RETURN DATE")]
+        public DateTime Expected_return { get; set; }
 
         [Column("ltpborrowed_date")]
         [DisplayName("DATE BORROWED")]

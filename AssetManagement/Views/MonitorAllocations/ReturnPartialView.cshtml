@@ -9,13 +9,23 @@
         <h4 class="allocation-title">Return Monitors Allocation</h4>
     </div>
     <p>
-        <a class="btn btn-sm bg-secondary h5 text-white text-decoration-none p-2 btn createbtn" asp-action="Index" asp-controller="ReturnMTAs">Back to List</a>
+        <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="ReturnMTAs">Back to List</a>
     </p>
+    <div class="mb-2">
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="ReturnMTAs" asp-action="Index">
+            <span class="fas fa-undo"></span> Back to List
+        </a>
+        <a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-controller="MonitorAllocations">
+            <span class="fas fa-undo"></span>
+            Go To Inventory Allocation
+        </a>
+    </div>
+
 
     <div class="card shadow-sm card-selected">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-striped table-datatable">
                     <thead>
                         <tr>
                             <th hidden>
@@ -45,13 +55,7 @@
                             <th>
                                 CREATED BY
                             </th>
-                            <th>
-                                UPDATED
-                            </th>
-                            <th>
-                                UPDATED BY
-                            </th>
-                            <th style="text-align: center!important">ACTION</th>
+                            <th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,16 +87,10 @@
                                     @Html.DisplayFor(modelItem => item.DateCreated)
                                 </td>
                                 <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                                    @Html.DisplayFor(modelItem => item.DateUpdated)
-                                </td>
-                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
                                     @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
                                 </td>
-                                <td class="editbtn" id="@item.MonitorDetails.MonitorInventory.Description" id="userCode2" name="userCODE">
-                                    @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                                </td>
                                 <td>
-                                    <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="Create" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
+                                    <a class="btn btn-outline-danger editbtn" asp-action="Create" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
                                 </td>
                             </tr>
                         }

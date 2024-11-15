@@ -20,6 +20,8 @@
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="TypeId" value="@ViewBag.LTTypeId" class="form-control" hidden/>
+
                 <div class="form-group col-md-2 mb-2" hidden>
                     <label asp-for="laptoptinvCode" class="control-label"></label>
                     <input asp-for="laptoptinvCode" class="form-control" />
@@ -78,7 +80,7 @@
                 </div>
                 <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
                     <input type="submit" value="Create" class="btn btn-theme createbtn" />
-                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+                    <a class="btn btn-outline-secondary" asp-action="Index" asp-route-typeId="@ViewBag.LTTypeId">Back to List</a>
                 </div>
             </div>
         </form>

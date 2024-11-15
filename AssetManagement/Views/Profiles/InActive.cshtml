@@ -25,61 +25,65 @@
         <span class="fas fa-ban"></span> Delete Permanently
     </button>
 
-    <div class="mt-4">
-        <table class="table" id="profilesTable">
-            <thead>
-                <tr>
-                    <th hidden>@Html.DisplayNameFor(model => model.Profile.ProfileId)</th>
-                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileName)</th>
-                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileDescription)</th>
-                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileDtCreated)</th>
-                    <th>@Html.DisplayNameFor(model => model.Profile.ProfileDtUpdated)</th>
-                    <th hidden>@Html.DisplayNameFor(model => model.Profile.Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.Profile.CreatedBy)</th>
-                    <th>@Html.DisplayNameFor(model => model.Profile.UpdatedBy)</th>
-                    <th class="text-center">ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ProfileList)
-                {
-                    <tr>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.ProfileId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProfileName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProfileDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProfileDtCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProfileDtUpdated)
-                        </td>
-                        <td hidden>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
-                        </td>
-                        <td class="text-center">
-                            <form asp-controller="Profiles" asp-action="Retrieve">
-                                <input type="hidden" name="profileId" value="@item.ProfileId" />
-                                <button type="submit" class="btn btn-sm btn-success">
-                                    <span class="fas fa-undo"></span> Retrieve
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
+                        <tr>
+                            <th hidden>@Html.DisplayNameFor(model => model.Profile.ProfileId)</th>
+                            <th>@Html.DisplayNameFor(model => model.Profile.ProfileName)</th>
+                            <th>@Html.DisplayNameFor(model => model.Profile.ProfileDescription)</th>
+                            <th>@Html.DisplayNameFor(model => model.Profile.ProfileDtCreated)</th>
+                            <th>@Html.DisplayNameFor(model => model.Profile.ProfileDtUpdated)</th>
+                            <th hidden>@Html.DisplayNameFor(model => model.Profile.Status)</th>
+                            <th>@Html.DisplayNameFor(model => model.Profile.CreatedBy)</th>
+                            <th>@Html.DisplayNameFor(model => model.Profile.UpdatedBy)</th>
+                            <th class="text-center">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ProfileList)
+                        {
+                            <tr>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.ProfileId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProfileName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProfileDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProfileDtCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProfileDtUpdated)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.Status.status_name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
+                                </td>
+                                <td class="text-center">
+                                    <form asp-controller="Profiles" asp-action="Retrieve">
+                                        <input type="hidden" name="profileId" value="@item.ProfileId" />
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <span class="fas fa-undo"></span> Retrieve
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -100,26 +104,3 @@
     </script>
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize DataTables
-        $('#profilesTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
-    });
-
-</script>

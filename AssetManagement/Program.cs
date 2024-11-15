@@ -2,12 +2,25 @@ using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
 using AssetManagement.Services;
 using AssetManagement.Utility;
-
-
+using ExternalLogin.Interfaces;
+using ExternalLogin.Services;
+using ExternalLogin;
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
+
+var CentralLoginConnectionString = builder.Configuration.GetConnectionString("CentralLoginConnection")
+?? throw new InvalidOperationException("Connection string 'ExternalDbContext' not found.");
+
+builder.Services.AddDbContext<ExternalDbContext>(options =>
+    options.UseSqlServer(CentralLoginConnectionString));
+
+//external login => AD Login
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IExternalLoginService, ExternalLoginService>();
+
+
 
 // Configure database context
 builder.Services.AddDbContext<AssetManagementContext>(options =>

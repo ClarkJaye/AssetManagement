@@ -18,7 +18,16 @@
                     <input asp-for="laptoptinvCode" class="form-control" readonly />
                     <span asp-validation-for="laptoptinvCode" class="text-danger"></span>
                 </div>
-                <input type="hidden" asp-for="SerialCode" />
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="SerialCode" class="control-label"></label>
+                    <input asp-for="SerialCode" class="form-control" readonly />
+                    <span asp-validation-for="SerialCode" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-2">
+                    <label asp-for="ComputerName" class="control-label"></label>
+                    <input asp-for="ComputerName" class="form-control" readonly />
+                    <span asp-validation-for="ComputerName" class="text-danger"></span>
+                </div>
                 <div class="form-group col-md-2 mb-2">
                     <label asp-for="PO" class="control-label"></label>
                     <input asp-for="PO" class="form-control" />
@@ -29,14 +38,29 @@
                     <input asp-for="Price" class="form-control" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-2 mb-2">
-                    <label asp-for="Vendor" class="control-label"></label>
-                    <input asp-for="Vendor" class="form-control"/>
-                    <span asp-validation-for="Vendor" class="text-danger"></span>
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="LTDVendor" class="control-label"></label>
+                    <select asp-for="LTDVendor" class="form-select" asp-items="ViewBag.LTVendor"></select>
+                    <span asp-validation-for="LTDVendor" class="text-danger"></span>
                 </div>
-                <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="LTStatus" class="control-label">STATUS</label>
+                    <select asp-for="LTStatus" class="form-select" asp-items="ViewBag.DTStatus"></select>
+                    <span asp-validation-for="LTStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="PurchaseDate" class="control-label">PURCHASE DATE</label>
+                    <input asp-for="PurchaseDate" class="form-control" />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DeployedDate" class="control-label">DEPLOYED DATE</label>
+                    <input asp-for="DeployedDate" class="form-control" />
+                    <span asp-validation-for="DeployedDate" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex align-items-end gap-3 mt-3">
                     <input type="submit" value="Save" class="btn btn-theme " />
-                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+                    <a class="btn btn-outline-secondary" asp-action="Index" asp-route-typeId="@ViewBag.LTTypeId">Back to List</a>
                 </div>
             </div>
         </form>

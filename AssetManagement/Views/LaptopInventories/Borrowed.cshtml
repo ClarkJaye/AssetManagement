@@ -5,80 +5,101 @@
 }
 
 
+<h4>Borrowed Laptop</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                DESCRIPTION
+            </th>
+            <th>
+                CODE
+            </th>
+            <th>
+                SERIAL
+            </th>
+            <th>
+                COMPUTER NAME
+            </th>
+            <th>
+                DEPARTMENT
+            </th>
+            <th>
+                BORROWER
+            </th>
+            <th>
+                DATE OF BORROWED
+            </th>
+            <th>
+                EXPECTED RETURN DATE
+            </th>
+            <th>
+                RETURN DATE
+            </th>
+            <th>
+                REMARK
+            </th>
+            <th>
+                CREATED AT
+            </th>
+            <th>
+                CREATED BY
+            </th>
+        </tr>
+    </thead>
+    <tbody>
 
-<div class="table-responsive">
-    <table id="borrowedTable" class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateBorrow)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Remark)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserUpdated)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateBorrow)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Remark)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserCreated.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UserUpdated.UserCode)
-                        </td>
-                    </tr>
-                }
-            }
-            else
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td colspan="12" class="text-center">
-                        No data available.
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.laptoptinvCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.SerialCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.ComputerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                    </td>
+                    <td>
+                        @item.DateBorrow.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @item.Expected_return.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @item.Return_date?.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                    <td>
+                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserCreated.UserFullName)
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
-
-</div>
+        }
+        else
+        {
+            <tr>
+                <td colspan="12" class="text-center">
+                    No data available.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

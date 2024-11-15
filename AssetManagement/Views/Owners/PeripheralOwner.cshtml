@@ -4,94 +4,111 @@
 @{
     Layout = null;
 }
-@{
-    ViewData["Title"] = "Index";
-}
 
 
-<!-- Action Buttons -->
-<div class="d-flex align-items-center justify-content-end mb-4">
-    <div class="d-flex align-items-center gap-2">
-        <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+<hr />
+<div class="mx-5">
+
+
+    <!-- Action Buttons -->
+    <div class="d-flex align-items-center justify-content-end mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" id="filterInput" placeholder="Search..." class="form-control" style="width: 350px;">
+        </div>
     </div>
-</div>
 
-<
-<div class="table-responsive" style="cursor: pointer;">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerFullName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerLocation)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.OwnerOffice)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.DateUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Createdby)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Updatedby)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner.Department)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.OwnerList)
-            {
-                <tr data-id="@item.OwnerCode" data-ld="@item.OwnerFullName">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OwnerCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OwnerFullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Location.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OwnerOffice)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status.status_name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive" style="cursor: pointer; max-height: 600px;">
+                <table class="table table-striped">
+                    <thead>
+
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerFullName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerLocation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.OwnerOffice)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.DateCreated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.DateUpdated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.Createdby)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.Updatedby)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.Status)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner.Department)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.OwnerList.Any())
+                        {
+                            @foreach (var item in Model.OwnerList)
+                            {
+                                <tr data-id="@item.OwnerCode" data-ld="@item.OwnerFullName">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OwnerCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OwnerFullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Location.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OwnerOffice)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateCreated)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="12" class="text-center">
+                                    No data available.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -99,14 +116,11 @@
 
 <script>
     $(document).ready(function () {
-
-
         // Add click event listener to each row in the table
         $('table tbody tr').click(function () {
             // Get the id from the clicked row's data-id attribute
             var id = $(this).data('id');
             var ld = $(this).data('ld');
-
 
             // Remove the 'highlighted-row' class from any other row
             $("tr.highlighted-row").removeClass("highlighted-row");
@@ -115,17 +129,9 @@
             $(this).closest("tr").addClass("highlighted-row");
             $('#oid').val(id);
             $('#odes').val(ld);
-
-
         });
 
-    });
 
-
-
-    //FILTERING
-
-    $(document).ready(function () {
         $('#filterInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('tbody tr').filter(function () {

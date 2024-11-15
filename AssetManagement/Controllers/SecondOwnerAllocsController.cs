@@ -64,9 +64,18 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> SecondOwnerViews()
         {
             await FindStatus();
-            //EXECUTE VIEWS
-            var assetManagementContext1 = await _context.tbl_ictams_ltnewalloc.Where(x => x.SecAllocationStatus == "IN").Include(s => s.Createdby).Include(s => s.LaptopAllocation).Include(s => s.LaptopInventoryDetails.LaptopInventory).Include(s => s.LaptopInventoryDetails).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
-            return View(assetManagementContext1);
+
+            var assetManagementContext = await _context.tbl_ictams_ltnewalloc
+                   .Where(x => x.SecAllocationStatus == "AC")
+                   .Include(s => s.LaptopAllocation)
+                   .Include(s => s.LaptopAllocation.LaptopInventoryDetails)
+                   .Include(s => s.LaptopAllocation.LaptopInventoryDetails.LaptopInventory)
+                   .Include(s => s.Owner)
+                   .Include(s => s.Status)
+                   .Include(s => s.Createdby)
+                   .Include(s => s.Updatedby).ToListAsync();
+
+            return View(assetManagementContext);
         }
 
         // GET: SecondOwnerAllocs

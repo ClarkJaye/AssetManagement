@@ -51,7 +51,7 @@
                             <th>
                                 UPDATED BY  
                             </th>
-                            <th class="text-center">ACTION</th>
+                            <th style="text-align:center!important;">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,7 +89,7 @@
                                     @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
                                 </td>
                                 <td>
-                                    <a class="btn btn-outline-secondary editbtn" asp-action="Create" asp-controller="MonitorNewAllocs" asp-route-id="@item.AllocId" asp-route-ids="@item.monitorCode" asp-route-ids2="@item.SerialNumber">Second Owner</a>
+                                    <a class="btn btn-theme" asp-action="Create" asp-controller="MonitorNewAllocs" asp-route-id="@item.AllocId" asp-route-ids="@item.monitorCode" asp-route-ids2="@item.SerialNumber">Select Second Owner</a>
                                 </td>
                             </tr>
                         }
@@ -131,19 +131,6 @@
             });
         });
 
-
-        $(document).on("click", "#userCode3", function () {
-            var userCode = "@ViewBag.Id";
-
-            $.ajax({
-                url: "@Url.Action("ReturnDetails", "MonitorInventories")",
-                type: "GET",
-                data: { userCODE: userCode },
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            });
-        });
 
     });
 </script>

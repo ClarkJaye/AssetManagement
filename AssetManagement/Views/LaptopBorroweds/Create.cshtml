@@ -70,8 +70,8 @@
                     <span asp-validation-for="Remark" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-md-3" style="margin-top:23px;">
-                    <input type="submit" value="Create" class="btn btn-theme" />
+                <div class="form-group mb-3 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Save" class="btn btn-theme" />
                     <a class="btn btn-outline-secondary" asp-action="LapInvPartialView">Back to List</a>
                 </div>
             </div>
@@ -90,18 +90,21 @@
     }
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () { 
+    document.addEventListener("DOMContentLoaded", function () {
+        //OWNER
         $("#ownertable").click(function () {
+            $('#oid').val(null);
+            $('#odes').val(null);
             $.ajax({
-                url: "@Url.Action("OwnerPartialView", "LaptopBorroweds")",
+                url: "@Url.Action("OwnerPartialView", "Owners")",
                 type: "GET",
                 success: function (res) {
                     $(".displaytable").html(res);
                 }
             })
         })
+
 
         // Function to hide the display table
         function hideTable() {

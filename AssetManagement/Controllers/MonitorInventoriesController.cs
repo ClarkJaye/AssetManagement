@@ -21,26 +21,51 @@ namespace AssetManagement.Controllers
             ViewBag.Id = id;
             ViewBag.Ids = ids;
             ViewBag.Id2 = id2;
-            var assetManagementContext = _context.tbl_ictams_monitordetails.Where(x => x.monitorCode == id).Include(i => i.Createdby).Include(i => i.MonitorInventory).Include(i => i.Status).Include(i => i.Updatedby).Include(i => i.Vendor);
+            var assetManagementContext = _context.tbl_ictams_monitordetails
+                .Where(x => x.monitorCode == id)
+                .Include(i => i.Createdby)
+                .Include(i => i.MonitorInventory)
+                .Include(i => i.Status)
+                .Include(i => i.Updatedby)
+                .Include(i => i.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> SeeAllSerial(string id)
         {
-            var assetManagementContext = _context.tbl_ictams_monitordetails.Where(x => x.monitorCode == id && x.MonitorStatus == "AV").Include(i => i.Createdby).Include(i => i.MonitorInventory).Include(i => i.Status).Include(i => i.Updatedby).Include(i => i.Vendor);
+            var assetManagementContext = _context.tbl_ictams_monitordetails
+                .Where(x => x.monitorCode == id && x.MonitorStatus == "AV")
+                .Include(i => i.Createdby)
+                .Include(i => i.MonitorInventory)
+                .Include(i => i.Status)
+                .Include(i => i.Updatedby)
+                .Include(i => i.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
 
         public async Task<IActionResult> DeletedHistory(string userCODE)
         {
-
-            var assetManagementContext = _context.tbl_ictams_monitoralloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.MonitorDetails.MonitorInventory).Where(x => x.AllocationStatus == "IN" && x.monitorCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.MonitorDetails);
+            var assetManagementContext = _context.tbl_ictams_monitoralloc
+                .Include(l => l.Status).Include(l => l.Createdby)
+                .Include(l => l.MonitorDetails.MonitorInventory)
+                .Where(x => x.AllocationStatus == "IN" && x.monitorCode.Contains(userCODE))
+                .Include(l => l.Owner).Include(l => l.Updatedby)
+                .Include(l => l.MonitorDetails);
             return View(await assetManagementContext.ToListAsync());
         }
         public async Task<IActionResult> ReturnDetails(string userCODE)
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_monitorreturn.Where(x => x.MonitorAllocation.monitorCode.Contains(userCODE)).Include(r => r.MonitorAllocation).Include(r => r.ReturnType).Include(r => r.Status).Include(r => r.UserCreated).Include(r => r.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_monitorreturn
+                    .Where(x => x.MonitorAllocation.monitorCode.Contains(userCODE))
+                    .Include(r => r.MonitorAllocation)
+                    .Include(r => r.MonitorAllocation.MonitorDetails)
+                    .Include(r => r.MonitorAllocation.MonitorDetails.MonitorInventory)
+                    .Include(r => r.ReturnType)
+                    .Include(r => r.MonitorAllocation.Owner)
+                    .Include(r => r.Status)
+                    .Include(r => r.UserCreated)
+                    .Include(r => r.UserUpdated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -68,6 +93,7 @@ namespace AssetManagement.Controllers
                     .Include(l => l.MonitorDetail)
                     .Include(l => l.MonitorDetail.MonitorInventory)
                     .Include(l => l.Owner)
+                    .Include(l => l.Department)
                     .Include(l => l.Status)
                     .Include(l => l.UserCreated)
                     .Include(l => l.UserUpdated).ToListAsync();
@@ -131,16 +157,19 @@ namespace AssetManagement.Controllers
         // GET: MonitorInventories
         public async Task<IActionResult> MTInvPartialView(string code)
         {
-            var assetManagementContext = _context.tbl_ictams_monitordetails
-                .Where(x => x.monitorCode == code && x.MonitorStatus == "AV")
+            var assetManagementContext = await _context.tbl_ictams_monitordetails
+                .Where(x => x.monitorCode == code)
                 .OrderByDescending(x => x.monitorCode)
+                .ThenByDescending(x => x.SerialNumber)
                 .Include(l => l.MonitorInventory)
                 .Include(l => l.Vendor)
-                .Include(l => l.Createdby);
+                .Include(l => l.Status)
+                .Include(l => l.Createdby)
+                .ToListAsync();
 
-            return View(await assetManagementContext.ToListAsync());
-
+            return View(assetManagementContext);
         }
+
         // GET: MonitorInventories
         public async Task<IActionResult> Index()
         {

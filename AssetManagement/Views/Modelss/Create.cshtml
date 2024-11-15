@@ -4,46 +4,21 @@
     ViewData["Title"] = "Create";
     Layout = null;
 }
-<style>
-
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Chivo', sans-serif;
-        margin: 0;
-        padding: 10px;
-
-    }
-
-    /* Add this CSS to adjust the top margin of the layout container */
-    .container {
-        margin-top: 70px; /* Adjust this value according to your navbar height */
-    }
-        .form-group{
-        margin-top: 10px;
-    }
 
 
-</style>
-<h4>Model</h4>
 <hr />
 <div>
         <form asp-action="Create">
         <div class="row form-group">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-3">
+            <div class="form-group col-md-3 mb-3">
                 <label asp-for="ModelDescription" class="control-label"></label>
-                <input asp-for="ModelDescription" class="form-control" required />
+                <input asp-for="ModelDescription" class="form-control" required placeholder="Enter Description" />
                 <span asp-validation-for="ModelDescription" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn bg-success text-white" />
-                <a class="btn bg-secondary text-white " asp-action="Index">Back</a>
+            <div class="form-group col-md-3 mb-3 d-flex align-items-end gap-2 ">
+                <input type="submit" value="Create" class="btn btn-theme" />
+                <a class="btn btn-outline-secondary " asp-action="Index">Back to List</a>
             </div>
         </div>
         </form>

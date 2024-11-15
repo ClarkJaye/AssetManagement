@@ -29,6 +29,7 @@ namespace AssetManagement.Data
         public DbSet<UserDepartment> tbl_ictams_userdept { get; set; }
         public DbSet<Department> tbl_ictams_department { get; set; }
         public DbSet<Owner> tbl_ictams_owners { get; set; }
+        public DbSet<LaptopType> tbl_ictams_laptoptype { get; set; }
         public DbSet<LaptopInventory> tbl_ictams_laptopinv { get; set; }
         public DbSet<LaptopAllocation> tbl_ictams_laptopalloc { get; set; }
         public DbSet<Location> tbl_ictams_location { get; set; }

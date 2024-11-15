@@ -7,113 +7,97 @@
 
 
 
-
-<div class="table-responsive">
-    <table id="deletedHistoryTable" class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.AllocId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ComputerName)
-                </th>
-                <th>
-                    PO
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SerialNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FixedassetTag)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateDeployed)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LaptopInventoryDetails.LaptopInventory)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Createdby)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Updatedby)
-                </th>
-
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AllocId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ComputerName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SerialNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FixedassetTag)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateDeployed)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status.status_name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateUpdated)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                        </td>
-
-                    </tr>
-                }
-            }
-            else
+<h4>Deleted Laptop History</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                DESCRIPTION
+            </th>
+            <th>
+                CODE
+            </th>
+            <th>
+                SERIAL
+            </th>
+            <th>
+                COMPUTER NAME
+            </th>
+            <th>
+                ASSET TAG
+            </th>
+            <th>
+                PO
+            </th>
+            <th>
+                OWNER
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateDeployed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                CREATED BY
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td colspan="12" class="text-center">
-                        No data available.
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ComputerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FixedassetTag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                    </td>
+                    <td>
+                        @item.DateDeployed.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                    </td>
+                    <td>
+                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>
+        }
+        else
+        {
+            <tr>
+                <td colspan="12" class="text-center">
+                    No data available.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-</div>
 
 

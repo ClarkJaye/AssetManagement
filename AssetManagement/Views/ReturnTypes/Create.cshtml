@@ -13,13 +13,13 @@
         <form asp-action="Create">
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group col-4">
+                <div class="form-group col-md-3">
                     <label asp-for="Description" class="control-label"></label>
                     <input asp-for="Description" class="form-control" />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
-                <div class="form-group col-4">
+                <div class="form-group col-md-3">
                     <label class="control-label">YES / NO</label>
                     <select asp-for="Return_Inv" class="form-control">
                         <option value="Y">YES</option>

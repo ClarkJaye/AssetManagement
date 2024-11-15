@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AssetManagement.Data;
@@ -51,7 +47,14 @@ namespace AssetManagement.Controllers
                 }
                 else
                 {
-                    var assetManagementContext = _context.tbl_ictams_monitorreturn.Include(r => r.MonitorAllocation).Include(r => r.ReturnType).Include(r => r.Status).Include(r => r.UserCreated).Include(r => r.UserUpdated);
+                    var assetManagementContext = _context.tbl_ictams_monitorreturn
+                        .Include(r => r.MonitorAllocation)
+                        .Include(r => r.MonitorAllocation.MonitorDetails)
+                        .Include(r => r.MonitorAllocation.MonitorDetails.MonitorInventory)
+                        .Include(r => r.ReturnType)
+                        .Include(r => r.Status)
+                        .Include(r => r.UserCreated)
+                        .Include(r => r.UserUpdated);
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
@@ -97,7 +100,7 @@ namespace AssetManagement.Controllers
             ViewData["allocID"] = item.AllocId;  
             ViewData["monitorCode"] = item.MonitorDetails.monitorCode;
             ViewData["monitorSerial"] = item.MonitorDetails.SerialNumber;
-            ViewData["mtStatus"] = new SelectList(_context.tbl_ictams_status, "status_code", "status_name", item.Status);
+            ViewData["MTReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
 
             return View();
         }
@@ -174,6 +177,7 @@ namespace AssetManagement.Controllers
         public IActionResult CreateSecReturn(string id)
         {
             ViewBag.Id = id;
+            ViewData["MTReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
             return View();
         }
         [HttpPost]
@@ -246,6 +250,7 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             ViewBag.Id = id;
+            ViewData["MTReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
             if (id == null || _context.tbl_ictams_monitorreturn == null)
             {
                 return NotFound();
@@ -279,7 +284,7 @@ namespace AssetManagement.Controllers
 
             _context.Update(returnMTA);
             await _context.SaveChangesAsync();
-
+            TempData["SuccessNotification"] = "Successfully updated!";
             return RedirectToAction(nameof(Index));
         }
 

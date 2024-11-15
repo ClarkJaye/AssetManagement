@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-group col-4 mt-4">
                     <input type="submit" value="Create" class="btn btn-theme" />
-                    <a class="btn btn-secondary" asp-action="Index">Back</a>
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
                 </div>
             </div>
         </form>
@@ -51,9 +51,8 @@
     }
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         $('#UpsStore').change(function () {
             var selectedStore = $(this).val();
             if (selectedStore) {

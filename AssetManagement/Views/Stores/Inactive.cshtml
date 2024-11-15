@@ -14,9 +14,11 @@
 
     <h4>Inactive Department</h4>
     <div class="mt-4">
-        <div class="table-responsive">
-            <table class="table table-striped table-datatable">
-                <thead>
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-container table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
                     <tr>
                         <th>
                             @Html.DisplayNameFor(model => model.Store_code)
@@ -39,7 +41,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.DateUpdated)
                         </th>
-                        <th></th>
+                                <th class="text-center">ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,6 +78,8 @@
                     }
                 </tbody>
             </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

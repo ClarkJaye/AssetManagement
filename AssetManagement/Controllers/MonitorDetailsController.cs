@@ -19,7 +19,12 @@ namespace AssetManagement.Controllers
         // GET: MonitorDetails
         public async Task<IActionResult> Index()
         {
-            var assetManagementContext = _context.tbl_ictams_monitordetails.Include(i => i.Createdby).Include(i => i.MonitorInventory).Include(i => i.Status).Include(i => i.Updatedby).Include(i => i.Vendor);
+            var assetManagementContext = _context.tbl_ictams_monitordetails
+                .Include(i => i.MonitorInventory)
+                .Include(i => i.Status)
+                .Include(i => i.Updatedby)
+                .Include(i => i.Createdby)
+                .Include(i => i.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -49,7 +54,7 @@ namespace AssetManagement.Controllers
         public IActionResult Create(string id)
         {
             ViewBag.Code = id;
-            ViewData["MTInvCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "Description");
+            ViewData["MTInvCode"] = new SelectList(_context.tbl_ictams_monitorinv, "monitorCode", "monitorCode");
             ViewData["MTVendor"] = new SelectList(_context.tbl_ictams_vendor, "VendorID", "VendorName");
             return View();
         }

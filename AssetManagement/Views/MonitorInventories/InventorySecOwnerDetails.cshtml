@@ -9,33 +9,35 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th hidden>
-                @Html.DisplayNameFor(model => model.SecAllocId)
+            <th>
+                DESCRIPTION
             </th>
             <th>
-                ID
+                CODE
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Owner)
-            </th>
-            <th>PO</th>
             <th>
                 SERIAL
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                ASSET TAG
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
+                PO
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Owner)
+            </th>
+            <th>
+                DATE DEPLOYED
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Createdby)
+                @Html.DisplayNameFor(model => model.DateCreated)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Updatedby)
+                CREATED BY
             </th>
         </tr>
     </thead>
@@ -45,35 +47,35 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td hidden>
-                        @Html.DisplayFor(modelItem => item.SecAllocId)
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonitorDetail.MonitorInventory.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MonitorAllocation.AllocId)
+                        @Html.DisplayFor(modelItem => item.MonitorDetail.monitorCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonitorAllocation.FixedassetTag)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.MonitorDetail.PO)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MonitorAllocation.SerialNumber)
+                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                        @item.MonitorDetail.DeployedDate?.ToString("MMM dd yyyy h:mm tt")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status.status_name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
                     </td>
                 </tr>
             }

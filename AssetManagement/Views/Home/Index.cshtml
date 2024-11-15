@@ -2,64 +2,212 @@
     ViewData["Title"] = "Home";
 }
 
-<style>
-	body{
-		overflow: hidden;
-	}
 
-    .sweetalert-custom-class {
-        font-family: 'Chivo', sans-serif;
-        border-radius: 10px;
-        background-color: #ffffff;
-        border: 2px solid #4CAF50;
-        box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
-    }
-
-    .sweetalert-title-class {
-        font-family: 'Chivo', sans-serif;
-        color: #4CAF50;
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .sweetalert-content-class {
-        font-family: 'Chivo', sans-serif;
-        color: #555555;
-        font-size: 18px;
-    }
-</style>
-
-<div class="container text-center justify-content-center align-items-center">
+@* <div class="container text-center justify-content-center align-items-center">
     <img src="~/img/home-logo.png" width="350px" class="mx-auto d-block mt-4" alt="Logo">
+</div> *@
+
+<div class="m-4">
+    <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card shadow h-100 py-2" style="border-left: .25rem solid #4e73df !important;">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold text-primary text-uppercase mb-1" style="font-size: .8em;">
+                                Total
+                            </div>
+                            <div class="h5 fw-bold text-secondary mb-0" id="">
+                                1500
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="lni lni-user" style="font-size: 2em; font-weight: 800; color: #dddfeb"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card shadow h-100 py-2" style="border-left: .25rem solid #ffca2c !important;">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
+                                Total
+                            </div>
+                            <div class="h5 fw-bold text-secondary mb-0" id="">
+                                1500
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="lni lni-user" style="font-size: 2em; font-weight: 800; color: #dddfeb"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card shadow h-100 py-2" style="border-left: .25rem solid #45474B !important;">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold text-uppercase mb-1" style="font-size: .8em;">
+                                Total
+                            </div>
+                            <div class="h5 fw-bold text-secondary mb-0" id="">
+                                1500
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="lni lni-user" style="font-size: 2em; font-weight: 800; color: #dddfeb"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card shadow h-100 py-2" style="border-left: .25rem solid #198754 !important;">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col mr-2">
+                            <div class="fw-bold text-success text-uppercase mb-1" style="font-size: .8em;">
+                                Total 
+                            </div>
+                            <div class="h5 fw-bold text-secondary mb-0" id="">
+                                1500
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="lni lni-user" style="font-size: 2em; font-weight: 800; color: #dddfeb"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-5">
+        <!-- Graphs Section -->
+        <div class="row">
+            <div class="col-6 mb-4">
+                <div class="card h-100 p-3">
+                    <h6 class="card-title">Graph 1 Statistics</h6>
+                    <canvas id="lineGraph"></canvas>
+                </div>
+            </div>
+            <div class="col-6 mb-4">
+                <div class="card h-100 p-3">
+                    <h6 class="card-title">Graph 2 Statistics</h6>
+                    <canvas id="barGraph"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
 
+<!-- Chart.js and jQuery -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-
-    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
-    {
-        var userName = @TempData["UserName"] as string;
-        <text>
-            Swal.fire({
-                icon: 'success',
-                title: 'Successful',
-                html: 'Welcome <span style="color: green; font-weight: bold; font-family: Chivo, sans-serif;">' + userName + '</span>! Login successfully!',
-                showConfirmButton: false,
-                timer: 3000,
-                iconColor: '#4CAF50', // Set the icon color to green
-                customClass: {
-                    popup: 'sweetalert-custom-class',
-                    title: 'sweetalert-title-class',
-                    content: 'sweetalert-content-class'
+    // Line Graph for Patients Statistics
+    const lineCtx = document.getElementById('lineGraph').getContext('2d');
+    const lineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // Sample months
+            datasets: [{
+                label: 'Test',
+                data: [120, 150, 180, 220, 170, 210, 260], // Sample data
+                borderColor: '#2c3e50',
+                backgroundColor: '#2c3e506e',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    enabled: true,
                 }
-            });
-        </text>
-    }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Number of Device'
+                    }
+                }
+            }
+        }
+    });
 
-
+    // Bar Graph for Services Statistics
+    const barCtx = document.getElementById('barGraph').getContext('2d');
+    const barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Device1', 'Device2', 'Device3', 'Device4'], // Sample services
+            datasets: [{
+                label: 'Number of Services',
+                data: [300, 200, 150, 100, 50], // Sample data
+                backgroundColor: [
+                    '#36a2eb',
+                    '#ffcd56',
+                    '#4bc0c0',
+                    '#ff9f40',
+                ],
+                borderColor: [
+                    '#36a2eb',
+                    '#ffcd56',
+                    '#4bc0c0',
+                    '#ff9f40',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true,
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Device'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Number of Device'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 </script>
-
-

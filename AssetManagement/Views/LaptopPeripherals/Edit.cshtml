@@ -64,27 +64,31 @@
                     <input asp-for="PeripheralDescription" class="form-control" />
                     <span asp-validation-for="PeripheralDescription" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3 mb-3" id="brandtable">
+
+                <div class="form-group col-md-2">
                     <label asp-for="PeripheralBrand" class="control-label"></label>
-                    <input asp-for="PeripheralBrand" class="form-control" id="brandid" hidden />
-                    <input class="form-select" id="branddes" value=" @Model.Brand.BrandDescription" required />
+                    <select asp-for="PeripheralBrand" class="form-select" asp-items="ViewBag.PBrand">
+                        <option selected disabled>select brand</option>
+                    </select>
                     <span asp-validation-for="PeripheralBrand" class="text-danger"></span>
-
                 </div>
-                <div class="form-group col-md-3 mb-3" id="devtable">
+
+                <div class="form-group col-md-2">
                     <label asp-for="PeripheralDevice" class="control-label"></label>
-                    <input asp-for="PeripheralDevice" class="form-control" id="devid" hidden />
-                    <input class="form-select" id="devdes" value=" @Model.DeviceType.DevtypeDescription" required />
+                    <select asp-for="PeripheralDevice" class="form-select" asp-items="ViewBag.PDevice">
+                        <option selected disabled>select brand</option>
+                    </select>
                     <span asp-validation-for="PeripheralDevice" class="text-danger"></span>
-
                 </div>
-                <div class="form-group col-md-3 mb-3" id="vendortable">
+
+                <div class="form-group col-md-2">
                     <label asp-for="PeripheralVendor" class="control-label"></label>
-                    <input asp-for="PeripheralVendor" class="form-control" id="vid" hidden />
-                    <input class="form-select" id="vname" value=" @Model.Vendor.VendorName" required />
+                    <select asp-for="PeripheralVendor" class="form-select" asp-items="ViewBag.PVendor">
+                        <option selected disabled>select brand</option>
+                    </select>
                     <span asp-validation-for="PeripheralVendor" class="text-danger"></span>
-
                 </div>
+
                 <div class="form-group col-md-3 mb-3">
                     <label asp-for="PeripheralQty" class="control-label"></label>
                     <input asp-for="PeripheralQty" class="form-control" />

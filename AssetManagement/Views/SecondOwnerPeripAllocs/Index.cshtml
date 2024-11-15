@@ -26,12 +26,12 @@
     <!-- Action Buttons -->
     <div class="d-flex align-items-center gap-2 mb-2 p-4">
         <div class="d-flex align-items-center gap-2">
-            <a class="btn btn-outline-theme" asp-controller="LaptopPeripheralAllocations" asp-action="LapPeripAllocPartialView">
+            <a class="btn btn-theme" asp-controller="LaptopPeripheralAllocations" asp-action="LapPeripAllocPartialView">
                 <i class="fas fa-pencil-alt"></i>
-                <span>Create New</span>
+                <span>Add New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-controller="SecondOwnerPeripAllocs" asp-action="Inactive">
-                <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+                <span class="fas fa-trash-alt"></span> Show Deleted History
             </a>
         </div>
     </div>
@@ -43,7 +43,7 @@
 <div class=" m-4">
     <div class="mb-3">
         <button type="button" class="multi-delete-button btn btn-sm btn-danger disabled" data-bs-toggle="modal" data-bs-target="#deleteModal">
-            <span class="fas fa-ban"></span> Temporary Delete
+            <span class="fas fa-ban"></span> Delete
         </button>
     </div>
     <form method="post" action="@Url.Action("DeleteAsEdit", "SecondOwnerPeripAllocs")">
@@ -65,136 +65,134 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table id="secPerTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="d-flex flex-column gap-1">
-                                <label for="select-all-checkbox" style="cursor:pointer;">ALL</label>
-                                <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
-                            </div>
-                        </th>
-                        <th>ID</th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Owner)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.LaptopPeripheral)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AgeYears)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DatePurchased)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateCreated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateUpdated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CreatedBy)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UpdatedBy)
-                        </th>
-                       <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="selectedIds" value="@item.SecAllocId" class="item-checkbox custom-checkbox" />
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopPeripAlloc.PeripheralAllocationId)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralDescription)
-                            </td>        
-                           @*  <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.AgeYears)
-                            </td> *@
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="d-flex flex-column gap-1">
+                                        <label for="select-all-checkbox" style="cursor:pointer;">ALL</label>
+                                        <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Owner)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LaptopPeripheral)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DatePurchased)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateCreated)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateUpdated)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UpdatedBy)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="selectedIds" value="@item.SecAllocId" class="item-checkbox custom-checkbox" />
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.LaptopPeripAlloc.PeripheralAllocationId)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralDescription)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
 
-                                @{
-                                    if (item.DatePurchased != null)
-                                    {
-                                        var purchaseDate = item.DatePurchased.Value;
-                                        var now = DateTime.Now;
+                                        @{
+                                            if (item.DatePurchased != null)
+                                            {
+                                                var purchaseDate = item.DatePurchased.Value;
+                                                var now = DateTime.Now;
 
-                                        var totalDays = (now - purchaseDate).Days;
+                                                var totalDays = (now - purchaseDate).Days;
 
-                                        var years = now.Year - purchaseDate.Year;
-                                        var months = now.Month - purchaseDate.Month;
-                                        var days = now.Day - purchaseDate.Day;
+                                                var years = now.Year - purchaseDate.Year;
+                                                var months = now.Month - purchaseDate.Month;
+                                                var days = now.Day - purchaseDate.Day;
 
-                                        if (days < 0)
-                                        {
-                                            months--;
-                                            days += DateTime.DaysInMonth(now.Year, now.AddMonths(-1).Month);
+                                                if (days < 0)
+                                                {
+                                                    months--;
+                                                    days += DateTime.DaysInMonth(now.Year, now.AddMonths(-1).Month);
+                                                }
+
+                                                if (months < 0)
+                                                {
+                                                    years--;
+                                                    months += 12;
+                                                }
+
+                                                if (years > 0)
+                                                {
+                                                    <span>@years year(s), @months month(s), @days day(s)</span>
+                                                }
+                                                else if (months > 0)
+                                                {
+                                                    <span>@months month(s), @days day(s)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@days day(s)</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>N/A</span>
+                                            }
                                         }
-
-                                        if (months < 0)
-                                        {
-                                            years--;
-                                            months += 12;
-                                        }
-
-                                        if (years > 0)
-                                        {
-                                            <span>@years year(s), @months month(s), @days day(s)</span>
-                                        }
-                                        else if (months > 0)
-                                        {
-                                            <span>@months month(s), @days day(s)</span>
-                                        }
-                                        else
-                                        {
-                                            <span>@days day(s)</span>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <span>N/A</span>
-                                    }
-                                }
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DatePurchased)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.CreatedBy.UserFullName)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.UpdatedBy.UserFullName)
-                            </td>
-                            <td>
-                                <a class="btn btn-sm btn-outline-secondary" asp-action="CreateSecPeripherals" asp-controller="ReturnPeripherals" asp-route-id="@item.LaptopPeripAlloc.PeripheralAllocationId">Return </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DatePurchased)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DateCreated)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.CreatedBy.UserFullName)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.UpdatedBy.UserFullName)
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-secondary" asp-action="CreateSecPeripherals" asp-controller="ReturnPeripherals" asp-route-id="@item.LaptopPeripAlloc.PeripheralAllocationId">Return </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </form>
     <div class="displaytable"> </div>
@@ -217,7 +215,6 @@
     </script>
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("select-all-checkbox");
@@ -238,22 +235,6 @@
             deleteButtonContainer.classList.toggle('disabled', !isAnyChecked);
         }
 
-        $('#secPerTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
 
         //modal
         $(document).ready(function () {
@@ -272,6 +253,6 @@
         });
 
     });
-   
-    
+
+
 </script>

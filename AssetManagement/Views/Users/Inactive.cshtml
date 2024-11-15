@@ -19,56 +19,58 @@
 
     <hr />
 
-    <!-- Table -->
-    <div class="mt-4 table-responsive ">
-        <table id="usersInactiveTable" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.UserCode)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserADLogin)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserFullName)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserCreated)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserDateCreated)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserUpdated)</th>
-                    <th>@Html.DisplayNameFor(model => model.UserDateUpdated)</th>
-                    <th>@Html.DisplayNameFor(model => model.Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.Profile)</th>
-                    <th class="text-center">ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.UserCode)</td>
-                        <td>@Html.DisplayFor(modelItem => item.UserADLogin)</td>
-                        <td>@Html.DisplayFor(modelItem => item.UserFullName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.UserCreated)</td>
-                        <td>@Html.DisplayFor(modelItem => item.UserDateCreated)</td>
-                        <td>@Html.DisplayFor(modelItem => item.UserUpdated)</td>
-                        <td>@Html.DisplayFor(modelItem => item.UserDateUpdated)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Status.status_name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Profile.ProfileName)</td>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.UserCode)</th>
+                            <th>@Html.DisplayNameFor(model => model.UserADLogin)</th>
+                            <th>@Html.DisplayNameFor(model => model.UserFullName)</th>
+                            <th>@Html.DisplayNameFor(model => model.UserCreated)</th>
+                            <th>@Html.DisplayNameFor(model => model.UserDateCreated)</th>
+                            <th>@Html.DisplayNameFor(model => model.UserUpdated)</th>
+                            <th>@Html.DisplayNameFor(model => model.UserDateUpdated)</th>
+                            <th>@Html.DisplayNameFor(model => model.Status)</th>
+                            <th>@Html.DisplayNameFor(model => model.Profile)</th>
+                            <th class="text-center">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.UserCode)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UserADLogin)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UserFullName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UserCreated)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UserDateCreated)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UserUpdated)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UserDateUpdated)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Status.status_name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Profile.ProfileName)</td>
 
-                        <td class="text-center">
-                            <form asp-controller="Users" asp-action="Retrieve">
-                                <input type="hidden" name="userCode" value="@item.UserCode" />
-                                <button type="submit" class="btn btn-sm btn-success">
-                                    <span class="fas fa-undo"></span> Retrieve
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                                <td class="text-center">
+                                    <form asp-controller="Users" asp-action="Retrieve">
+                                        <input type="hidden" name="userCode" value="@item.UserCode" />
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <span class="fas fa-undo"></span> Retrieve
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 
 @if (TempData["SuccessNotification"] != null)
@@ -87,17 +89,3 @@
 }
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize DataTables
-        $('#usersInactiveTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-        });
-    });
-</script>

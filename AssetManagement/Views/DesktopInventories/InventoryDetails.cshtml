@@ -34,114 +34,104 @@
             </div>
         </div>
 
-        <div class="table-responsive mt-4 table-render">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>
-                            ID
-                        </th>
-                        <th>PO</th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.InventoryDetails.unitTag)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FixedassetTag)
-                        </th>
-
-                        <th>
-                            @Html.DisplayNameFor(model => model.ComputerName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Owner)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateDeployed)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateCreated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateUpdated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th>
-                            DESKTOP INVENTORY
-                        </th>
-                        <th>
-                            CREATED BY
-                        </th>
-                        <th>
-                            UPDATED BY
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        @foreach (var item in Model)
-                        {
+        <div class="card shadow-sm card-selected">
+            <div class="card-body pt-0">
+                <div class="table-responsive mt-4 table-render" style="max-height: 600px;">
+                    <h4>Inventory Details</h4>
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AllocId)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FixedassetTag)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ComputerName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DateDeployed)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DateCreated)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DateUpdated)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Status.status_name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                                </td>
-
+                                <th>
+                                    DESCRIPTION
+                                </th>
+                                <th>CODE</th>
+                                <th>
+                                    UNIT TAG
+                                </th>
+                                <th>
+                                    ASSET TAG
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ComputerName)
+                                </th>
+                                <th>PO</th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Owner)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateDeployed)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateCreated)
+                                </th>
+                                <th>
+                                    CREATED BY
+                                </th>
+                               
                             </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="20" class="text-center">
-                                No data available.
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.Description)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FixedassetTag)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ComputerName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DateDeployed)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DateCreated)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="20" class="text-center">
+                                        No data available.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="displaytable"> </div>
 </div>
 
-<div class="displaytable"> </div>
 
 
 <script>
@@ -179,9 +169,6 @@
                     $(".displaytable").html(res);
                 }
             });
-
-            $(this).removeClass("btn-outline-secondary").addClass("btn-secondary");
-            $(".galloon .btn").not(this).removeClass("btn-secondary").addClass("btn-outline-secondary");
         });
 
 

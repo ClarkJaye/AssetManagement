@@ -13,32 +13,34 @@
             <div class="row form-group">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="ReturnID" />
-                <div class="form-group col-3">
+                <div class="form-group col-md-3">
                     <label asp-for="AllocID" class="control-label"></label>
                     <input asp-for="AllocID" class="form-control" />
                     <span asp-validation-for="AllocID" class="text-danger"></span>
                 </div>
-                <div class="form-group col-2" id="ownertable">
+                <div class="form-group col-md-3">
                     <label asp-for="RTtype" class="control-label"></label>
-                    <input asp-for="RTtype" class="form-control" id="oid" hidden />
-                    <input class="form-select" id="odes" readonly placeholder="Select Return Type Below" />
+                    <select asp-for="RTtype" class="form-select" id="serialNumber" asp-items="ViewBag.MTReturnType">
+                        <option selected disabled>Select Return Type </option>
+                    </select>
+                    <span asp-validation-for="RTtype" class="text-danger"></span>
                 </div>
-                <div class="form-group col-3" hidden>
+                <div class="form-group col-md-3" hidden>
                     <label asp-for="RTStatus" class="control-label"></label>
                     <select asp-for="RTStatus" class="form-control" asp-items="ViewBag.RTStatus"></select>
                     <span asp-validation-for="RTStatus" class="text-danger"></span>
                 </div>
-                <div class="form-group col-3" hidden>
+                <div class="form-group col-md-3" hidden>
                     <label asp-for="CreatedBy" class="control-label"></label>
                     <input asp-for="CreatedBy" class="form-control" />
                     <span asp-validation-for="CreatedBy" class="text-danger"></span>
                 </div>
-                <div class="form-group col-3" hidden>
+                <div class="form-group col-md-3" hidden>
                     <label asp-for="DateCreated" class="control-label"></label>
                     <input asp-for="DateCreated" class="form-control" />
                     <span asp-validation-for="DateCreated" class="text-danger"></span>
                 </div>
-                <div class="form-groupcol-md-2 d-flex align-items-center gap-2" style="margin-top:23px;">
+                <div class="form-groupcol-md-3 d-flex align-items-center gap-2" style="margin-top:23px;">
                     <input type="submit" value="Save" class="btn btn-theme" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>

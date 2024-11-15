@@ -72,5 +72,9 @@ namespace AssetManagement.Models
 		[Column("details_dtupdated")]
 		[DisplayName("UPDATED AT")]
 		public DateTime? UpdatedDate { get; set; }
-	}
+
+        [NotMapped]
+        public Owner Owner { get; set; }
+
+    }
 }

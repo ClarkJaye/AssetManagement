@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AssetManagement.Models.LaptopPeripheralAllocation>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Laptop Peripherals Allocation";
 }
 
 
@@ -18,30 +18,17 @@
     <!-- Action Buttons -->
     <div class="d-flex align-items-center gap-2 mb-2 p-4">
         <div class="d-flex align-items-center gap-2">
-            <a class="btn btn-outline-theme" asp-controller="LaptopPeripheralAllocations" asp-action="Create">
+            <a class="btn btn-theme" asp-controller="LaptopPeripheralAllocations" asp-action="Create">
                 <i class="fas fa-pencil-alt"></i>
                 <span>Allocate New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-controller="LaptopPeripheralAllocations" asp-action="Inactive">
-                <span class="fas fa-trash-alt"></span> Show Temporary Deleted
+                <span class="fas fa-trash-alt"></span> Show Deleted History
             </a>
         </div>
     </div>
     <!-- Total -->
     <div class="report-view d-flex flex-column justify-content-end">
-        @* <div class="report-item">
-            <span class="report-label">Total Peripherals:</span>
-            <span class="report-value">
-                @if (ViewBag.TotalPer != null)
-                {
-                    <text>@ViewBag.TotalPer</text>
-                }
-                else
-                {
-                    <text>0</text>
-                }
-            </span>
-        </div> *@
         <div class="report-item">
             <span class="report-label">Total <span class="text-success">Allocated</span> Peripherals:</span>
             <span class="report-value">
@@ -78,7 +65,7 @@
 <div class=" m-4">
     <div class="mb-3">
         <button type="button" class="multi-delete-button btn btn-sm btn-danger disabled" data-bs-toggle="modal" data-bs-target="#deleteModal">
-            <span class="fas fa-ban"></span> Temporary Delete
+            <span class="fas fa-ban"></span> Delete
         </button>
     </div>
 
@@ -101,165 +88,114 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table id="ltPerTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="d-flex flex-column gap-1">
-                                <label for="select-all-checkbox" style="cursor:pointer;">ALL</label>
-                                <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
-                            </div>
-                        </th>
-                        <th>ID</th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Owner)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.LaptopPeripheral)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.SerialNumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FixedAssetTag)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DatePurchased)
-                        </th>
-                        <th>
-                            Age Years
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PONumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PeripheralAllocCreatedAt)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PeripheralAllocUpdateAt)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UnitPrice)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CreatedBy)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UpdatedBy)
-                        </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="selectedIds" value="@item.PeripheralAllocationId" class="item-checkbox custom-checkbox" />
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.PeripheralAllocationId)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralDescription)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.SerialNumber)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.FixedAssetTag)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DatePurchased)
-                            </td>
-                            @* <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.AgeYears)
-                            </td> *@
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" id="userCode2" name="userCODE">
 
-                                @{
-                                    if (item.DatePurchased != null)
-                                    {
-                                        var purchaseDate = item.DatePurchased.Value;
-                                        var now = DateTime.Now;
-
-                                        var totalDays = (now - purchaseDate).Days;
-
-                                        var years = now.Year - purchaseDate.Year;
-                                        var months = now.Month - purchaseDate.Month;
-                                        var days = now.Day - purchaseDate.Day;
-
-                                        if (days < 0)
-                                        {
-                                            months--;
-                                            days += DateTime.DaysInMonth(now.Year, now.AddMonths(-1).Month);
-                                        }
-
-                                        if (months < 0)
-                                        {
-                                            years--;
-                                            months += 12;
-                                        }
-
-                                        if (years > 0)
-                                        {
-                                            <span>@years year(s), @months month(s), @days day(s)</span>
-                                        }
-                                        else if (months > 0)
-                                        {
-                                            <span>@months month(s), @days day(s)</span>
-                                        }
-                                        else
-                                        {
-                                            <span>@days day(s)</span>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <span>N/A</span>
-                                    }
-                                }
-                            </td>
-
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.PONumber)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.PeripheralAllocCreatedAt)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.PeripheralAllocUpdateAt)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.UnitPrice)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.CreatedBy.UserFullName)
-                            </td>
-                            <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.UpdatedBy.UserFullName)
-                            </td>
-                            <td>
-                                <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@item.PeripheralAllocationId">Edit</a>
-                            </td>
-                            <td>
-                                <a class="btn btn-sm btn-outline-secondary" asp-action="Create" asp-controller="ReturnPeripherals" asp-route-id="@item.PeripheralAllocationId">Return </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="d-flex flex-column gap-1">
+                                        <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Owner)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LaptopPeripheral)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SerialNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FixedAssetTag)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PONumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DatePurchased)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UnitPrice)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PeripheralAllocCreatedAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PeripheralAllocUpdateAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UpdatedBy)
+                                </th>
+                                <th style="text-align:center!important;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="selectedIds" value="@item.PeripheralAllocationId" class="item-checkbox custom-checkbox" />
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocationId)
+                                    </td>
+                                    <td class="editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralDescription)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.FixedAssetTag)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.PONumber)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DatePurchased)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocCreatedAt)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.CreatedBy.UserFullName)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocUpdateAt)
+                                    </td>
+                                    <td class=" editbtn" id="@item.LaptopPeripheral.PeripheralDescription" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.UpdatedBy.UserFullName)
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.PeripheralAllocationId">Edit</a>
+                                            |
+                                            <a class="btn btn-outline-secondary" asp-action="Create" asp-controller="ReturnPeripherals" asp-route-id="@item.PeripheralAllocationId">Return </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
     </form>
-
-    <div class="displaytable mt-4"></div>
+    <div class="displaytable"></div>
 </div>
 
 
@@ -285,7 +221,6 @@
     </script>
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("select-all-checkbox");
@@ -307,32 +242,16 @@
         }
 
 
-        $('#ltPerTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
 
         //modal
         $(document).on("click", ".editbtn", function () {
             var userCode = $(this).attr("id");
-
             $.ajax({
                 url: "@Url.Action("peripDetails", "SecondOwnerPeripAllocs")",
                 type: "GET",
                 data: { userCODE: userCode },
                 success: function (res) {
+                    console.log(res)
                     $(".displaytable").html(res);
                 }
             });

@@ -51,11 +51,11 @@ namespace AssetManagement.Controllers
 
 
 
-        public async Task<IActionResult> SeeAll(string id, string ids, string id2)
+        public async Task<IActionResult> SeeAll(string id, string ids, int typeId)
         {
             ViewBag.Id = id;
             ViewBag.Ids = ids;
-            ViewBag.Id2 = id2;
+            ViewData["LTTypeId"] = typeId;
             var assetManagementContext = _context.tbl_ictams_laptopinvdetails.Where(x=>x.laptoptinvCode == id).Include(i => i.Createdby).Include(i => i.LaptopInventory).Include(i => i.Status).Include(i => i.Updatedby).Include(i => i.Vendor);
             return View(await assetManagementContext.ToListAsync());
         }
@@ -130,7 +130,14 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> DeletedHistory(string userCODE)
         {
 
-            var assetManagementContext = _context.tbl_ictams_laptopalloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventoryDetails.LaptopInventory).Where(x => x.AllocationStatus == "IN" && x.LaptopCode.Contains(userCODE)).Include(l => l.Owner).Include(l => l.Updatedby).Include(l=>l.LaptopInventoryDetails);
+            var assetManagementContext = _context.tbl_ictams_laptopalloc
+                .Include(l => l.Status)
+                .Include(l => l.Createdby)
+                .Include(l => l.LaptopInventoryDetails.LaptopInventory)
+                .Where(x => x.AllocationStatus == "IN" && x.LaptopCode.Contains(userCODE))
+                .Include(l => l.Owner)
+                .Include(l => l.Updatedby)
+                .Include(l=>l.LaptopInventoryDetails);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -138,7 +145,16 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_ltareturn.Where(x => x.LaptopAllocation.LaptopCode.Contains(userCODE)).Include(r => r.LaptopAllocation).Include(r => r.ReturnType).Include(r => r.Status).Include(r => r.UserCreated).Include(r => r.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_ltareturn
+                    .Where(x => x.LaptopAllocation.LaptopCode.Contains(userCODE))
+                    .Include(r => r.LaptopAllocation)
+                    .Include(r => r.LaptopAllocation.LaptopInventoryDetails)
+                    .Include(r => r.LaptopAllocation.LaptopInventoryDetails.LaptopInventory)
+                    .Include(r => r.ReturnType)
+                    .Include(r => r.LaptopAllocation.Owner)
+                    .Include(r => r.Status)
+                    .Include(r => r.UserCreated)
+                    .Include(r => r.UserUpdated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -148,7 +164,15 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_ltborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE) ).Include(l => l.LaptopInventoryDetails.LaptopInventory).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_ltborrowed
+                    .Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE))
+                    .Include(l => l.LaptopInventoryDetails.LaptopInventory)
+                    .Include(l => l.LaptopInventoryDetails)
+                    .Include(l => l.Owner)
+                    .Include(l => l.Department)
+                    .Include(l => l.Status)
+                    .Include(l => l.UserCreated)
+                    .Include(l => l.UserUpdated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -156,13 +180,22 @@ namespace AssetManagement.Controllers
 
 
         // GET: LaptopAllocations
-        public async Task<IActionResult> InventoryDetails(string id,string ids, string id2)
+        public async Task<IActionResult> InventoryDetails(string id,string ids, int typeId)
         {
             ViewBag.Id = id;
             ViewBag.Ids = ids;
-            ViewBag.Id2 = id2;
+            ViewData["LTTypeId"] = typeId;
 
-            var assetManagementContext = _context.tbl_ictams_laptopalloc.Where(x => x.AllocationStatus == "AC" && x.LaptopCode == id).Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventoryDetails.LaptopInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.LaptopInventoryDetails);
+            var assetManagementContext = _context.tbl_ictams_laptopalloc
+                .Where(x => x.AllocationStatus == "AC" && x.LaptopCode == id)
+                .Include(s => s.LaptopInventoryDetails)
+                .Include(s => s.LaptopInventoryDetails.LaptopInventory)
+                .Include(l => l.Createdby)
+                .Include(l => l.Owner)
+                .Include(l => l.Status)
+                .Include(l => l.Updatedby)
+                .Include(l => l.LaptopInventoryDetails);
+
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -192,7 +225,15 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = await _context.tbl_ictams_ltnewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecLaptopCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.LaptopAllocation).Include(s => s.LaptopInventoryDetails.LaptopInventory).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.LaptopInventoryDetails).ToListAsync();
+                var assetManagementContext = await _context.tbl_ictams_ltnewalloc
+                    .Where(x => x.SecAllocationStatus == "AC" && x.SecLaptopCode.Contains(userCODE))
+                    .Include(s => s.LaptopAllocation)
+                    .Include(s => s.LaptopAllocation.LaptopInventoryDetails)
+                    .Include(s => s.LaptopAllocation.LaptopInventoryDetails.LaptopInventory)
+                    .Include(s => s.Owner)
+                    .Include(s => s.Status)
+                    .Include(s => s.Createdby)
+                    .Include(s => s.Updatedby).ToListAsync();
 
                 return View( assetManagementContext);
             }
@@ -200,7 +241,26 @@ namespace AssetManagement.Controllers
         }
 
 
+        // GET: DesktopInventories/DeskInvPartialView
+        public async Task<IActionResult> LapInvenPartialView(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Invalid laptop inventory code.");
+            }
 
+            var assetManagementContext = _context.tbl_ictams_laptopinvdetails
+                .Where(x => x.laptoptinvCode == code)
+                .OrderByDescending(x => x.laptoptinvCode)
+                .ThenByDescending(x => x.SerialCode)
+                .Include(l => l.LaptopInventory)
+                .Include(l => l.Vendor)
+                .Include(l => l.Status)
+                .Include(l => l.Createdby);
+
+            // Return the partial view with the filtered data
+            return PartialView(await assetManagementContext.ToListAsync());
+        }
 
 
         // GET: LaptopInventories
@@ -225,8 +285,9 @@ namespace AssetManagement.Controllers
 
         }
 
+
         // GET: LaptopInventories
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Home()
         {
             var ucode = HttpContext.Session.GetString("UserName");
 
@@ -255,7 +316,68 @@ namespace AssetManagement.Controllers
                 }
                 else
                 {
-                    await FindStatus();
+                    // Count total laptops
+                    var totalLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity);
+
+                    // Count available laptops (where Quantity > AllocatedNo and status is 'AV')
+                    var countAvailLT = await _context.tbl_ictams_laptopinv
+                        .Where(x => x.Quantity > x.AllocatedNo && x.LTStatus == "AV")
+                        .SumAsync(x => x.Quantity - x.AllocatedNo);
+
+                    // Count total allocated laptops
+                    var totalAllocatedLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.AllocatedNo);
+
+                    // Fetch inventory details
+                    var assetManagementContext = await _context.tbl_ictams_laptoptype
+                        .Include(a => a.Createdby)
+                        .Include(a => a.Updatedby)
+                        .Include(a => a.Status)
+                        .ToListAsync();
+
+                    // Set totals in ViewBag to use in the view
+                    ViewBag.TotalLaptops = totalLaptops;
+                    ViewBag.TotalAvailableLaptops = countAvailLT;
+                    ViewBag.TotalAllocatedLaptops = totalAllocatedLaptops;
+
+                    // Return the view with the laptop inventory data
+                    return View(assetManagementContext);
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // GET: LaptopInventories
+        public async Task<IActionResult> Index(int typeId)
+        {
+            var ucode = HttpContext.Session.GetString("UserName");
+
+            var findPass = await _context.tbl_ictams_users.Where(x => x.UserCode == ucode).FirstOrDefaultAsync();
+
+            var PasswordIsCorrect = BCrypt.Net.BCrypt.Verify("1234", findPass.UserPassword);
+            if (PasswordIsCorrect)
+            {
+                // Show success alert using SweetAlert
+                TempData["AlertType"] = "success";
+                TempData["SuccessMessage"] = "Login successfully!";
+                return RedirectToAction("ChangePassword", "Users");
+            }
+            await FindAllocationCompleted();
+            int? userProfile = HttpContext.Session.GetInt32("UserProfile");
+            if (userProfile.HasValue)
+            {
+                var hasOpenAccess = await _context.tbl_ictams_profileaccess
+                    .AnyAsync(pa => pa.OpenAccess == "Y" &&
+                                    pa.Module.ModuleTitle == "Laptop Inventories" &&  // Adjust the module name as needed
+                                    pa.ProfileId == userProfile.Value);
+
+                if (!hasOpenAccess)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    //await FindStatusLTT(typeId);
 
                     // Count total laptops
                     var totalLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.Quantity);
@@ -269,8 +391,11 @@ namespace AssetManagement.Controllers
                     var totalAllocatedLaptops = await _context.tbl_ictams_laptopinv.SumAsync(x => x.AllocatedNo);
 
                     // Fetch inventory details
-                    var assetManagementContext = _context.tbl_ictams_laptopinv
-                        .Where(x => x.LTStatus == "AV" || x.LTStatus == "CO")
+                    var laptopType = await _context.tbl_ictams_laptoptype.FirstOrDefaultAsync(x => x.LaptopTypeID == typeId);
+                    ViewData["LTTypeId"] = typeId;
+                    ViewData["LaptopType"] = laptopType.Description;
+                    var assetManagementContext = await _context.tbl_ictams_laptopinv
+                        .Where(x => x.LTStatus == "AV" || x.LTStatus == "CO" && x.TypeId == typeId)
                         .Include(l => l.Brand)
                         .Include(l => l.CPU)
                         .Include(l => l.Createdby)
@@ -280,7 +405,7 @@ namespace AssetManagement.Controllers
                         .Include(l => l.Model)
                         .Include(l => l.OS)
                         .Include(l => l.Status)
-                        .Include(l => l.Updatedby);
+                        .Include(l => l.Updatedby).ToListAsync();
 
                     // Set totals in ViewBag to use in the view
                     ViewBag.TotalLaptops = totalLaptops;
@@ -288,7 +413,7 @@ namespace AssetManagement.Controllers
                     ViewBag.TotalAllocatedLaptops = totalAllocatedLaptops;
 
                     // Return the view with the laptop inventory data
-                    return View(await assetManagementContext.ToListAsync());
+                    return View(assetManagementContext);
                 }
             }
 
@@ -330,18 +455,26 @@ namespace AssetManagement.Controllers
         }
 
 
-        public async Task<IActionResult> Inactive()
+        public async Task<IActionResult> Inactive(int typeId)
         {
             await FindStatus();
-            var assetManagementContext = _context.tbl_ictams_laptopinv.Where(x => x.LTStatus == "IN").Include(l => l.Brand).Include(l => l.CPU).Include(l => l.Createdby).Include(l => l.HardDisk).Include(l => l.Level).Include(l => l.Memory).Include(l => l.Model).Include(l => l.OS).Include(l => l.Status).Include(l => l.Updatedby);
+            var assetManagementContext = _context.tbl_ictams_laptopinv
+                .Where(x => x.LTStatus == "IN" && x.TypeId == typeId)
+                .Include(l => l.Brand)
+                .Include(l => l.CPU).Include(l => l.Createdby)
+                .Include(l => l.HardDisk).Include(l => l.Level)
+                .Include(l => l.Memory).Include(l => l.Model)
+                .Include(l => l.OS).Include(l => l.Status)
+                .Include(l => l.Updatedby);
             return View(await assetManagementContext.ToListAsync());
         }
 
 
-
         // GET: LaptopInventories/Create
-        public IActionResult Create()
+        public IActionResult Create(int typeId)
         {
+            ViewData["LTTypeId"] = typeId;
+
             ViewData["LTBrand"] = new SelectList(_context.tbl_ictams_brand, "BrandId", "BrandId");
             ViewData["LTcpu"] = new SelectList(_context.tbl_ictams_cpu, "CPUId", "CPUId");
             ViewData["LTCreated"] = new SelectList(_context.tbl_ictams_users, "UserCode", "UserCode");
@@ -360,7 +493,7 @@ namespace AssetManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("laptoptinvCode,Description,LTLevel,LTBrand,LTModel,LTcpu,LTHardisk,LTMemory,LTOS,AllocatedNo,LTStatus,LTCreated,DateCreated")] LaptopInventory laptopInventory)
+        public async Task<IActionResult> Create([Bind("laptoptinvCode,Description,LTLevel,LTBrand,LTModel,LTcpu,LTHardisk,LTMemory,LTOS,AllocatedNo,LTStatus,LTCreated,DateCreated,TypeId")] LaptopInventory laptopInventory)
         {
             if (laptopInventory.LTLevel.Equals(0))
             {
@@ -417,15 +550,17 @@ namespace AssetManagement.Controllers
                 // ...
                 TempData["SuccessNotification"] = "Successfully added a new device to inventory";
                 // ...
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "LaptopInventories", new { typeId = laptopInventory.TypeId });
 
             }
         }
 
         // GET: LaptopInventories/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string id, int typeId)
         {
-            if (id == null)
+            ViewData["LTTypeId"] = typeId;
+
+            if (id == null || typeId == null)
             {
                 return NotFound();
             }
@@ -438,7 +573,7 @@ namespace AssetManagement.Controllers
                 .Include(x => x.HardDisk)
                 .Include(x => x.Memory)
                 .Include(x => x.OS)
-                .FirstOrDefaultAsync(x => x.laptoptinvCode == id);
+                .FirstOrDefaultAsync(x => x.laptoptinvCode == id && x.TypeId == typeId);
 
             if (laptopInventory == null)
             {
@@ -452,7 +587,7 @@ namespace AssetManagement.Controllers
         // POST: LaptopInventories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("laptoptinvCode,Description,LTLevel,LTBrand,LTModel,LTcpu,LTHardisk,LTMemory,LTOS,Quantity,AllocatedNo,LTStatus,LTCreated,DateCreated,LTUpdated,DateUpdated")] LaptopInventory laptopInventory)
+        public async Task<IActionResult> Edit(string id, [Bind("laptoptinvCode,Description,LTLevel,LTBrand,LTModel,LTcpu,LTHardisk,LTMemory,LTOS,Quantity,AllocatedNo,LTStatus,LTCreated,DateCreated,LTUpdated,DateUpdated, TypeId")] LaptopInventory laptopInventory)
         {
             if (id != laptopInventory.laptoptinvCode)
             {

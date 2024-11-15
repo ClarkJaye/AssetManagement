@@ -64,10 +64,11 @@
             </div> *@
         </div>
 
-
-        <div class="table-container table-responsive">
-            <table id="upsBatTypeTable" class="table">
-                <thead>
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-container table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
                     <tr>
                         <th>
                             <div class="d-flex align-items-center flex-column gap-1">
@@ -95,8 +96,8 @@
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.User)
-                        </th>                
-                        <th>ACTION</th>
+                        </th>
+                        <th class="text-center">ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,6 +142,8 @@
                     }
                 </tbody>
             </table>
+                </div>
+            </div>
         </div>
     </form>
 
@@ -169,27 +172,8 @@
     </script>
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-        // Initialize DataTables
-        $('#upsBatTypeTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous",
-                    next: "Next"
-                }
-            }
-        });
-
+    document.addEventListener("DOMContentLoaded", function () {
         // Select/Deselect All Checkboxes Logic
         const selectAllCheckbox = document.getElementById("select-all-checkbox");
         const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedIds"]');

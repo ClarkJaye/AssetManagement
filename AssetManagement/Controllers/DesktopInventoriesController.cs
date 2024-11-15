@@ -47,10 +47,12 @@ namespace AssetManagement.Controllers
             }
 
             var assetManagementContext = _context.tbl_ictams_desktopinvdetails
-                .Where(x => x.desktopInvCode == code && x.DTStatus == "AV")
+                .Where(x => x.desktopInvCode == code)
                 .OrderByDescending(x => x.desktopInvCode)
+                .ThenByDescending(x => x.unitTag)
                 .Include(l => l.DesktopInventory)
                 .Include(l => l.Vendor)
+                .Include(l => l.Status)
                 .Include(l => l.Createdby);
 
             // Return the partial view with the filtered data
@@ -69,8 +71,6 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_desktopinvdetails
                 .Where(x => x.desktopInvCode == code && x.DTStatus == "AV")
                 .Include(l => l.Createdby);
-
-            // Return the partial view with the filtered data
             return PartialView(await assetManagementContext.ToListAsync());
         }
 
@@ -89,10 +89,10 @@ namespace AssetManagement.Controllers
             return Json(unitTags);
         }
 
-        public JsonResult GetComputerName(string code, string unitTag)
+        public JsonResult GetComputerName(string deskCode, string unitTag)
         {
             var computerName = _context.tbl_ictams_desktopinvdetails
-                .Where(l => l.desktopInvCode == code && l.unitTag == unitTag)
+                .Where(l => l.desktopInvCode == deskCode && l.unitTag == unitTag)
                 .Select(l => l.ComputerName)
                 .FirstOrDefault();
 
@@ -238,7 +238,15 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_dtareturn.Where(x => x.DesktopAllocation.DesktopCode.Contains(userCODE)).Include(r => r.DesktopAllocation).Include(r => r.ReturnType).Include(r => r.Status).Include(r => r.UserCreated).Include(r => r.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_dtareturn
+                    .Where(x => x.DesktopAllocation.DesktopCode.Contains(userCODE))
+                   .Include(r => r.DesktopAllocation)
+                    .Include(r => r.DesktopAllocation.InventoryDetails)
+                    .Include(r => r.DesktopAllocation.InventoryDetails.DesktopInventory)
+                    .Include(r => r.ReturnType)
+                    .Include(r => r.DesktopAllocation.Owner)
+                    .Include(r => r.Status)
+                    .Include(r => r.UserCreated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -247,7 +255,14 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = _context.tbl_ictams_dtborrowed.Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE)).Include(l => l.InventoryDetails).Include(l => l.Owner).Include(l => l.Status).Include(l => l.UserCreated).Include(l => l.UserUpdated);
+                var assetManagementContext = _context.tbl_ictams_dtborrowed
+                    .Where(x => x.StatusID == "AC" && x.UnitID.Contains(userCODE))
+                    .Include(l => l.InventoryDetails)
+                    .Include(l => l.Owner)
+                    .Include(l => l.Department)
+                    .Include(l => l.Status)
+                    .Include(l => l.UserCreated)
+                    .Include(l => l.UserUpdated);
                 return View(await assetManagementContext.ToListAsync());
             }
             return View();
@@ -256,7 +271,15 @@ namespace AssetManagement.Controllers
         {
             if (!string.IsNullOrEmpty(userCODE))
             {
-                var assetManagementContext = await _context.tbl_ictams_dtnewalloc.Where(x => x.SecAllocationStatus == "AC" && x.SecDesktopCode.Contains(userCODE)).Include(s => s.Createdby).Include(s => s.DesktopAllocation).Include(s => s.InventoryDetails).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).Include(s => s.InventoryDetails).ToListAsync();
+                var assetManagementContext = await _context.tbl_ictams_dtnewalloc
+                    .Where(x => x.SecAllocationStatus == "AC" && x.SecDesktopCode.Contains(userCODE))
+                    .Include(s => s.Createdby)
+                    .Include(s => s.DesktopAllocation)
+                    .Include(s => s.InventoryDetails)
+                    .Include(s => s.Owner)
+                    .Include(s => s.Status)
+                    .Include(s => s.Updatedby)
+                    .Include(s => s.InventoryDetails).ToListAsync();
 
                 return View(assetManagementContext);
             }

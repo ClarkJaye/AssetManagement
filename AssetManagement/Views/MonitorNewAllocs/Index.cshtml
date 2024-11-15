@@ -16,7 +16,7 @@
         <div class="d-flex align-items-center gap-2">
             <a asp-controller="MonitorAllocations" asp-action="MonitorAllocPartialView" class="btn btn-theme">
                 <i class="fas fa-pencil-alt"></i>
-                <span>Create New</span>
+                <span>Add New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-action="Inactive">
                 <span class="fas fa-trash-alt"></span> Show Temporary Deleted
@@ -60,18 +60,17 @@
                             <tr>
                                 <th>
                                     <div class="d-flex flex-column gap-1">
-                                        <label for="select-all-checkbox" style="cursor:pointer;">ALL</label>
                                         <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
                                     </div>
                                 </th>
                                 <th>
-                                    MONITOR ALLOCATION
+                                    MONITOR CODE
                                 </th>
                                 <th>
-                                    MONITOR DETAIL
+                                    @Html.DisplayNameFor(model => model.SerialNumber)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.MonitorAllocation.MonitorDetails.MonitorInventory)
+                                    ASSET TAG
                                 </th>
                                 <th>
                                     PO
@@ -80,26 +79,24 @@
                                     @Html.DisplayNameFor(model => model.Owner)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Createdby)
+                                    DATE DEPLOYED
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.DateCreated)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Updatedby)
+                                    CREATED BY
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.DateUpdated)
                                 </th>
-
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Status)
+                                    UPDATED BY
                                 </th>
-                                <th>
-                                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                        <span id="boot-icon" class="bi bi-trash-fill"></span>
-                                    </button>
-                                </th>
+                                <th class="text-center">ACTION</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,31 +107,22 @@
                                         <input type="checkbox" name="selectedIds" value="@item.SecAllocId" class="item-checkbox custom-checkbox" />
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.MonitorAllocation.AllocId)
+                                        @Html.DisplayFor(modelItem => item.MonitorAllocation.monitorCode)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.MonitorInventory.monitorCode)
+                                        @Html.DisplayFor(modelItem => item.SerialNumber)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.SerialNumber)
+                                        @Html.DisplayFor(modelItem => item.MonitorAllocation.FixedassetTag)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.PO)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.DateCreated)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                                        @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.DeployedDate)
                                     </td>
                                     @{
                                         if (item.MonitorAllocation.MonitorDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
@@ -162,9 +150,20 @@
                                             </td>
                                         }
                                     }
-
                                     <td>
-                                        <a class="btn btn-sm bg-secondary  text-white custom-fontsize editbtn" asp-action="CreateSecReturn" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
+                                        @Html.DisplayFor(modelItem => item.DateCreated)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-outline-danger" asp-action="CreateSecReturn" asp-controller="ReturnMTAs" asp-route-id="@item.AllocId">Return </a>
                                     </td>
                                 </tr>
                             }
@@ -213,18 +212,5 @@
             deleteButtonContainer.classList.toggle('disabled', !isAnyChecked);
         }
 
-        //MODAL
-        $(document).on("click", ".editbtn", function () {
-            var userCode = $(this).attr("id");
-
-            $.ajax({
-                url: "@Url.Action("seeDetails", "MonitorNewAllocs")",
-                type: "GET",
-                data: { userCODE: userCode },
-                success: function (res) {
-                    $(".displaytable").html(res);
-                }
-            });
-        });
     });
 </script>

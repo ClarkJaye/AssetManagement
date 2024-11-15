@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AssetManagement.Models.LaptopAllocation>
 
 @{
-    ViewData["Title"] = "Laptop Inventories";
+    ViewData["Title"] = "Laptop Allocation";
 }
 
 
@@ -26,7 +26,7 @@
     <!-- Action Buttons -->
     <div class="d-flex align-items-center gap-2 mb-2 mx-2 p-4">
         <div class="d-flex align-items-center gap-2">
-            <a class="btn btn-outline-theme" asp-controller="LaptopAllocations" asp-action="Create">
+            <a class="btn btn-theme" asp-controller="LaptopAllocations" asp-action="Create">
                 <i class="fas fa-pencil-alt"></i>
                 <span>Add New</span>
             </a>
@@ -38,19 +38,6 @@
 
 
     <div class="report-view d-flex flex-column justify-content-end">
-       @*  <div class="report-item">
-            <span class="report-label">Total Laptops:</span>
-            <span class="report-value">
-                @if (ViewBag.TotalLaptops != null)
-                {
-                    <text>@ViewBag.TotalLaptops</text>
-                }
-                else
-                {
-                    <text>0</text>
-                }
-            </span>
-        </div> *@
         <div class="report-item">
             <span class="report-label">Total <span class="text-success">Allocated</span> Laptops:</span>
             <span class="report-value">
@@ -109,88 +96,76 @@
             </div>
         </div>
 
-        <!-- Table with Data -->
-        <div class="table-container table-responsive">
-            <table id="laptopAllocTable" class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="d-flex flex-column gap-1">
-                                <label for="select-all-checkbox" style="cursor:pointer;">ALL</label>
-                                <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
-                            </div>
-                        </th>
-                        <th>LAPTOP CODE</th>
-                        <th>@Html.DisplayNameFor(model => model.SerialNumber)</th>
-                        <th>DESCRIPTION</th>
-                        <th>@Html.DisplayNameFor(model => model.FixedassetTag)</th>
-                        <th>@Html.DisplayNameFor(model => model.ComputerName)</th>
-                        <th>PO</th>
-                        <th>@Html.DisplayNameFor(model => model.Owner)</th>
-                        <th>@Html.DisplayNameFor(model => model.DateDeployed)</th>
-                        <th>@Html.DisplayNameFor(model => model.AllocationStatus)</th>
-                        <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
-                        <th>@Html.DisplayNameFor(model => model.Createdby)</th>
- @*                     <th>@Html.DisplayNameFor(model => model.DateUpdated)</th>
-                        <th>@Html.DisplayNameFor(model => model.Updatedby)</th> *@
-                        <th></th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr class="@((item.AllocationStatus == "CO") ? "text-danger" : "")">
-                            <td class="text-center">
-                                <input type="checkbox" name="selectedIds" value="@item.AllocId" class="item-checkbox custom-checkbox" />
-                            </td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopCode)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.SerialNumber)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.FixedassetTag)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.ComputerName)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Owner.OwnerCode)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateDeployed)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Status.status_name)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateCreated)</td>
-                            <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Createdby.UserFullName)</td>
-                          @*   <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateUpdated)</td>
-                            <td class="editbtn" id="@item.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Updatedby.UserFullName)</td> *@
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <a class="btn btn-sm btn-outline-secondary" asp-action="Create" asp-controller="ReturnLTAs" asp-route-id="@item.AllocId">
-                                        <i class="fas fa-undo"></i>
-                                        <span>Return</span>
-                                    </a>
-                                    @if (item.LaptopInventoryDetails.PurchaseDate <= DateTime.Now.AddYears(-4))
-                                    {
-                                        <a class="btn btn-sm btn-outline-warning" asp-action="ChangeStatus" asp-controller="LaptopAllocations" asp-route-id="@item.AllocId">
-                                            <i class="fas fa-check"></i>
-                                            <span>Yes</span>
-                                        </a>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="d-flex flex-column gap-1">
+                                        <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
+                                    </div>
+                                </th>
+                                <th>LAPTOP CODE</th>
+                                <th>@Html.DisplayNameFor(model => model.SerialNumber)</th>
+                                <th>DESCRIPTION</th>
+                                <th>@Html.DisplayNameFor(model => model.FixedassetTag)</th>
+                                <th>@Html.DisplayNameFor(model => model.ComputerName)</th>
+                                <th>PO</th>
+                                <th>@Html.DisplayNameFor(model => model.Owner)</th>
+                                <th>@Html.DisplayNameFor(model => model.DateDeployed)</th>
+                                <th>@Html.DisplayNameFor(model => model.AllocationStatus)</th>
+                                <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
+                                <th>@Html.DisplayNameFor(model => model.Createdby)</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="@((item.AllocationStatus == "CO") ? "text-danger" : "")">
+                                    <td class="text-center">
+                                        <input type="checkbox" name="selectedIds" value="@item.AllocId" class="item-checkbox custom-checkbox" />
+                                    </td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopCode)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.SerialNumber)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopInventoryDetails.LaptopInventory.Description)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.FixedassetTag)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.ComputerName)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.LaptopInventoryDetails.PO)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Owner.OwnerFullName)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateDeployed)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Status.status_name)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.DateCreated)</td>
+                                    <td class="editbtn" id="@item.LaptopInventoryDetails.LaptopInventory.Description">@Html.DisplayFor(modelItem => item.Createdby.UserFullName)</td>
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <a class="btn btn-sm btn-outline-secondary" asp-action="Create" asp-controller="ReturnLTAs" asp-route-id="@item.AllocId">
+                                                <i class="fas fa-undo"></i>
+                                                <span>Return</span>
+                                            </a>
+                                            @if (item.LaptopInventoryDetails.PurchaseDate <= DateTime.Now.AddYears(-4))
+                                            {
+                                                <a class="btn btn-sm btn-outline-warning" asp-action="ChangeStatus" asp-controller="LaptopAllocations" asp-route-id="@item.AllocId">
+                                                    <i class="fas fa-check"></i>
+                                                    <span>Yes</span>
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </form>
-
-
     <div class="displaytable"> </div>
 </div>
 
-
-<!-- Notification Handling -->
-@if (TempData["ErrorMessage"] != null)
-{
-    <script>
-        alert('@TempData["ErrorMessage"]');
-    </script>
-}
 
 @if (TempData["SuccessNotification"] != null)
 {
@@ -200,14 +175,27 @@
                 title: 'Success',
                 text: '@TempData["SuccessNotification"]',
                 icon: 'success',
-                timer: 3000,
+                timer: 3000, // Automatically close the notification after 3 seconds
+                showConfirmButton: false
+            });
+        });
+    </script>
+}
+@if (TempData["ErrorNotification"] != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                title: 'Error',
+                text: '@TempData["ErrorNotification"]',
+                icon: 'error',
+                timer: 3000, // Automatically close the notification after 3 seconds
                 showConfirmButton: false
             });
         });
     </script>
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("select-all-checkbox");
@@ -227,25 +215,6 @@
             const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
             deleteButtonContainer.classList.toggle('disabled', !isAnyChecked);
         }
-
-        // Initialize DataTables
-        $('#laptopAllocTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
-
 
         //MODAL
         $(document).on("click", ".editbtn", function () {

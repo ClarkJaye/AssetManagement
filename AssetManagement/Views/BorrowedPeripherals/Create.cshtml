@@ -26,14 +26,14 @@
             <div class="form-group col-3" id="ownertable">
                 <label asp-for="OwnerID" class="control-label"></label>
                 <input asp-for="OwnerID" class="form-control" id="oid" hidden />
-                <input class="form-control" id="odes" readonly style="background-color: white;" />
+                <input class="form-control" id="odes" placeholder="Select borrower below" readonly style="background-color: white;" />
             </div>
             <div class="form-group col-3">
                 <label asp-for="Remark" class="control-label"></label>
-                <input asp-for="Remark" class="form-control" />
+                <input asp-for="Remark" class="form-control" placeholder="Enter a remarks"/>
                 <span asp-validation-for="Remark" class="text-danger"></span>
             </div>
-            <div class="form-group col-md-3 mb-3 d-flex align-items-center gap-2" style="margin-top: 23px;">
+            <div class="form-group mb-3 d-flex align-items-end gap-3 mt-3">
                 <input type="submit" value="Create" class="btn btn-theme" />
                 <a class="btn btn-outline-secondary" asp-action="LTPeripPartialView">Back to List</a>
             </div>
@@ -70,6 +70,23 @@
         });
 
 
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty();
+        }
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#ownertable, .displaytable').length) {
+                hideTable();
+            }
+        });
+
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();
+            }
+        });
 
     })
 </script>

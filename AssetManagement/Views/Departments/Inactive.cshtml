@@ -14,62 +14,66 @@
 
     <h4>Inactive Department</h4>
     <div class="mt-4">
-        <div class="table-responsive">
-            <table class="table table-striped table-datatable">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Dept_name)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DCreatedby)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Dept_status)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateCreated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DUpdateby)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateUpdated)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Dept_name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DCreatedby)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Dept_status)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DUpdateby)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
-                            </td>
-                            <td class="d-flex flex-row gap-2">
-                                <a class="btn btn-sm btn-outline-success" asp-controller="Departments" asp-action="Activate" asp-route-id="@item.Dept_code" data-id="@item.Dept_code">
-                                    <span class="fas fa-undo"></span> Retrieve
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-container table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Dept_name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DCreatedby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Dept_status)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateCreated)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DUpdateby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateUpdated)
+                                </th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Dept_name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DCreatedby)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Dept_status)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateCreated)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DUpdateby)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                                    </td>
+                                    <td class="d-flex flex-row gap-2">
+                                        <a class="btn btn-sm btn-outline-success" asp-controller="Departments" asp-action="Activate" asp-route-id="@item.Dept_code" data-id="@item.Dept_code">
+                                            <span class="fas fa-undo"></span> Retrieve
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

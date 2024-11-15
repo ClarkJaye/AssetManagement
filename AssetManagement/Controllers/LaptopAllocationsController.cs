@@ -121,45 +121,45 @@ namespace AssetManagement.Controllers
             }
         }
         public async Task<IActionResult> LaptopReportsDeploy(string id)
-{
-    ViewBag.Id = id;
-
-    if (id == null)
-    {
-        return View();
-    }
-    else
-    {
-        DateTime fourYearsAgo = DateTime.Now.AddYears(-4);
-
-        var assetManagementContext = _context.tbl_ictams_laptopalloc
-            .Where(x => x.AllocationStatus == "CO" &&
-                _context.tbl_ictams_owners.Any(a => a.OwnerCode == x.OwnerCode && a.Department.Dept_name == id) &&
-                x.DateDeployed < DateTime.Now && x.DateDeployed < fourYearsAgo)
-            .Include(l => l.Status)
-            .Include(l => l.Createdby)
-            .Include(l => l.LaptopInventoryDetails.LaptopInventory)
-            .Include(l => l.Owner)
-            .ThenInclude(l => l.Department)
-            .Include(l => l.Updatedby)
-            .Include(l => l.LaptopInventoryDetails);
-
-        var laptopAllocations = await assetManagementContext.ToListAsync();
-
-        // Check if there are any laptop allocations that meet the criteria
-        if (laptopAllocations.Any())
         {
-            return View(laptopAllocations);
+            ViewBag.Id = id;
+
+            if (id == null)
+            {
+                return View();
+            }
+            else
+            {
+                DateTime fourYearsAgo = DateTime.Now.AddYears(-4);
+
+                var assetManagementContext = _context.tbl_ictams_laptopalloc
+                    .Where(x => x.AllocationStatus == "CO" &&
+                        _context.tbl_ictams_owners.Any(a => a.OwnerCode == x.OwnerCode && a.Department.Dept_name == id) &&
+                        x.DateDeployed < DateTime.Now && x.DateDeployed < fourYearsAgo)
+                    .Include(l => l.Status)
+                    .Include(l => l.Createdby)
+                    .Include(l => l.LaptopInventoryDetails.LaptopInventory)
+                    .Include(l => l.Owner)
+                    .ThenInclude(l => l.Department)
+                    .Include(l => l.Updatedby)
+                    .Include(l => l.LaptopInventoryDetails);
+
+                var laptopAllocations = await assetManagementContext.ToListAsync();
+
+                // Check if there are any laptop allocations that meet the criteria
+                if (laptopAllocations.Any())
+                {
+                    return View(laptopAllocations);
+                }
+                else
+                {
+                    // Set id to null and return a view with id as null
+                    id = null;
+                    ViewBag.Id = id; // Update ViewBag.Id to reflect the change
+                    return View(); // Return the view with id as null
+                }
+            }
         }
-        else
-        {
-            // Set id to null and return a view with id as null
-            id = null;
-            ViewBag.Id = id; // Update ViewBag.Id to reflect the change
-            return View(); // Return the view with id as null
-        }
-    }
-}
 
 
 
@@ -430,13 +430,37 @@ namespace AssetManagement.Controllers
             var totalDisposeLaptop = await _context.tbl_ictams_ltareturn.CountAsync(x => x.ReturnType.Description == "DISPOSE");
             ViewBag.TotalDisposeLaptop = totalDisposeLaptop;
 
-            var assetManagementContext = _context.tbl_ictams_ltareturn.Where(x=>x.ReturnType.Description == "DISPOSE").Include(r => r.LaptopAllocation).ThenInclude(l => l.LaptopInventoryDetails).ThenInclude(s => s.LaptopInventory).Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.OS).Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Brand).Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Memory.Capacity).Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.HardDisk.Capacity).Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Level).Include(r => r.ReturnType).Include(r => r.Status).Include(r => r.UserCreated).Include(r => r.UserUpdated);
+            var assetManagementContext = _context.tbl_ictams_ltareturn
+                .Where(x=>x.ReturnType.Description == "DISPOSE")
+                .Include(r => r.LaptopAllocation)
+                .ThenInclude(l => l.LaptopInventoryDetails)
+                .ThenInclude(s => s.LaptopInventory)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.OS)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Brand)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Memory.Capacity)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.HardDisk.Capacity)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Level)
+                .Include(r => r.ReturnType).Include(r => r.Status).Include(r => r.UserCreated)
+                .Include(r => r.UserUpdated);
             return View(await assetManagementContext.ToListAsync());
         }
 
         public async Task<IActionResult> LTNewActiveReport()
         {
-            var assetManagementContext = await _context.tbl_ictams_ltnewalloc.Where(x => x.SecAllocationStatus == "AC").Include(s => s.Createdby).Include(s => s.LaptopAllocation).Include(s => s.LaptopInventoryDetails).Include(s => s.LaptopInventoryDetails.LaptopInventory).Include(l => l.LaptopInventoryDetails.LaptopInventory.OS).Include(l => l.LaptopInventoryDetails.LaptopInventory.Brand).Include(l => l.LaptopInventoryDetails.LaptopInventory.Memory.Capacity).Include(l => l.LaptopInventoryDetails.LaptopInventory.HardDisk.Capacity).Include(l => l.LaptopInventoryDetails.LaptopInventory.Level).Include(s => s.Owner).Include(s => s.Status).Include(s => s.Updatedby).ToListAsync();
+            var assetManagementContext = await _context.tbl_ictams_ltnewalloc
+                .Where(x => x.SecAllocationStatus == "AC")
+                .Include(s => s.Createdby)
+                .Include(s => s.LaptopAllocation)
+                .Include(s => s.LaptopAllocation.LaptopInventoryDetails)
+                .Include(s => s.LaptopAllocation.LaptopInventoryDetails.LaptopInventory)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.OS)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Brand)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Memory.Capacity)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.HardDisk.Capacity)
+                .Include(l => l.LaptopAllocation.LaptopInventoryDetails.LaptopInventory.Level)
+                .Include(s => s.Owner)
+                .Include(s => s.Status)
+                .Include(s => s.Updatedby).ToListAsync();
             return View(assetManagementContext);
         }
 
@@ -463,9 +487,9 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> AllocationViews()
         {
             await FindStatus();
+            //var assetManagementContext = _context.tbl_ictams_laptopalloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventoryDetails.LaptopInventory).Where(x => x.AllocationStatus == "IN").Include(l => l.Owner).Include(l => l.Updatedby);
+            var assetManagementContext = _context.tbl_ictams_laptopalloc.Where(x => x.AllocationStatus == "AC").Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventoryDetails.LaptopInventory).Include(l => l.Owner).Include(l => l.Updatedby).Include(l => l.LaptopInventoryDetails);
 
-
-            var assetManagementContext = _context.tbl_ictams_laptopalloc.Include(l => l.Status).Include(l => l.Createdby).Include(l => l.LaptopInventoryDetails.LaptopInventory).Where(x => x.AllocationStatus == "IN").Include(l => l.Owner).Include(l => l.Updatedby);
             return View(await assetManagementContext.ToListAsync());
         }
 
@@ -516,11 +540,11 @@ namespace AssetManagement.Controllers
                     ViewBag.TotalNotAllocLaptops = totalNotAllocLaps;
 
                     var assetManagementContext = _context.tbl_ictams_laptopalloc.Where(x => x.AllocationStatus != "IN")
+                        .Include(l => l.LaptopInventoryDetails.LaptopInventory)
+                        .Include(l => l.LaptopInventoryDetails)
                         .Include(l => l.Status)
                         .Include(l => l.Createdby)
-                        .Include(l => l.LaptopInventoryDetails.LaptopInventory)
                         .Include(l => l.Owner)
-                        .Include(l => l.LaptopInventoryDetails)
                         .Include(l => l.Updatedby);
 
                     return View(await assetManagementContext.ToListAsync());

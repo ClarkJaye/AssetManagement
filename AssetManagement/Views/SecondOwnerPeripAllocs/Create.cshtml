@@ -57,7 +57,7 @@
                     <select asp-for="SecAllocationStatus" class="form-control" asp-items="ViewBag.SecAllocationStatus"></select>
                     <span asp-validation-for="SecAllocationStatus" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3 mb-3 d-flex align-items-center gap-2" style="margin-top: 23px;">
+                <div class="form-group d-flex align-items-end gap-3 mt-3">
                     <input type="submit" value="Create" class="btn btn-theme" />
                     <a class="btn btn-outline-secondary " asp-action="Index" asp-controller="SecondOwnerPeripAllocs">Back to List</a>
                 </div>

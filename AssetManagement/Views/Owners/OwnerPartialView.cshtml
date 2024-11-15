@@ -67,7 +67,14 @@
                                         @Html.DisplayFor(modelItem => item.Store.StoreName)
                                     </td>
                                     <td>
-                                        <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status.status_name)</span>
+                                        @if (item.Status.status_code.ToUpper() == "AC")
+                                        {
+                                            <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status.status_name)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info">@Html.DisplayFor(modelItem => item.Status.status_name)</span>
+                                        }
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Department.Dept_name)

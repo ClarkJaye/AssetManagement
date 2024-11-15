@@ -14,32 +14,38 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input asp-for="AllocID" value="@ViewBag.allocID" class="form-control" hidden/>
 
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-3 mb-3">
                     <label for="monitorCode" class="control-label">Monitor Code</label>
                     <input id="monitorCode" value="@ViewBag.monitorCode" class="form-control" disabled />
                 </div>
 
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-3 mb-3">
                     <label for="serialNo" class="control-label">Serial Number</label>
                     <input id="serialNo" value="@ViewBag.monitorSerial" disabled class="form-control" />
                 </div>
 
                 <div class="form-group col-md-3 mb-3">
                     <label asp-for="RTtype" class="control-label"></label>
-                    <select asp-for="RTtype" class="form-select" id="serialNumber" asp-items="ViewBag.mtStatus">
+                    <select asp-for="RTtype" class="form-select" asp-items="ViewBag.MTReturnType">
                         <option selected disabled>Select Return Type </option>
                     </select>
                     <span asp-validation-for="RTtype" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3 d-flex align-items-center gap-2">
-                    <input type="submit" value="Create" class="btn btn-theme" />
-                    <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="MonitorAllocations">Back to List</a>
+                <div class="form-group d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Save" class="btn btn-theme" />
+                    <a class="btn btn-outline-secondary" asp-action="ReturnPartialView" asp-controller="MonitorAllocations">
+                        <span class="fas fa-undo"></span>
+                        Back to Return List
+                    </a>
+                    <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="MonitorAllocations">
+                        <span class="fas fa-undo"></span>
+                        Go To Inventory Allocation
+                    </a>
                 </div>
             </div>
         </form>
     </div>
     <div class="displaytable"></div>
-
 </div>
 
 @section Scripts {

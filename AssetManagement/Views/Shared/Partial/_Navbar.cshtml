@@ -105,7 +105,15 @@
                                             <li>
                                                 @foreach (var item in OpenAccessModulesC5)
                                                 {
-                                                    <a tabindex="-1" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                                    if(item.Value == "21")
+                                                    {
+                                                        <a tabindex="-1" asp-controller="@item.Text.Replace(" ", "")" asp-action="Home">
+                                                            @item.Text
+                                                        </a>
+                                                    }else
+                                                    {
+                                                        <a tabindex="-1" asp-controller="@item.Text.Replace(" ", "")" asp-action="Index">@item.Text</a>
+                                                    }
                                                 }
                                             </li>
 

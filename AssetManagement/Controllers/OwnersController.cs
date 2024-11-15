@@ -24,6 +24,7 @@ namespace AssetManagement.Controllers
             var assetManagementContext = _context.tbl_ictams_owners
              .Where(p => p.Status.status_code == "AC" && !_context.tbl_ictams_laptopalloc.Any(a => a.OwnerCode == p.OwnerCode && a.AllocationStatus == "AC"))
              .Where(p => p.Status.status_code == "AC" && !_context.tbl_ictams_ltnewalloc.Any(a => a.SecOwnerCode == p.OwnerCode && a.SecAllocationStatus == "AC"))
+             .Include(o => o.Store)
              .Include(o => o.Location)
              .Include(o => o.Createdby)
              .Include(o => o.Department)
@@ -46,6 +47,7 @@ namespace AssetManagement.Controllers
              .Where(p => p.Status.status_code == "AC" && !_context.tbl_ictams_desktopalloc.Any(a => a.OwnerCode == p.OwnerCode && a.AllocationStatus == "AC"))
              .Where(p => p.Status.status_code == "AC" && !_context.tbl_ictams_dtnewalloc.Any(a => a.SecOwnerCode == p.OwnerCode && a.SecAllocationStatus == "AC"))
              .Include(o => o.Location)
+             .Include(o => o.Store)
              .Include(o => o.Createdby)
              .Include(o => o.Department)
              .Include(o => o.Status)
@@ -79,16 +81,21 @@ namespace AssetManagement.Controllers
             return View(ownerViewModel);
         }
 
-        public async Task<IActionResult> OwnerViews(string id, string searchString)
+        public async Task<IActionResult> OwnerViews()
         {
 
+            //var assetManagementContext = _context.tbl_ictams_owners
+            // .Where(p => p.Status.status_code == "IN")
+            // .Include(o => o.Location)
+            // .Include(o => o.Createdby)
+            // .Include(o => o.Department)
+            // .Include(o => o.Status)
+            // .Include(o => o.Updatedby);
+
             var assetManagementContext = _context.tbl_ictams_owners
-             .Where(p => p.Status.status_code == "IN")
-             .Include(o => o.Location)
-             .Include(o => o.Createdby)
-             .Include(o => o.Department)
-             .Include(o => o.Status)
-             .Include(o => o.Updatedby);
+                        .Include(o => o.Location)
+                        .Include(o => o.Createdby).Include(o => o.Department).Include(o => o.Store)
+                        .Include(o => o.Status).Include(o => o.Updatedby);
 
             OwnerViewModel ownerViewModel = new()
             {

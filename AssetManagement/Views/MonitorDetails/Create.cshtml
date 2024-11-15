@@ -26,8 +26,8 @@
                 {
                     <div class="form-group col-md-2 mb-3">
                         <label asp-for="monitorCode" class="control-label"></label>
-                        <select asp-for="monitorCode" class="form-select" asp-items="ViewBag.MTInvCode" onchange="loadPartialView(this.value)">
-                            <option selected disabled>select monitor code</option>
+                        <select asp-for="monitorCode" class="form-select" asp-items="ViewBag.MTInvCode" onchange="LoadPartialView(this.value)">
+                            <option selected disabled>Select monitor code</option>
                         </select>
                         <span asp-validation-for="monitorCode" class="text-danger"></span>
                     </div>
@@ -35,7 +35,7 @@
 
                 <div class="form-group col-md-2 mb-2">
                     <label asp-for="SerialNumber" class="control-label"></label>
-                    <input asp-for="SerialNumber" class="form-control" placeholder="Enter Serial No" required id="serial"/>
+                    <input asp-for="SerialNumber" class="form-control" placeholder="Enter Serial No" required id="serial" />
                     <span asp-validation-for="SerialNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-2 mb-2">
@@ -66,9 +66,10 @@
                     <input asp-for="DeployedDate" class="form-control" required />
                     <span asp-validation-for="DeployedDate" class="text-danger"></span>
                 </div>
-                <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
-                    <input type="submit" value="Create" class="btn btn-theme " />
-                    <a class="btn btn-outline-secondary" asp-controller="MonitorInventories" asp-action="Index">Back to List</a>
+                <div class="form-group cold-md-2 mb-2 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Save" class="btn btn-theme" />
+                    <a class="btn btn-outline-secondary" asp-controller="MonitorInventories" asp-action="Index">Back to Inventory</a>
+                    <a class="btn btn-outline-secondary" asp-controller="MonitorDetails" asp-action="Index">Back to List of details</a>
                 </div>
             </div>
         </form>
@@ -83,28 +84,47 @@
     }
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var code = $("#code").val();
-            if (code) {
-                $("#serial").click(function () {
-                    loadPartialView(code);
-                })
+        var code = $("#code").val();
+        if (code) {
+            $("#serial").click(function () {
+                LoadPartialView(code);
+            })
+        }
+
+        // Load partial view based on selected code
+        function LoadPartialView(selectedCode) {
+            if (selectedCode) {
+                $.ajax({
+                    url: '@Url.Action("MTInvPartialView", "MonitorInventories")',
+                    type: "GET",
+                    data: { code: selectedCode },
+                    success: function (res) {
+                        $(".displaytable").html(res);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error loading partial view: " + error);
+                    }
+                });
             }
-            function loadPartialView(InvCode) {
-                if (InvCode) {
-                    $.ajax({
-                        url: '@Url.Action("MTInvPartialView", "MonitorInventories")',
-                        type: "GET",
-                        data: { code: InvCode },
-                        success: function (res) {
-                            $(".displaytable").html(res);
-                        },
-                        error: function (xhr, status, error) {
-                            console.log("Error: " + error);
-                        }
-                    });
-                }
+        }
+
+
+        // Function to hide the display table
+        function hideTable() {
+            $(".displaytable").empty();
+        }
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#serial, #PO, .displaytable').length) {
+                hideTable();
             }
-        })
+        });
+
+        // Optional: Allow hiding the table if 'Esc' key is pressed
+        $(document).keyup(function (e) {
+            if (e.key === "Escape") {
+                hideTable();
+            }
+        });
     </script>
 }

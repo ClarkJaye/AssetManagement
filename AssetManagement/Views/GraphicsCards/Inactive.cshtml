@@ -12,84 +12,67 @@
     <h4 class="title">Inactive Graphics Cards</h4>
 
     <div class="mt-4">
-        <table id="inactiveGrapCardsTable" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GraphicsDescription)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GraphicsStatus)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GraphicsCreatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GraphicsCreatedDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GraphicsUpdatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.GraphicsUpdatedDate)
-                    </th>
-                    <th class="text-center">ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GraphicsDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GraphicsStatus)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GraphicsCreatedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GraphicsCreatedDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GraphicsUpdatedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GraphicsUpdatedDate)
-                        </td>
-                        <td class="d-flex justify-content-center">
-                            <a class="btn btn-sm btn-success btn-activate" asp-controller="GraphicsCards" asp-action="Activate" asp-route-id="@item.GraphicsID" data-id="@item.GraphicsID">
-                                <span class="fas fa-undo"></span> Retrieve
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-container table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.GraphicsDescription)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.GraphicsStatus)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.GraphicsCreatedBy)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.GraphicsCreatedDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.GraphicsUpdatedBy)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.GraphicsUpdatedDate)
+                                </th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GraphicsDescription)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GraphicsStatus)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GraphicsCreatedBy)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GraphicsCreatedDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GraphicsUpdatedBy)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.GraphicsUpdatedDate)
+                                    </td>
+                                    <td class="d-flex justify-content-center">
+                                        <a class="btn btn-sm btn-success btn-activate" asp-controller="GraphicsCards" asp-action="Activate" asp-route-id="@item.GraphicsID" data-id="@item.GraphicsID">
+                                            <span class="fas fa-undo"></span> Retrieve
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Initialize DataTables
-        $('#inactiveGrapCardsTable').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: false,
-            responsive: true,
-            columnDefs: [{ targets: [0, 0], orderable: false }],
-            language: {
-                paginate: {
-                    previous: "Previous", // Change "Previous"
-                    next: "Next" // Change "Next"
-                }
-            }
-        });
-
-    });
-</script>

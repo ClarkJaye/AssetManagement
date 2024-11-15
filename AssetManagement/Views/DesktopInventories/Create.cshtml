@@ -12,16 +12,8 @@
     </div>
 }
 
-@if (@TempData["SuccessNotification"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessNotification"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
 <div class="m-4">
-    <h4>Add New</h4>
+    <h4>Add Desktop Inventory</h4>
     <hr />
     <div>
         <form asp-action="Create">
@@ -118,17 +110,14 @@
                     <input asp-for="AllocatedNo" class="form-control" />
                     <span asp-validation-for="AllocatedNo" class="text-danger"></span>
                 </div>
-                <div class="form-group cold-md-2 d-flex align-items-end gap-3 mt-3">
-                    <input type="submit" value="Create" class="btn btn-theme createbtn" />
+                <div class="form-group col-md-2 mb-2 d-flex align-items-end gap-3 mt-3">
+                    <input type="submit" value="Save" class="btn btn-theme createbtn" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>
-
             </div>
         </form>
     </div>
-    <div class="displaytable">
-    </div>
-
+    <div class="displaytable"></div>
 </div>
 
 @section Scripts {

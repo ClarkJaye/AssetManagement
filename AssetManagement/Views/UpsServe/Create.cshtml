@@ -26,14 +26,14 @@
                 </div>
                 <div class="form-group col-4">
                     <label asp-for="UnitServe" class="control-label"></label>
-                    <textarea asp-for="UnitServe" class="form-control" >
+                    <textarea asp-for="UnitServe" class="form-control">
 
                     </textarea>
                     <span asp-validation-for="UnitServe" class="text-danger"></span>
                 </div>
                 <div class="form-group col-12 mt-4 d-flex align-items-center justify-content-end gap-2">
                     <input type="submit" value="Create" class="btn btn-theme" />
-                    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
                 </div>
             </div>
         </form>
@@ -41,12 +41,13 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         $('#UpsStore').change(function () {
             var selectedStore = $(this).val();
             if (selectedStore) {
@@ -63,4 +64,7 @@
                 $('#UpsCode').append('<option value="">Select UPS Code</option>');
             }
         });
-    });</script>
+    })
+    
+
+</script>

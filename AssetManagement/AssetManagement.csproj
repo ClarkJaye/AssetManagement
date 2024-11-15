@@ -133,6 +133,12 @@
     <Folder Include="wwwroot\lib\dataTables\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ExternalLogin">
+      <HintPath>..\..\..\..\..\PrinceQ_Services\PrinceQueuing\External\ExternalLogin.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
 
 

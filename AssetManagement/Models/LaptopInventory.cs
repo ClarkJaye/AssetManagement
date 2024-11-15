@@ -112,6 +112,11 @@ namespace AssetManagement.Models
         public User Updatedby { get; set; }
 
 
+        [Column("typeId")]
+        public int? TypeId { get; set; }
+        [ForeignKey("TypeId")]
+        [DisplayName("Laptop Type")]
+        public LaptopType? LaptopType { get; set; }
 
     }
 }

@@ -4,174 +4,134 @@
     ViewData["Title"] = "Report";
 }
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap" />
+<div class="m-4">
+    <h4>Active Desktop Second Owner</h4>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-
-<style>
-
-    .red-text {
-        color: red;
-    }
-
-    .yellow-text {
-        color: yellow;
-    }
-
-    .orangered-text {
-        color: orangered;
-    }
-
-</style>
-@if (TempData["Welcome"] != null)
-{
-    <div class="toast-notification animated-toast">
-        <p>@TempData["Welcome"]</p>
+    <div class="report-view">
+        <div class="report-item">
+            <span class="report-label">Total Active Desktops:</span>
+            <span class="report-value">@ViewBag.TotalActiveDesktop</span>
+        </div>
     </div>
-}
 
-<h4 style="margin-top: 80px;">Active Desktop Second Owner</h4>
-<div class="report-view">
-    <div class="report-item">
-        <span class="report-label">Total Active Desktops:</span>
-        <span class="report-value">@ViewBag.TotalActiveDesktop</span>
+
+    <div class="card shadow-sm card-selected">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-datatable">
+                    <thead>
+                        <tr>
+                            <th>
+                                DESKTOP CODE
+                            </th>
+                            <th>
+                                ID
+                            </th>
+                            <th>PO</th>
+                            <th>
+                                UNIT TAG
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DesktopAllocation.FixedassetTag)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DesktopAllocation.ComputerName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Owner)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DesktopAllocation.DateDeployed)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DateCreated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DateUpdated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Createdby)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Updatedby)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AllocId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DesktopAllocation.FixedassetTag)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DesktopAllocation.ComputerName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DesktopAllocation.DateDeployed)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateUpdated)
+                                </td>
+                                @{
+                                    if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
+                                    {
+                                        <td style="color:red; font-weight:bold; font-size:12px;">
+                                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                                        </td>
+                                    }
+                                    else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
+                                    {
+                                        <td style="color:darkgreen; font-weight:bold; font-size:12px;">
+                                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                                        </td>
+                                    }
+                                    else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
+                                    {
+                                        <td style="color:orange; font-weight:bold; font-size:12px;">
+                                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status.status_name)
+                                        </td>
+                                    }
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Createdby.UserCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
-<div style="margin-top: -40px;">
-    <input type="text" id="filterInput" placeholder="Search...">
-</div>
-<div class="table-container">
-    <table class="table custom-fontsize ">
-        <thead>
-            <tr>
-                <th>
-                    DESKTOP CODE
-                </th>
-                <th>
-                    ID
-                </th>
-                <th>PO</th>
-                <th>
-                    UNIT TAG
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DesktopAllocation.FixedassetTag)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DesktopAllocation.ComputerName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DesktopAllocation.DateDeployed)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Createdby)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Updatedby)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AllocId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.FixedassetTag)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.ComputerName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DesktopAllocation.DateDeployed)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                    </td>
-                    @{
-
-
-
-                        if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
-                        {
-                            <td style="color:red; font-weight:bold; font-size:12px;">
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
-                            </td>
-                        }
-                        else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
-                        {
-                            <td style="color:darkgreen; font-weight:bold; font-size:12px;">
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
-                            </td>
-                        }
-                        else if (item.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
-                        {
-                            <td style="color:orange; font-weight:bold; font-size:12px;">
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status.status_name)
-                            </td>
-                        }
-                    }
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-<script>
-
-    //FILTERING
-
-    $(document).ready(function () {
-        $('#filterInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            $('tbody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-
-
-
-</script>

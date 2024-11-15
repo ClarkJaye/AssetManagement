@@ -19,9 +19,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-    <div>
-        <a id="createbtn" class="btn btn-outline-theme createbtn" asp-controller="MonitorAllocations" asp-action="ReturnPartialView">
-            <span class="fas fa-pencil-alt"></span> Create
+    <div class="d-flex align-items-center gap-3">
+        <a id="createbtn" class="btn btn-theme createbtn" asp-controller="MonitorAllocations" asp-action="ReturnPartialView">
+            <span class="fas fa-pencil-alt"></span> Return
         </a>
     </div>
 </div>
@@ -38,7 +38,10 @@
                     <thead>
                         <tr>
                             <th>
-                                CODE
+                                DESCRIPTION
+                            </th>
+                            <th>
+                                MONITOR CODE
                             </th>
                             <th>
                                SERIAL NUMBER
@@ -50,13 +53,13 @@
                                RETURN TYPE
                             </th>
                             <th>
-                                CREATED
+                                CREATED AT
                             </th>
                             <th>
                                 CREATED BY
                             </th>
                             <th>
-                                UPDATED
+                                UPDATED AT
                             </th>
                             <th>
                                 UPDATED BY
@@ -69,29 +72,19 @@
                         {
                             <tr>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.MonitorAllocation.MonitorDetails.MonitorInventory.Description)
+                                </td>
+                                <td>
                                     @Html.DisplayFor(modelItem => item.MonitorAllocation.monitorCode)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.MonitorAllocation.SerialNumber)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ReturnType.Description)
-                                </td>
-                                <td>
                                     @Html.DisplayFor(modelItem => item.MonitorAllocation.OwnerCode)
                                 </td>
-                              @*   <td>
-                                    @Html.DisplayFor(modelItem => item.ReturnType)
-                                </td> *@
                                 <td>
-                                    @if (item.ReturnType.Return_Inv == "Y")
-                                    {
-                                        <span class="badge bg-success">@Html.DisplayFor(modelItem => item.ReturnType)</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.ReturnType)</span>
-                                    }
+                                    @item.ReturnType.Description
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DateCreated)
@@ -106,10 +99,10 @@
                                     @Html.DisplayFor(modelItem => item.UserUpdated.UserFullName)
                                 </td>
                                 <td>
-                                    <div class="d-flex flex-row gap-2 ">
+                                    <div class="d-flex justify-content-center align-items-center">
                                         @if (item.ReturnType.Return_Inv != "N")
                                         {
-                                            <a class="btn btn-sm bg-success text-white custom-fontsize editbtn" asp-action="Edit" asp-route-id="@item.ReturnID">Edit</a>
+                                            <a class="btn btn-outline-primary editbtn" asp-action="Edit" asp-route-id="@item.ReturnID">Edit</a>
                                         }
                                     </div>
                                 </td>

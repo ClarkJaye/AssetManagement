@@ -4,46 +4,42 @@
     Layout = null;
 }
 
-<h4>Details History</h4>
+<h4>Deleted Desktop History</h4>
 <table class="table table-striped">
     <thead>
         <tr>
             <th>
-                ID
-            </th>
-            <th>PO</th>
-            <th>
-                @Html.DisplayNameFor(model => model.FixedassetTag)
+                DESCRIPTION
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.InventoryDetails)
+                CODE
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ComputerName)
+                UNIT TAG
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Owner)
+                COMPUTER NAME
+            </th>
+            <th>
+               ASSET TAG
+            </th>
+            <th>
+                PO
+            </th>
+            <th>
+                OWNER
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateDeployed)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                DESKTOP CODE
+                @Html.DisplayNameFor(model => model.DateCreated)
             </th>
             <th>
                 CREATED BY
-            </th>
-            <th>
-                UPDATED BY
             </th>
         </tr>
     </thead>
@@ -54,43 +50,37 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AllocId)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                        @Html.DisplayFor(modelItem => item.DesktopCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FixedassetTag)
+                        @Html.DisplayFor(modelItem => item.UnitTag)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ComputerName)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.FixedassetTag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateDeployed)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                        @item.DateDeployed.ToString("MMM dd yyyy h:mm tt")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Status.status_name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
+                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Createdby.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updatedby.UserCode)
                     </td>
                 </tr>
             }

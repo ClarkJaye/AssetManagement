@@ -26,96 +26,146 @@
     </div>
 
 
-    <div class="contains" id="table-responsive">
-        <h4>First Owner Allocation</h4>
+    <div class="card shadow-sm card-selected">
+        <div class="card-body pt-0">
+            <div class="table-responsive mt-4 table-render" style="max-height: 600px;">
+                <h4>First Owner Allocation</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    DESCRIPTION
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LaptopPeripheral)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SerialNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FixedAssetTag)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DatePurchased)
+                                </th>
+                                <th>
+                                    SERVICE YEARS
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PONumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Owner)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PeripheralAllocCreatedAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreatedBy)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PeripheralAllocUpdateAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UpdatedBy)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralDescription)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SerialNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FixedAssetTag)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DatePurchased)
+                                    </td>
+                                    <td>
 
-        <div class="table-responsive">
-            <table class="table table-striped table-datatable">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.SerialNumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FixedAssetTag)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DatePurchased)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AgeYears)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PONumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PeripheralAllocCreatedAt)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.PeripheralAllocUpdateAt)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.LaptopPeripheral)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Owner)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CreatedBy)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UpdatedBy)
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+                                        @{
+                                            if (item.DatePurchased != null)
+                                            {
+                                                var purchaseDate = item.DatePurchased.Value;
+                                                var now = DateTime.Now;
 
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SerialNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FixedAssetTag)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DatePurchased)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AgeYears)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PONumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PeripheralAllocCreatedAt)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PeripheralAllocUpdateAt)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LaptopPeripheral.PeripheralCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status.status_code)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                                var totalDays = (now - purchaseDate).Days;
+
+                                                var years = now.Year - purchaseDate.Year;
+                                                var months = now.Month - purchaseDate.Month;
+                                                var days = now.Day - purchaseDate.Day;
+
+                                                if (days < 0)
+                                                {
+                                                    months--;
+                                                    days += DateTime.DaysInMonth(now.Year, now.AddMonths(-1).Month);
+                                                }
+
+                                                if (months < 0)
+                                                {
+                                                    years--;
+                                                    months += 12;
+                                                }
+
+                                                if (years > 0)
+                                                {
+                                                    <span>@years year(s), @months month(s), @days day(s)</span>
+                                                }
+                                                else if (months > 0)
+                                                {
+                                                    <span>@months month(s), @days day(s)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@days day(s)</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>N/A</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PONumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status.status_code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocCreatedAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedBy.UserCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PeripheralAllocUpdateAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UpdatedBy.UserCode)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -136,8 +186,7 @@
                 type: "GET",
                 data: { userCODE: userCode },
                 success: function (res) {
-                    $(".contains").html(res);
-                    // Re-initialize DataTable after new content is loaded
+                    $(".table-render").html(res);
                     InitializeDataTable();
                 }
             });
@@ -153,8 +202,7 @@
                 type: "GET",
                 data: { userCODE: userCode },
                 success: function (res) {
-                    $(".contains").html(res);
-                    // Re-initialize DataTable after new content is loaded
+                    $(".table-render").html(res);
                     InitializeDataTable();
                 }
             });
@@ -182,7 +230,7 @@
                     next: "Next"
                 }
             },
-            deferLoading: true  
+            deferLoading: true
         });
     }
 </script>

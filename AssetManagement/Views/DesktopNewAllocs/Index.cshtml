@@ -15,9 +15,9 @@
     <!-- Action Buttons -->
     <div class="d-flex align-items-center gap-2 mb-2">
         <div class="d-flex align-items-center gap-2">
-            <a asp-controller="DesktopAllocations" asp-action="DeskAllocPartialView" class="btn btn-outline-theme">
+            <a asp-controller="DesktopAllocations" asp-action="DeskAllocPartialView" class="btn btn-theme">
                 <i class="fas fa-pencil-alt"></i>
-                <span>Create New</span>
+                <span>Add New</span>
             </a>
             <a class="btn btn-outline-secondary" asp-action="Inactive">
                 <span class="fas fa-trash-alt"></span> Show Temporary Deleted
@@ -53,139 +53,134 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
 
-            <table class="table table-striped table-datatable">
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="d-flex flex-column gap-1">
-                                <label for="select-all-checkbox" style="cursor:pointer;">ALL</label>
-                                <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
-                            </div>
-                        </th>
-                        <th hidden>
-                            @Html.DisplayNameFor(model => model.SecAllocId)
-                        </th>
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Owner)
-                        </th>
-                        <th>
-                            COMPUTER NAME
-                        </th>
-                        <th>
-                            CODE
-                        </th>
-                        <th>
-                            PO
-                        </th>
-                        <th>
-                            UNIT TAG
-                        </th>
-                        <th>
-                            DESCRIPTION
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateCreated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.DateUpdated)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Createdby)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Updatedby)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="selectedIds" value="@item.SecAllocId" class="item-checkbox custom-checkbox" />
-                            </td>
-                            <td hidden>
-                                @Html.DisplayFor(modelItem => item.SecAllocId)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DesktopAllocation.AllocId)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DesktopAllocation.ComputerName)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DesktopAllocation.DesktopCode)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DesktopAllocation.UnitTag)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.Description)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateCreated)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.DateUpdated)
-                            </td>
-                            @{
-                                if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
-                                {
-                                    <td style="color:red; font-weight:bold; font-size:12px;">
-                                        @Html.DisplayFor(modelItem => item.Status.status_name)
+        <div class="card shadow-sm card-selected">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-datatable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="d-flex flex-column gap-1">
+                                        <input type="checkbox" id="select-all-checkbox" class="custom-checkbox" />
+                                    </div>
+                                </th>
+                                <th>
+                                    DESCRIPTION
+                                </th>
+                                <th>
+                                    DESKTOP CODE
+                                </th>
+                                <th>
+                                    UNIT TAG
+                                </th>
+                                <th>
+                                    COMPUTER NAME
+                                </th>
+                                <th>
+                                    PO
+                                </th>
+                             
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Owner)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateCreated)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateUpdated)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Createdby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Updatedby)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="selectedIds" value="@item.SecAllocId" class="item-checkbox custom-checkbox" />
                                     </td>
-                                }
-                                else if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
-                                {
-                                    <td style="color:darkgreen; font-weight:bold; font-size:12px;">
-                                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.Description)
                                     </td>
-                                }
-                                else if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
-                                {
-                                    <td style="color:orange; font-weight:bold; font-size:12px;">
-                                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DesktopAllocation.DesktopCode)
                                     </td>
-                                }
-                                else
-                                {
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DesktopAllocation.UnitTag)
+                                    </td>
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DesktopAllocation.ComputerName)
+                                    </td>
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.InventoryDetails.PO)
+                                    </td>
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                                    </td>
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DateCreated)
+                                    </td>
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.DateUpdated)
+                                    </td>
+                                    @{
+                                        if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-72))
+                                        {
+                                            <td style="color:red; font-weight:bold; font-size:12px;">
+                                                @Html.DisplayFor(modelItem => item.Status.status_name)
+                                            </td>
+                                        }
+                                        else if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-24))
+                                        {
+                                            <td style="color:darkgreen; font-weight:bold; font-size:12px;">
+                                                @Html.DisplayFor(modelItem => item.Status.status_name)
+                                            </td>
+                                        }
+                                        else if (item.DesktopAllocation.InventoryDetails.PurchaseDate <= DateTime.Now.AddMonths(-48))
+                                        {
+                                            <td style="color:orange; font-weight:bold; font-size:12px;">
+                                                @Html.DisplayFor(modelItem => item.Status.status_name)
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Status.status_name)
+                                            </td>
+                                        }
+                                    }
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
+                                    </td>
+                                    <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
+                                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
+                                    </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Status.status_name)
+                                        <a class="btn btn-sm btn-secondary editbtn" asp-action="CreateSecReturn" asp-controller="ReturnDTAs" asp-route-id="@item.AllocId">Return </a>
                                     </td>
-                                }
+                                </tr>
                             }
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                            </td>
-                            <td class=" editbtn" id="@item.DesktopAllocation.InventoryDetails.DesktopInventory.Description" id="userCode2" name="userCODE">
-                                @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
-                            </td>
-                            <td>
-                                <a class="btn btn-sm btn-secondary editbtn" asp-action="CreateSecReturn" asp-controller="ReturnDTAs" asp-route-id="@item.AllocId">Return </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </form>
     <div class="displaytable"> </div>
 </div>
+
+
+
 
 @if (TempData["SuccessNotification"] != null)
 {
@@ -202,9 +197,6 @@
     </script>
 }
 
-
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("select-all-checkbox");

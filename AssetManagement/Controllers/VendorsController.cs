@@ -73,7 +73,8 @@ namespace AssetManagement.Controllers
         {
             await FindStatus();
             var myData = HttpContext.Session.GetString("UserName");
-            var lSM_PNContext = _context.tbl_ictams_vendor.Where(Vendor => Vendor.VendorStatus == "IN").Include(x => x.Createdby).Include(x => x.Status);
+            //var lSM_PNContext = _context.tbl_ictams_vendor.Where(Vendor => Vendor.VendorStatus == "IN").Include(x => x.Createdby).Include(x => x.Status);
+            var lSM_PNContext = _context.tbl_ictams_vendor.Include(x => x.Createdby).Include(x => x.Status);
             return View(await lSM_PNContext.ToListAsync());
 
         }

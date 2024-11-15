@@ -23,7 +23,7 @@
 <div class="d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center gap-2 mb-2 p-4">
         <div class="d-flex align-items-center gap-2">
-            <a class="btn btn-outline-theme" asp-action="Create">
+            <a class="btn btn-theme" asp-action="Create">
                 <i class="fas fa-pencil-alt"></i>
                 <span>Add New</span>
             </a>
@@ -104,7 +104,7 @@
                                     </div>
                                 </th>
                                 <th>
-                                    DESKTOP CODE
+                                    MONITOR CODE
                                 </th>
                                 <th>
                                     DESCRIPTION
@@ -131,13 +131,6 @@
                                 </th>
                                 <th>
                                     CREATED BY
-                                </th>
-
-                                <th>
-                                    @Html.DisplayNameFor(model => model.DateUpdated)
-                                </th>
-                                <th>
-                                    UPDATED BY
                                 </th>
                                 <th style="text-align: center!important">ACTION</th>
                             </tr>
@@ -201,12 +194,6 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Createdby.UserFullName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Updatedby.UserFullName)
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">

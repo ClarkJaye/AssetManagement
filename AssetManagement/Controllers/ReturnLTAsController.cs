@@ -52,7 +52,13 @@ namespace AssetManagement.Controllers
                 }
                 else
                 {
-                    var assetManagementContext = _context.tbl_ictams_ltareturn.Include(r => r.LaptopAllocation).Include(r => r.ReturnType).Include(r => r.Status).Include(r => r.UserCreated).Include(r => r.UserUpdated);
+                    var assetManagementContext = _context.tbl_ictams_ltareturn
+                        .Include(r => r.LaptopAllocation)
+                        .Include(r => r.LaptopAllocation.LaptopInventoryDetails.LaptopInventory)
+                        .Include(r => r.ReturnType)
+                        .Include(r => r.Status)
+                        .Include(r => r.UserCreated)
+                        .Include(r => r.UserUpdated);
                     return View(await assetManagementContext.ToListAsync());
                 }
             }
@@ -92,9 +98,15 @@ namespace AssetManagement.Controllers
         }
 
         // GET: ReturnLTAs/Create
-        public IActionResult Create(string id)
+        public async Task<IActionResult> Create(string id)
         {
-            ViewBag.Id = id;
+            var item = await _context.tbl_ictams_laptopalloc.Include(x => x.LaptopInventoryDetails)
+               .FirstOrDefaultAsync(i => i.AllocId == id);
+
+            ViewData["allocID"] = item.AllocId;
+            ViewData["LTCode"] = item.LaptopInventoryDetails.laptoptinvCode;
+            ViewData["LTSerial"] = item.LaptopInventoryDetails.SerialCode;
+            ViewData["LTReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
             return View();
         }
 
@@ -200,6 +212,7 @@ namespace AssetManagement.Controllers
         public IActionResult CreateSecReturn(string id)
         {
             ViewBag.Id = id;
+            ViewData["ReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
             return View();
         }   
         [HttpPost]
@@ -266,6 +279,7 @@ namespace AssetManagement.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             ViewBag.Id = id;
+            ViewData["MTReturnType"] = new SelectList(_context.tbl_ictams_returntype, "TypeID", "Description");
             if (id == null || _context.tbl_ictams_ltareturn == null)
             {
                 return NotFound();
@@ -290,18 +304,15 @@ namespace AssetManagement.Controllers
             {
                 return NotFound();
             }
-
-
             var ucode = HttpContext.Session.GetString("UserName");
             returnLTA.DateUpdated = DateTime.Now;
             returnLTA.RTUpdated = ucode;
             returnLTA.RTStatus = "AC";
 
             _context.Update(returnLTA);
-                    await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-
+            await _context.SaveChangesAsync();
+            TempData["SuccessNotification"] = "Successfully updated!";
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ReturnLTAs/Delete/5

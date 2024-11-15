@@ -9,36 +9,41 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.InventoryDetails)
+                DESCRIPTION
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateBorrow)
+                CODE
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Remark)
+                UNIT TAG
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                COMPUTER NAME
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateUpdated)
+                DEPARTMENT
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.InventoryDetails)
+                BORROWER
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Owner)
+                DATE OF BORROWED
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                EXPECTED RETURN DATE
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserCreated)
+                RETURN DATE
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserUpdated)
+                REMARK
             </th>
-            <th></th>
+            <th>
+                CREATED AT
+            </th>
+            <th>
+                CREATED BY
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -48,34 +53,40 @@
             {
                 <tr>
                     <td>
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.DesktopInventory.desktopInvCode)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.InventoryDetails.unitTag)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateBorrow)
+                        @Html.DisplayFor(modelItem => item.InventoryDetails.ComputerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department.Dept_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner.OwnerFullName)
+                    </td>
+                    <td>
+                        @item.DateBorrow.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @item.Expected_return?.ToString("MMM dd yyyy h:mm tt")
+                    </td>
+                    <td>
+                        @item.Return_date?.ToString("MMM dd yyyy h:mm tt")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Remark)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
+                        @item.DateCreated.ToString("MMM dd yyyy h:mm tt")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DateUpdated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InventoryDetails.desktopInvCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Owner.OwnerCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status.status_code)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserCreated.UserCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserUpdated.UserCode)
+                        @Html.DisplayFor(modelItem => item.UserCreated.UserFullName)
                     </td>
                 </tr>
             }
